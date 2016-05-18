@@ -1,0 +1,40 @@
+{
+  "name": "Book",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "authors": {
+      "type": [
+        "string"
+      ],
+      "required": true
+    },
+    "amazon_page": {
+      "type": "string",
+      "required": true
+    },
+    "categories_id": {
+      "type": [
+        "string"
+      ],
+      "required": true
+    },
+    "eggheads_id": {
+      "type": [
+        "string"
+      ],
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

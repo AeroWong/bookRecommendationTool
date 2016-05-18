@@ -1,0 +1,26 @@
+{
+  "name": "Recommendation",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "src": {
+      "type": "string",
+      "required": true
+    },
+    "book_id": {
+      "type": "string",
+      "required": true
+    },
+    "egghead_id": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

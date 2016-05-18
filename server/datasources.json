@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "br_dev_db": {
+    "host": "127.0.0.1",
+    "port": 27017,
+    "database": "br_dev_db",
+    "username": "brAdmin",
+    "password": "password",
+    "name": "br_dev_db",
+    "connector": "mongodb"
+  }
+}
