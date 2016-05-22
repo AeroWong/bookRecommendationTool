@@ -21,10 +21,10 @@ module.exports = function (Book) {
                                 authors: []};
 
         // check if the client fills in all the necessary book info
-        if (isBookDetialFilled(title, authors, amazonPage, categories, eggheads, cb)) {
+        if (!isBookDetialFilled(title, authors, amazonPage, categories, eggheads, cb)) {
             return;
         };
-        // query the bookshelf
+        // query the bookshelf's books
         Book.find()
         .then(function(booksInBookshelf){
             bookshelfBookLength = booksInBookshelf.length;
@@ -168,6 +168,8 @@ module.exports = function (Book) {
                      message: 'Please insert at least 1 egghead for the book'};
             cb(null, error);
             return false;
+        } else {
+            console.log('Recommendation detail filled.')
         }
     }
     function turnBookshelfElementsToLowerCase (elems) {
