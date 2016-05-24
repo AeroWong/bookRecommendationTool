@@ -7,23 +7,28 @@ module.exports = function (Book) {
             authors = bookDetialObj.authors,
             amazonPage = bookDetialObj.amazon_page,
             categories = bookDetialObj.categories_id,
-            eggheads = bookDetialObj.eggheads_id,
+            egghead = bookDetialObj.egghead_id,
+            eggheadId,
             bookshelfBookLength,
             newBookId,
             isBookInBookshelf,
             lowerCaseBookTitle = title.toLowerCase(),
+            lowerCaseEgghead = egghead.toLowerCase(),
+            lowerCaseEggheadsInBookshelf,
+            lowerCaseEggheadsWithIdInBookshelf,
             lowerCaseCategoriesWithIdInBookshelf,
             lowerCaseCategoriesInBookshelf,
             lowerCaseCategories = categories.map(function(category){return category.toLowerCase()}),
-            lowerCaseEggheads = eggheads.map(function(egghead){return egghead.toLowerCase()}),
             bookObjectToSave = {categories_id: [],
-                                eggheads_id: [],
                                 authors: []};
 
         // check if the client fills in all the necessary book info
-        if (!isBookDetialFilled(title, authors, amazonPage, categories, eggheads, cb)) {
-            return;
-        };
+        // if (!isBookDetialFilled(title, authors, amazonPage, categories, eggheads, cb)) {
+        //     return;
+        // };
+
+        // add book if only the book hasn't been recommended by an egghead before
+
         // query the bookshelf's books
         Book.find()
         .then(function(booksInBookshelf){
@@ -35,80 +40,77 @@ module.exports = function (Book) {
                 return bookTitle === lowerCaseBookTitle;
             })
         })
-        .then(function(isBookInBookshelf){
+        .then(function(bookInBookshelf){
             // check if the book is already in bookshelf
-            if (isBookInBookshelf) {
+            if (bookInBookshelf) {
                 console.log("Bookshelf has a book named - " + title + " - already.");
                 error = {name: 'Duplicated book in bookshelf',
                          status: 400,
                          message: "Bookshelf has a book named - " + title + " - already."};
                 cb(null, error);
             } else {
-                bookObjectToSave.title = title;
-                bookObjectToSave.authors = bookObjectToSave.authors.concat(authors);
-                bookObjectToSave.amazon_page = amazonPage;
-                // query Category model to get bookshelf categories
-                return app.models.Category.find().then(function(categoriesInBookshelf){
-                    return categoriesInBookshelf;
-                });
+                // check if the book was recommended by the egghead before
+                // get egghead id
+
             }
         })
-        .then(function(categoriesInBookshelf){
-            var bookshelfCategoryLength = categoriesInBookshelf.length;
-            // create an array of categories with id
-            lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categoriesInBookshelf);
-            // create an array of categories
-            lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categoriesInBookshelf);
-            // check if there is any new category bookshelf doesn't have
-            categories.forEach(function(inputCategory){
-                var lowerCaseCategory = inputCategory.toLowerCase();
-                if (lowerCaseCategoriesInBookshelf.indexOf(lowerCaseCategory) == -1) {
-                    var newCategoryId;
-                    bookshelfCategoryLength ++;
-                    newCategoryId = 'c-' + String(bookshelfCategoryLength);
-                    // create new category if the bookshelf doesn't have input category
-                    app.models.Category.create({
-                        id: newCategoryId,
-                        name: inputCategory
-                    })
-                    console.log('New category created - ' + inputCategory);
-                    bookObjectToSave.categories_id.push(newCategoryId);
-                } else {
-                    // get category id from existing categories in bookshelf
-                    getIdFromExistingElements(lowerCaseCategories, lowerCaseCategoriesWithIdInBookshelf, bookObjectToSave);
-                }
-            })
-            // query bookshelf for existing eggheads
-            return app.models.EggHead.find().then(function(eggheadsInBookshelf){
-                return eggheadsInBookshelf;
-            });
-        })
-        .then(function(eggheadsInBookshelf){
-            var bookshelfEggheadLength = eggheadsInBookshelf.length;
-            // create an array of eggheads with id
-            lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheadsInBookshelf);
-            // create an array of eggheads
-            lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheadsInBookshelf);
-            // check if there is any new egghead bookshelf doesn't have
-            eggheads.forEach(function(inputEgghead){
-                var lowerCaseEgghead = inputEgghead.toLowerCase();
-                if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
-                    var newEggheadId;
-                    bookshelfEggheadLength ++;
-                    newEggheadId = 'eh-' + String(bookshelfEggheadLength);
-                    // create new category if the bookshelf doesn't have input category
-                    app.models.EggHead.create({
-                        id: newEggheadId,
-                        name: inputEgghead
-                    })
-                    console.log('New egghead created - ' + inputEgghead);
-                    bookObjectToSave.eggheads_id.push(newEggheadId);
-                } else {
-                    // get category id from existing categories in bookshelf
-                    getIdFromExistingElements(lowerCaseEggheads, lowerCaseEggheadsWithIdInBookshelf, bookObjectToSave);
-                }
-            })
-            // construct an id for new book
+        // .then(function(categoriesInBookshelf){
+        //     var bookshelfCategoryLength = categoriesInBookshelf.length;
+        //     // create an array of categories with id
+        //     lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categoriesInBookshelf);
+        //     // create an array of categories
+        //     lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categoriesInBookshelf);
+        //     // check if there is any new category bookshelf doesn't have
+        //     categories.forEach(function(inputCategory){
+        //         var lowerCaseCategory = inputCategory.toLowerCase();
+        //         if (lowerCaseCategoriesInBookshelf.indexOf(lowerCaseCategory) == -1) {
+        //             var newCategoryId;
+        //             bookshelfCategoryLength ++;
+        //             newCategoryId = 'c-' + String(bookshelfCategoryLength);
+        //             // create new category if the bookshelf doesn't have input category
+        //             // app.models.Category.create({
+        //             //     id: newCategoryId,
+        //             //     name: inputCategory
+        //             // })
+        //             console.log('New category created - ' + inputCategory);
+        //             bookObjectToSave.categories_id.push(newCategoryId);
+        //         } else {
+        //             // get category id from existing categories in bookshelf
+        //             getIdFromExistingElements(lowerCaseCategories, lowerCaseCategoriesWithIdInBookshelf, bookObjectToSave);
+        //         }
+        //     })
+        //     // query bookshelf for existing eggheads
+        //     return app.models.EggHead.find().then(function(eggheadsInBookshelf){
+        //         return eggheadsInBookshelf;
+        //     });
+        // })
+        // .then(function(eggheadsInBookshelf){
+        //     var bookshelfEggheadLength = eggheadsInBookshelf.length;
+        //     // create an array of eggheads with id
+        //     lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheadsInBookshelf);
+        //     // create an array of eggheads
+        //     lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheadsInBookshelf);
+        //     // check if there the input egghead bookshelf doesn't have
+        //     if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
+        //         var newEggheadId;
+        //         bookshelfEggheadLength ++;
+        //         newEggheadId = 'eh-' + String(bookshelfEggheadLength);
+        //         // create new egghead if the bookshelf doesn't have input egghead
+        //         // app.models.EggHead.create({
+        //         //     id: newEggheadId,
+        //         //     name: egghead
+        //         // })
+        //         console.log('New egghead created - ' + egghead);
+        //         bookObjectToSave.egghead_id = newEggheadId;
+        //     } else {
+        //         // get existing egghead id
+        //         lowerCaseEggheadsWithIdInBookshelf.forEach(function(egghead){
+        //             if (lowerCaseEgghead === egghead.name) {
+        //                 bookObjectToSave.egghead_id = egghead.id;
+        //             }
+        //         })
+        //     }
+                    // construct an id for new book
             bookshelfBookLength ++;
             newBookId = 'b-' + String(bookshelfBookLength);
             bookObjectToSave.id = newBookId;
@@ -122,7 +124,7 @@ module.exports = function (Book) {
                 eggheads_id: bookObjectToSave.eggheads_id
             })
             console.log('The following book is inserted in bookshelf: \n', bookObjectToSave);
-        })
+        // })
     }
     Book.remoteMethod('addBook', {
         description: 'Insert a new book in bookshelf',
@@ -195,7 +197,7 @@ module.exports = function (Book) {
                 reformedEgghead.name = egghead.name.toLowerCase();
                 reformedEgghead.profile_pic = egghead.profile_pic;
                 reformedEgghead.site = egghead.site;
-                reformedEgghead.eggheads_id = egghead.id;
+                reformedEgghead.id = egghead.id;
                 return reformedEgghead;
             })
         }
