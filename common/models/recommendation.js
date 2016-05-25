@@ -4,11 +4,11 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing
-        var recommendation = { bookTitle: 'Fuck That shit',
+        var recommendation = { bookTitle: 'on writing well',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Hip Hop'],
-                               egghead: 'derek sivers',
+                               egghead: 'coolio',
                                src: 'd12.com' },
             // processing variables
             bookTitle = recommendation.bookTitle,
@@ -70,8 +70,26 @@ module.exports = function(Recommendation) {
             }
         })
         // check if there is a duplicated recommendation
+        var hasRecommendation = Recommendation.find().then(function(recommendations){
+            var counter = 0;
+            recommendations.forEach(function(recommendation){
+                if (bookId === recommendation.book_id && eggheadId === recommendation.egghead_id) {
+                    counter++;
+                }
+            })
+            if (counter > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        })
 
-        Promise.all([hasEgghead, getBookId]);
+        Promise.all([hasEgghead, getBookId, hasRecommendation]).then(function(promises){
+            if (promises[2] === true) {
+                console.log('A recommendation made by ' + egghead + " for book '" + bookTitle + "' existed.");
+                return;
+            }
+        });
 
         // add recommendation: old book + new egghead
         // add recommendation: new book + old egghead
