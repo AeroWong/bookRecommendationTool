@@ -4,11 +4,11 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing
-        var recommendation = { bookTitle: 'on writing welL',
+        var recommendation = { bookTitle: 'Fuck That shit',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Hip Hop'],
-                               egghead: 'Coolio',
+                               egghead: 'derek sivers',
                                src: 'd12.com' },
             // processing variables
             bookTitle = recommendation.bookTitle,
@@ -18,10 +18,12 @@ module.exports = function(Recommendation) {
             egghead = recommendation.egghead,
             src = recommendation.src,
             lowerCaseEgghead = egghead.toLowerCase(),
+            lowerCaseEggheadsWithIdInBookshelf = null,
             lowerCaseEggheadsInBookshelf = null,
             lowerCaseBookTitle = bookTitle.toLowerCase(),
             lowerCaseBookTitlesWithIdInBookshelf = null,
             lowerCaseBookTitlesInBookshelf = null,
+            eggheadId = null,
             bookId = null,
             // recommendation obj to save
             recommendationObj = { id: null,
@@ -39,27 +41,37 @@ module.exports = function(Recommendation) {
         // check if bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find().then(function(eggheads){
             lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
+            lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheads);
             if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
                 console.log("The egghead doesn't exist. Please create one.");
                 return;
+            } else {
+                // reference egghead id by egghead's name
+                lowerCaseEggheadsWithIdInBookshelf.forEach(function(egghead){
+                    if (lowerCaseEgghead === egghead.name) {
+                        eggheadId = egghead.id;
+                    }
+                })
             }
         })
-        // reference book id by title
+        // reference book id by book title
         var getBookId = app.models.Book.find().then(function(books){
             lowerCaseBookTitlesWithIdInBookshelf = reformBookshelfElements(books);
             lowerCaseBookTitlesInBookshelf = turnBookshelfElementsToLowerCase(books);
-            // check if there is a duplicated book
+            // use existing id if there is a duplicated book
             lowerCaseBookTitlesWithIdInBookshelf.forEach(function(book){
                 if (lowerCaseBookTitle === book.title) {
                     bookId = book.id;
-                } else {
-                    bookId = 'b-' + (books.length + 1);
                 }
             })
+            // create a new id
+            if (lowerCaseBookTitlesInBookshelf.indexOf(lowerCaseBookTitle) === -1) {
+                bookId = 'b-' + String(books.length + 1);
+            }
         })
         // check if there is a duplicated recommendation
 
-        Promise.all([hasEgghead]);
+        Promise.all([hasEgghead, getBookId]);
 
         // add recommendation: old book + new egghead
         // add recommendation: new book + old egghead
