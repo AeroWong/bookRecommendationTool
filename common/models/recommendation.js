@@ -8,7 +8,7 @@ module.exports = function(Recommendation) {
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Social Science', 'Finance', 'Hip Hop'],
-                               egghead: 'Tupac',
+                               egghead: 'Coolio',
                                src: 'd12.com' },
             // processing variables
             bookTitle = recommendation.bookTitle,
@@ -28,31 +28,33 @@ module.exports = function(Recommendation) {
             lowerCaseCategoriesWithIdInBookshelf = null,
             eggheadId = null,
             bookId = null,
+            isNewBook = null,
             recommendationId = null,
-            categoryid = null,
+            categoryId = null,
+            eggheadId = null,
+            hasRecommendation = null,
             categoryObj = { id: null,
                             name: null },
-            hasRecommendation = null,
-            // recommendation obj to save
             recommendationObj = { id: null,
                                   src: null,
                                   book_id: null,
                                   egghead_id: null },
-            // book obj to save
             bookObj = { id: null,
                         title: null,
                         authors: null,
                         amazon_page: null,
                         categories_id: [],
-                        egghead_id: [] };
+                        eggheads_id: [] };
 
         // check if bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find().then(function(eggheads){
             lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
             lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheads);
             if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
-                console.log("The egghead doesn't exist. Please create one.");
-                return;
+                // stop the system
+                var e = new Error("The egghead doesn't exist. Please create one.");
+                console.log(e.message);
+                throw e;
             } else {
                 // reference egghead id by egghead's name
                 lowerCaseEggheadsWithIdInBookshelf.forEach(function(egghead){
@@ -70,11 +72,13 @@ module.exports = function(Recommendation) {
             lowerCaseBookTitlesWithIdInBookshelf.forEach(function(book){
                 if (lowerCaseBookTitle === book.title) {
                     bookId = book.id;
+                    isNewBook = false;
                 }
             })
             // create a new id
             if (lowerCaseBookTitlesInBookshelf.indexOf(lowerCaseBookTitle) === -1) {
                 bookId = 'b-' + String(books.length + 1);
+                isNewBook = true;
             }
         })
         // check if there is a duplicated recommendation
@@ -105,31 +109,54 @@ module.exports = function(Recommendation) {
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
-                    // insert book process starts from referencing categories id by category name
-                    app.models.Category.find().then(function(categories){
-                        categoryId = 'c-' + String(categories.length + 1);
-                        lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
-                        lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
-                        // insert book bookshelf category id to book
-                        lowerCaseCategories.forEach(function(inputCategory){
-                            lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
-                                if (inputCategory === bookshelfCategory.name) {
-                                    bookObj.categories_id.push(bookshelfCategory.categories_id);
+                    // add book
+                    if (isNewBook) {
+                        // add book step 1: referencing categories id by category's name
+                        var getCategoriesId = app.models.Category.find().then(function(categories){
+                            categoryId = 'c-' + String(categories.length + 1);
+                            lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
+                            lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
+                            // insert bookshelf category id to book
+                            lowerCaseCategories.forEach(function(inputCategory){
+                                lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
+                                    if (inputCategory === bookshelfCategory.name) {
+                                        bookObj.categories_id.push(bookshelfCategory.categories_id);
+                                    }
+                                })
+                            })
+                            // create new category in bookshelf if bookshelf doesn't have the input category
+                            lowerCaseCategories.forEach(function(category){
+                                if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1) {
+                                    bookObj.categories_id.push(categoryId);
+                                    var startCaseCategory = _.startCase(category);
+                                    categoryObj.id = categoryId;
+                                    categoryObj.name = startCaseCategory;
+                                    app.models.Category.create(categoryObj);
+                                    console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
                                 }
                             })
                         })
-                        // create new category in bookshelf if bookshelf doesn't have the input category
-                        lowerCaseCategories.forEach(function(category){
-                            if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1) {
-                                bookObj.categories_id.push(categoryId);
-                                var startCaseCategory = _.startCase(category);
-                                categoryObj.id = categoryId;
-                                categoryObj.name = startCaseCategory;
-                                app.models.Category.create(categoryObj);
-                                console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
-                            }
+                        // add book step 2: referencing eggheads id by egghead's name
+                        var getEggheadId = app.models.EggHead.find().then(function(eggheads){
+                            eggheadId = 'eh-' + String(categories.length + 1);
+                            // insert bookshelf egghead id to book
+                            lowerCaseEggheadsWithIdInBookshelf.forEach(function(bookshelfEgghead){
+                                if (bookshelfEgghead.name === lowerCaseEgghead) {
+                                    bookObj.eggheads_id.push(bookshelfEgghead.id);
+                                }
+                            })
                         })
-                    })
+                        // add book step 3: add id / title / authors / amazonPage
+                        Promise.all([getCategoriesId, getEggheadId]).then(function(){
+                            bookObj.id = bookId;
+                            bookObj.title = bookTitle;
+                            bookObj.authors = authors;
+                            bookObj.amazon_page = amazonPage;
+                            // insert book to bookshelf
+                            app.models.Book.create(bookObj);
+                            console.log(bookObj);
+                        })
+                    }
                 }
             })
         })
