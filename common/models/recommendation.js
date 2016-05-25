@@ -7,7 +7,7 @@ module.exports = function(Recommendation) {
         var recommendation = { bookTitle: 'Fuck That Shit',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
-                               categories: ['Social Science', 'Finance'],
+                               categories: ['Social Science', 'Finance', 'Hip Hop'],
                                egghead: 'Tupac',
                                src: 'd12.com' },
             // processing variables
@@ -23,11 +23,15 @@ module.exports = function(Recommendation) {
             lowerCaseBookTitle = bookTitle.toLowerCase(),
             lowerCaseBookTitlesWithIdInBookshelf = null,
             lowerCaseBookTitlesInBookshelf = null,
+            lowerCaseCategories = categories.map(function(category){return category.toLowerCase()}),
             lowerCaseCategoriesInBookshelf = null,
             lowerCaseCategoriesWithIdInBookshelf = null,
             eggheadId = null,
             bookId = null,
             recommendationId = null,
+            categoryid = null,
+            categoryObj = { id: null,
+                            name: null },
             hasRecommendation = null,
             // recommendation obj to save
             recommendationObj = { id: null,
@@ -102,7 +106,30 @@ module.exports = function(Recommendation) {
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
                     // insert book process starts from referencing categories id by category name
-
+                    app.models.Category.find().then(function(categories){
+                        categoryId = 'c-' + String(categories.length + 1);
+                        lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
+                        lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
+                        // insert book bookshelf category id to book
+                        lowerCaseCategories.forEach(function(inputCategory){
+                            lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
+                                if (inputCategory === bookshelfCategory.name) {
+                                    bookObj.categories_id.push(bookshelfCategory.categories_id);
+                                }
+                            })
+                        })
+                        // create new category in bookshelf if bookshelf doesn't have the input category
+                        lowerCaseCategories.forEach(function(category){
+                            if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1) {
+                                bookObj.categories_id.push(categoryId);
+                                var startCaseCategory = _.startCase(category);
+                                categoryObj.id = categoryId;
+                                categoryObj.name = startCaseCategory;
+                                app.models.Category.create(categoryObj);
+                                console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
+                            }
+                        })
+                    })
                 }
             })
         })
