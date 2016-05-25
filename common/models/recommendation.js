@@ -7,8 +7,8 @@ module.exports = function(Recommendation) {
         var recommendation = { bookTitle: 'Fuck That Shit',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
-                               categories: ['Hip Hop'],
-                               egghead: 'derek sivers',
+                               categories: ['Social Science', 'Finance'],
+                               egghead: 'Tupac',
                                src: 'd12.com' },
             // processing variables
             bookTitle = recommendation.bookTitle,
@@ -23,6 +23,8 @@ module.exports = function(Recommendation) {
             lowerCaseBookTitle = bookTitle.toLowerCase(),
             lowerCaseBookTitlesWithIdInBookshelf = null,
             lowerCaseBookTitlesInBookshelf = null,
+            lowerCaseCategoriesInBookshelf = null,
+            lowerCaseCategoriesWithIdInBookshelf = null,
             eggheadId = null,
             bookId = null,
             recommendationId = null,
@@ -37,8 +39,8 @@ module.exports = function(Recommendation) {
                         title: null,
                         authors: null,
                         amazon_page: null,
-                        categories_id: null,
-                        egghead_id: null };
+                        categories_id: [],
+                        egghead_id: [] };
 
         // check if bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find().then(function(eggheads){
@@ -92,14 +94,15 @@ module.exports = function(Recommendation) {
                     console.log("A recommendation was already made by '" + egghead + "' for book '" + bookTitle + "'.")
                     return;
                 } else {
+                    recommendationObj.id = recommendationId;
+                    recommendationObj.src = src;
+                    recommendationObj.book_id = bookId;
+                    recommendationObj.egghead_id = eggheadId;
                     // add recommendation: new book + old egghead
-                    Recommendation.create({
-                        id: recommendationId,
-                        src: src,
-                        book_id: bookId,
-                        egghead_id: eggheadId
-                    })
+                    Recommendation.create(recommendationObj);
                     console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
+                    // insert book process starts from referencing categories id by category name
+
                 }
             })
         })
