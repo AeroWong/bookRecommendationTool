@@ -4,11 +4,11 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing
-        var recommendation = { bookTitle: 'on writing well',
+        var recommendation = { bookTitle: 'Fuck That Shit',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Hip Hop'],
-                               egghead: 'coolio',
+                               egghead: 'derek sivers',
                                src: 'd12.com' },
             // processing variables
             bookTitle = recommendation.bookTitle,
@@ -25,6 +25,8 @@ module.exports = function(Recommendation) {
             lowerCaseBookTitlesInBookshelf = null,
             eggheadId = null,
             bookId = null,
+            recommendationId = null,
+            hasRecommendation = null,
             // recommendation obj to save
             recommendationObj = { id: null,
                                   src: null,
@@ -70,30 +72,37 @@ module.exports = function(Recommendation) {
             }
         })
         // check if there is a duplicated recommendation
-        var hasRecommendation = Recommendation.find().then(function(recommendations){
-            var counter = 0;
-            recommendations.forEach(function(recommendation){
-                if (bookId === recommendation.book_id && eggheadId === recommendation.egghead_id) {
-                    counter++;
+        Promise.all([hasEgghead, getBookId]).then(function(){
+            Recommendation.find().then(function(recommendations){
+                // creating new id if there is no duplicated one in bookshelf
+                recommendationId = 'r-' + String(recommendations.length + 1);
+                var counter = 0;
+                recommendations.forEach(function(recommendation){
+                    if (bookId === recommendation.book_id && eggheadId === recommendation.egghead_id) {
+                        counter++;
+                    }
+                })
+                if (counter > 0) {
+                    return hasRecommendation = true;
+                } else {
+                    return hasRecommendation = false;
+                }
+            }).then(function(hasRecommendation){
+                if (hasRecommendation === true) {
+                    console.log("A recommendation was already made by '" + egghead + "' for book '" + bookTitle + "'.")
+                    return;
+                } else {
+                    // add recommendation: new book + old egghead
+                    Recommendation.create({
+                        id: recommendationId,
+                        src: src,
+                        book_id: bookId,
+                        egghead_id: eggheadId
+                    })
+                    console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
                 }
             })
-            if (counter > 0) {
-                return true;
-            } else {
-                return false;
-            }
         })
-
-        Promise.all([hasEgghead, getBookId, hasRecommendation]).then(function(promises){
-            if (promises[2] === true) {
-                console.log('A recommendation made by ' + egghead + " for book '" + bookTitle + "' existed.");
-                return;
-            }
-        });
-
-        // add recommendation: old book + new egghead
-        // add recommendation: new book + old egghead
-
     }
     Recommendation.remoteMethod('addRecommendation', {
         description: 'Add a new book recommendation',
