@@ -4,7 +4,7 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing
-        var recommendation = { bookTitle: 'Fuck That Shit',
+        var recommendation = { bookTitle: 'Fuck The Whole Universe',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Social Science', 'Finance', 'Hip Hop'],
@@ -99,7 +99,7 @@ module.exports = function(Recommendation) {
                 }
             }).then(function(hasRecommendation){
                 if (hasRecommendation === true) {
-                    console.log("A recommendation was already made by '" + egghead + "' for book '" + bookTitle + "'.")
+                    console.log("A duplicated recommendation was made by '" + egghead + "' for the book '" + bookTitle + "'.")
                     return;
                 } else {
                     recommendationObj.id = recommendationId;
@@ -109,7 +109,7 @@ module.exports = function(Recommendation) {
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
-                    // add book
+                    // egghead recommends new book
                     if (isNewBook) {
                         // add book step 1: referencing categories id by category's name
                         var getCategoriesId = app.models.Category.find().then(function(categories){
@@ -156,6 +156,15 @@ module.exports = function(Recommendation) {
                             app.models.Book.create(bookObj);
                             console.log(bookObj);
                         })
+                    } else {
+                        //egghead recommends old book
+                        app.models.Book.findById(bookId, function(err, book){
+                            var eggheadList = book.eggheads_id;
+                            eggheadList.push(eggheadId);
+                            book.updateAttributes({eggheads_id: eggheadList}, function(err, book){
+                                console.log("Updated the book '" + bookTitle + "' egghead's List.");
+                            })
+                        })
                     }
                 }
             })
@@ -168,6 +177,47 @@ module.exports = function(Recommendation) {
         accepts: {arg: 'Recommendation info', type: 'Recommendation', description: 'Recommendation detail', http: {source: 'body'}},
         returns: {arg: 'book', type: Recommendation, root: true}
     });
+    function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, egghead, src, cb) {
+        var error = new Error();
+        if (_.isEmpty(title) || title === 'string') {
+            console.log("Please insert the book title.");
+            error = {name: 'Book without title',
+                     status: 400,
+                     message: 'Please fill in the title field'};
+            cb(null, error);
+            return false;
+        } else if (_.isEmpty(authors) || authors[0] === 'string') {
+            console.log("Please insert at least 1 author for the book.");
+            error = {name: 'Book without author',
+                     status: 400,
+                     message: 'Please insert at least 1 author for the book'};
+            cb(null, error);
+            return false;
+        } else if (_.isEmpty(amazonPage) || amazonPage === 'string') {
+            console.log("Please insert the amazon page for the book.");
+            error = {name: 'Book without amazon page',
+                     status: 400,
+                     message: 'Please insert the amazon page for the book'};
+            cb(null, error);
+            return false;
+        } else if (_.isEmpty(categories) || categories[0] === 'string') {
+            console.log("Please insert at least 1 category for the book.");
+            error = {name: 'Book without category',
+                     status: 400,
+                     message: 'Please insert at least 1 category for the book'};
+            cb(null, error);
+            return false;
+        } else if (_.isEmpty(eggheads) || eggheads[0] === 'string') {
+            console.log("Please insert at least 1 egghead for the book.");
+            error = {name: "Book without egghead's recommendation",
+                     status: 400,
+                     message: 'Please insert at least 1 egghead for the book'};
+            cb(null, error);
+            return false;
+        } else {
+            console.log('Recommendation detail filled.')
+        }
+    }
     function turnBookshelfElementsToLowerCase (elems) {
         return elems.map(function(elem){
             if ('title' in elem){
