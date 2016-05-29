@@ -6,7 +6,7 @@ module.exports = function(Category) {
             return allCategories;
         });
     }
-    Category.remoteMethod ('findCategories', {   
+    Category.remoteMethod ('findCategories', {
         description: 'add a new category for the bookshelf',
         accessType: 'WRITE',
         http: {path: '/findCategories', verb: 'post', status: 200},

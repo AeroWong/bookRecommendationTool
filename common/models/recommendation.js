@@ -3,14 +3,14 @@ var app = require('../../server/server.js');
 
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
-        // recommendation object for testing
+        // recommendation object for testing --- will be deleted after implementation
         var recommendation = { bookTitle: 'Fuck The Whole Universe',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Social Science', 'Finance', 'Hip Hop'],
                                egghead: 'Coolio',
                                src: 'd12.com' },
-            // processing variables
+        //
             bookTitle = recommendation.bookTitle,
             authors = recommendation.authors,
             amazonPage = recommendation.amazonPage,
@@ -175,7 +175,7 @@ module.exports = function(Recommendation) {
         http: {path: '/addRecommendation', verb: 'post', status: 200},
         accessType: 'WRITE',
         accepts: {arg: 'Recommendation info', type: 'Recommendation', description: 'Recommendation detail', http: {source: 'body'}},
-        returns: {arg: 'book', type: Recommendation, root: true}
+        returns: {arg: 'Recommendation', type: Recommendation, root: true}
     });
     function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, egghead, src, cb) {
         var error = new Error();
