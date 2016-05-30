@@ -9,6 +9,10 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "alias": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],

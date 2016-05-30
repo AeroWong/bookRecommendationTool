@@ -34,7 +34,8 @@ module.exports = function(Recommendation) {
             eggheadId = null,
             hasRecommendation = null,
             categoryObj = { id: null,
-                            name: null },
+                            name: null,
+                            alias: null },
             recommendationObj = { id: null,
                                   src: null,
                                   book_id: null,
@@ -109,7 +110,7 @@ module.exports = function(Recommendation) {
                     recommendationObj.egghead_id = eggheadId;
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
-                    console.log("A new recommendation was made by '" + egghead + "' for book '" + bookTitle + "'.")
+                    console.log("A new recommendation was made by '" + egghead + "' for the book '" + bookTitle + "'.")
                     // egghead recommends new book
                     if (isNewBook) {
                         // add book step 1: referencing categories id by category's name
@@ -132,6 +133,7 @@ module.exports = function(Recommendation) {
                                     var startCaseCategory = _.startCase(category);
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
+                                    categoryObj.alias = _.words(startCaseCategory).join('');
                                     app.models.Category.create(categoryObj);
                                     console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
                                 }
