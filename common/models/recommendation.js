@@ -168,6 +168,8 @@ module.exports = function(Recommendation) {
                     }
                 }
             })
+        }).catch(function(e){
+            console.log(e);
         })
     }
     Recommendation.remoteMethod('addRecommendation', {

@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var Promise = require('bluebird');
 var app = require('../../server/server.js');
 
 module.exports = function (EggHead) {
@@ -40,34 +41,36 @@ module.exports = function (EggHead) {
         // egghead object for testing --- will be deleted after implementation
         var egghead = {name: 'Derek Sivers'},
         //
-            name = egghead.name;
+            name = egghead.name,
+            eggheadInfoObj = {};
 
         EggHead.findOne({where: {name: name}}).then(function(egghead){
-            var eggheadInfoObj = {};
             eggheadInfoObj.name = egghead.name;
             eggheadInfoObj.profilePic = egghead.profile_pic;
             eggheadInfoObj.site = egghead.site;
             eggheadInfoObj.id = egghead.id;
-            return eggheadInfoObj;
-        }).then(function(eggheadInfoObj){
             eggheadInfoObj.recommendations = [];
-            var eggheadInfoWithRecommendationsObj;
-
-            app.models.Recommendation.find({where: {egghead_id: eggheadInfoObj.id}}).then(function(recommendations){
-                recommendations.forEach(function(recommendation){
+            return eggheadInfoObj.id;
+        }).then(function(eggheadId){
+            return app.models.Recommendation.find({where: {egghead_id: eggheadId}}).then(function(recommendations){
+                return Promise.map(recommendations, function(recommendation){
                     var reformedRecommendation = { bookTitle: null,
+                                                   bookId: recommendation.book_id,
                                                    src: recommendation.src };
-
-                    app.models.Book.findById(recommendation.book_id).then(function(book){
-                        reformedRecommendation.bookTitle = book.title;
-                        eggheadInfoObj.recommendations.push(reformedRecommendation);
-                        eggheadInfoWithRecommendationsObj = eggheadInfoObj;
-                    })
+                    return reformedRecommendation;
                 })
             })
-            return eggheadInfoWithRecommendationsObj;
-        }).then(function(egghead){
-            console.log('---', egghead);
+        }).then(function(recommendations){
+            console.log("Fetching " + name + "'s recommendations...")
+            return recommendations.map(function(recommendation){
+                app.models.Book.findById(recommendation.bookId).then(function(book){
+                    recommendation.bookTitle = book.title;
+                    console.log('Recommendation: ' + recommendation.bookTitle + ' | Book id: ' + recommendation.bookId);
+                })
+                return recommendation;
+            })
+        }).catch(function(e){
+            console.log(e);
         })
     }
     EggHead.remoteMethod('addEgghead', {
