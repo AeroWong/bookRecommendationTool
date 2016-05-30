@@ -57,6 +57,7 @@ module.exports = function (EggHead) {
             return app.models.Recommendation.find({where: {egghead_id: eggheadId}}).then(function(recommendations){
                 return Promise.map(recommendations, function(recommendation){
                     var reformedRecommendation = { bookTitle: null,
+                                                   bookAlias: null,
                                                    bookId: recommendation.book_id,
                                                    src: recommendation.src };
                     return reformedRecommendation;
@@ -67,6 +68,7 @@ module.exports = function (EggHead) {
             return recommendations.map(function(recommendation){
                 app.models.Book.findById(recommendation.bookId).then(function(book){
                     recommendation.bookTitle = book.title;
+                    recommendation.bookAlias = book.alias;
                     console.log('Recommendation: ' + recommendation.bookTitle + ' | Book id: ' + recommendation.bookId);
                 })
                 return recommendation;
