@@ -44,7 +44,8 @@ module.exports = function(Recommendation) {
                         authors: null,
                         amazon_page: null,
                         categories_id: [],
-                        eggheads_id: [] };
+                        eggheads_id: [],
+                        alias: null };
 
         // check if bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find().then(function(eggheads){
@@ -146,12 +147,15 @@ module.exports = function(Recommendation) {
                                 }
                             })
                         })
-                        // add book step 3: add id / title / authors / amazonPage
+                        // add book step 3: construct alias
+                        var alias = _.words(bookTitle).join('');
+                        // add book step 4: add id / title / authors / amazonPage / alias
                         Promise.all([getCategoriesId, getEggheadId]).then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
                             bookObj.authors = authors;
                             bookObj.amazon_page = amazonPage;
+                            bookObj.alias = alias;
                             // insert book to bookshelf
                             app.models.Book.create(bookObj);
                             console.log(bookObj);
