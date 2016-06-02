@@ -4,12 +4,12 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'Fuck The Whole Universe',
+        var recommendation = { bookTitle: 'Smack That',
                                bookCoverImage: 'coverImage.png',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
-                               categories: ['Social Science', 'Finance', 'Hip Hop'],
-                               egghead: 'Derek Sivers',
+                               categories: ['Hip Hop'],
+                               egghead: 'Coolio',
                                src: 'd12.com' },
         //
             bookTitle = recommendation.bookTitle,
@@ -37,6 +37,7 @@ module.exports = function(Recommendation) {
             hasRecommendation = null,
             categoryObj = { id: null,
                             name: null,
+                            books_id: [],
                             alias: null },
             recommendationObj = { id: null,
                                   src: null,
@@ -141,6 +142,7 @@ module.exports = function(Recommendation) {
                                     var startCaseCategory = _.startCase(category);
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
+                                    categoryObj.books_id.push(bookId);
                                     categoryObj.alias = _.words(startCaseCategory).join('').toLowerCase();
                                     app.models.Category.create(categoryObj);
                                     console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
@@ -171,6 +173,21 @@ module.exports = function(Recommendation) {
                             bookObj.alias = alias;
                             // insert book to bookshelf
                             app.models.Book.create(bookObj);
+                            return bookObj;
+                        })
+                        .then(function(completeBookObj){
+                            // add book to category's book list
+                            completeBookObj.categories_id.forEach(function(categoryId){
+                                app.models.Category.findOne({where: {id: categoryId}})
+                                .then(function(category){
+                                    var originalBookList = category.books_id;
+                                    if (originalBookList.indexOf(bookId) === -1){
+                                        originalBookList.push(bookId);
+                                        category.updateAttributes({books_id: originalBookList})
+                                        console.log('Updated category ' + category.name + "'s book list.")
+                                    }
+                                })
+                            })
                             console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
                             cb(null, "A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.");
                         })
