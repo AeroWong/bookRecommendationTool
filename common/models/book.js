@@ -6,14 +6,15 @@ module.exports = function (Book) {
     Book.getBookInfo = function (bookAlias, cb) {
         // bookAlias for testing --- will be deleted after implementation
         var bookAlias = 'fuckthewholeuniverse',
-            bookInfoObj = {title: null,
-                           authors: null,
-                           coverImage: null,
-                           amazonPage: null,
-                           src: null,
-                           recommendations: []};
-        // get book's basic info
+        //
+            bookInfoObj = { title: null,
+                            authors: null,
+                            coverImage: null,
+                            amazonPage: null,
+                            src: null };
+
         Book.findOne({where: {alias: bookAlias}}).then(function(book){
+            // get book's basic info
             bookInfoObj.title = book.title;
             bookInfoObj.authors = book.authors;
             bookInfoObj.coverImage = book.cover_image;
@@ -51,15 +52,16 @@ module.exports = function (Book) {
         })
         .then(function(recommendations){
             bookInfoObj.recommendations = recommendations;
-            return bookInfoObj;
+            console.log('Fetching the following book...\n', bookInfoObj);
+            cb(null, bookInfoObj);
         }).catch(function(e){
             console.log(e);
         })
     }
     Book.remoteMethod('getBookInfo', {
-        description: "Get a book's basic info and the recommendations",
+        description: "render book's info and its recommendation sources",
         http: {path: '/getBookInfo', verb: 'get', status: 200},
-        accepts: {arg: 'Book alias', type: 'string', description: "Get a book's detial for book page template", http: {source: 'query'}},
-        returns: {arg: 'Book', type: Book, root: true}
+        accepts: {arg: 'book alias', type: 'string', description: "render the given book's url", http: {source: 'query'}},
+        returns: {arg: 'Book', type: 'object', root: true}
     })
 };

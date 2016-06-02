@@ -37,24 +37,29 @@ module.exports = function (EggHead) {
                 EggHead.create(eggheadObj);
                 console.log("A new egghead '" + name +"' was created.")
             }
+        }).then(function(){
+            cb(null, eggheadObj);
+        }).catch(function(e){
+            console.log(e);
         })
     }
-    EggHead.getEggheadProfileAndRecommendations = function(egghead, cb) {
+    EggHead.getEggheadInfo = function(eggheadAlias, cb) {
         // egghead object for testing --- will be deleted after implementation
-        var egghead = {name: 'Derek Sivers'},
+        var eggheadAlias = 'dereksivers',
         //
-            name = egghead.name,
-            eggheadInfoObj = {};
+            eggheadInfoObj = { name: null,
+                               profilePic: null,
+                               site: null };
 
-        EggHead.findOne({where: {name: name}}).then(function(egghead){
+        EggHead.findOne({where: {alias: eggheadAlias}})
+        .then(function(egghead){
+            // get egghead's basic info
             eggheadInfoObj.name = egghead.name;
             eggheadInfoObj.profilePic = egghead.profile_pic;
             eggheadInfoObj.site = egghead.site;
-            eggheadInfoObj.id = egghead.id;
-            eggheadInfoObj.recommendations = [];
-            return eggheadInfoObj.id;
-        }).then(function(eggheadId){
-            return app.models.Recommendation.find({where: {egghead_id: eggheadId}}).then(function(recommendations){
+
+            var getReformedRecommendations =
+            app.models.Recommendation.find({where: {egghead_id: egghead.id}}).then(function(recommendations){
                 return Promise.map(recommendations, function(recommendation){
                     var reformedRecommendation = { bookTitle: null,
                                                    bookAlias: null,
@@ -63,17 +68,30 @@ module.exports = function (EggHead) {
                     return reformedRecommendation;
                 })
             })
-        }).then(function(recommendations){
-            console.log("Fetching " + name + "'s recommendations...")
-            return recommendations.map(function(recommendation){
-                app.models.Book.findById(recommendation.bookId).then(function(book){
-                    recommendation.bookTitle = book.title;
-                    recommendation.bookAlias = book.alias;
-                    console.log('Recommendation: ' + recommendation.bookTitle + ' | Book id: ' + recommendation.bookId);
-                })
-                return recommendation;
+            var getBooks = app.models.Book.find().then(function(books){
+                return books;
             })
-        }).catch(function(e){
+            return Promise.all([getReformedRecommendations, getBooks]).then(function(promises){
+                var reformedRecommendations = promises[0],
+                    books = promises[1];
+
+                return reformedRecommendations.map(function(recommendation){
+                    books.forEach(function(book){
+                        if (recommendation.bookId === book.id) {
+                            recommendation.bookTitle = book.title;
+                            recommendation.bookAlias = book.alias;
+                        }
+                    })
+                    return recommendation;
+                })
+            })
+        })
+        .then(function(recommendations){
+            eggheadInfoObj.recommendations = recommendations;
+            console.log("Rendering the following egghead's info:\n", eggheadInfoObj);
+            cb(null, eggheadInfoObj);
+        })
+        .catch(function(e){
             console.log(e);
         })
     }
@@ -82,13 +100,13 @@ module.exports = function (EggHead) {
         http: {path: '/addEgghead', verb: 'post', status: 200},
         accessType: 'WRITE',
         accepts: {arg: 'Egghead info', type: 'EggHead', description: 'EggHead detail', http: {source: 'body'}},
-        returns: {arg: 'Egghead', type: EggHead, root: true}
+        returns: {arg: 'data', type: EggHead, root: true}
     })
-    EggHead.remoteMethod('getEggheadProfileAndRecommendations', {
-        description: 'Get egghead recommendations',
-        http: {path: '/getEggheadProfileAndRecommendations', verb: 'get', status: 200},
-        accepts: {arg: 'Egghead name', type: 'EggHead', description: 'Get a list of recommendations', http: {source: 'body'}},
-        returns: {arg: 'EggHead', type: EggHead, root: true}
+    EggHead.remoteMethod('getEggheadInfo', {
+        description: "render egghead's profile and recommendations",
+        http: {path: '/getEggheadInfo', verb: 'get', status: 200},
+        accepts: {arg: 'egghead alias', type: 'string', description: "render the given egghead's URL", http: {source: 'query'}},
+        returns: {arg: 'data', type: 'object', root: true}
     })
     function turnBookshelfElementsToLowerCase (elems) {
         return elems.map(function(elem){
