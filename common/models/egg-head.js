@@ -4,13 +4,8 @@ var app = require('../../server/server.js');
 
 module.exports = function (EggHead) {
     EggHead.addEgghead = function (egghead, cb) {
-        // egghead object for testing --- will be deleted after implementation
-        var egghead = {name: 'Blake',
-                       profilePic: 'egghead.jpg',
-                       site: 'superEgghead.com'},
-        //
-            name = egghead.name,
-            profilePic = egghead.profilePic,
+        var name = egghead.name,
+            profilePic = egghead.profile_pic,
             site = egghead.site,
             lowerCaseName = name.toLowerCase(),
             lowerCaseNamesInBookshelf = null,
@@ -21,33 +16,33 @@ module.exports = function (EggHead) {
                            site: null,
                            alias: null };
 
-        EggHead.find().then(function(eggheads){
+        EggHead.find()
+        .then(function(eggheads){
             eggheadId = 'eh-' + String(eggheads.length + 1);
             lowerCaseNamesInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
             if (lowerCaseNamesInBookshelf.indexOf(lowerCaseName) > -1) {
                 var e = new Error("Duplicated egghead.");
-                console.log(e.message);
+                cb(null, e.message);
                 throw e;
             } else {
                 eggheadObj.id = eggheadId;
                 eggheadObj.name = name;
                 eggheadObj.profile_pic = profilePic;
                 eggheadObj.site = site;
-                eggheadObj.alias = _.words(name).join('');
+                eggheadObj.alias = _.words(name).join('').toLowerCase();
                 EggHead.create(eggheadObj);
                 console.log("A new egghead '" + name +"' was created.")
             }
-        }).then(function(){
+        })
+        .then(function(){
             cb(null, eggheadObj);
-        }).catch(function(e){
+        })
+        .catch(function(e){
             console.log(e);
         })
     }
     EggHead.getEggheadInfo = function(eggheadAlias, cb) {
-        // egghead object for testing --- will be deleted after implementation
-        var eggheadAlias = 'dereksivers',
-        //
-            eggheadInfoObj = { name: null,
+        var eggheadInfoObj = { name: null,
                                profilePic: null,
                                site: null };
 
@@ -58,8 +53,8 @@ module.exports = function (EggHead) {
             eggheadInfoObj.profilePic = egghead.profile_pic;
             eggheadInfoObj.site = egghead.site;
 
-            var getReformedRecommendations =
-            app.models.Recommendation.find({where: {egghead_id: egghead.id}}).then(function(recommendations){
+            var getReformedRecommendations = app.models.Recommendation.find({where: {egghead_id: egghead.id}})
+            .then(function(recommendations){
                 return Promise.map(recommendations, function(recommendation){
                     var reformedRecommendation = { bookTitle: null,
                                                    bookAlias: null,
@@ -68,7 +63,8 @@ module.exports = function (EggHead) {
                     return reformedRecommendation;
                 })
             })
-            var getBooks = app.models.Book.find().then(function(books){
+            var getBooks = app.models.Book.find()
+            .then(function(books){
                 return books;
             })
             return Promise.all([getReformedRecommendations, getBooks]).then(function(promises){

@@ -9,7 +9,7 @@ module.exports = function(Recommendation) {
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Social Science', 'Finance', 'Hip Hop'],
-                               egghead: 'Coolio',
+                               egghead: 'Derek Sivers',
                                src: 'd12.com' },
         //
             bookTitle = recommendation.bookTitle,
@@ -51,7 +51,8 @@ module.exports = function(Recommendation) {
                         alias: null };
 
         // check if bookshelf has the egghead
-        var hasEgghead = app.models.EggHead.find().then(function(eggheads){
+        var hasEgghead = app.models.EggHead.find()
+        .then(function(eggheads){
             lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
             lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheads);
             if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
@@ -69,7 +70,8 @@ module.exports = function(Recommendation) {
             }
         })
         // reference book id by book title
-        var getBookId = app.models.Book.find().then(function(books){
+        var getBookId = app.models.Book.find()
+        .then(function(books){
             lowerCaseBookTitlesWithIdInBookshelf = reformBookshelfElements(books);
             lowerCaseBookTitlesInBookshelf = turnBookshelfElementsToLowerCase(books);
             // use existing id if there is a duplicated book
@@ -87,7 +89,8 @@ module.exports = function(Recommendation) {
         })
         // check if there is a duplicated recommendation
         Promise.all([hasEgghead, getBookId]).then(function(){
-            Recommendation.find().then(function(recommendations){
+            Recommendation.find()
+            .then(function(recommendations){
                 // creating new id if there is no duplicated one in bookshelf
                 recommendationId = 'r-' + String(recommendations.length + 1);
                 var counter = 0;
@@ -101,10 +104,12 @@ module.exports = function(Recommendation) {
                 } else {
                     return hasRecommendation = false;
                 }
-            }).then(function(hasRecommendation){
+            })
+            .then(function(hasRecommendation){
                 if (hasRecommendation === true) {
-                    console.log("A duplicated recommendation was made by '" + egghead + "' for the book '" + bookTitle + "'.")
-                    return;
+                    var e = new Error('Duplicated book recommendation.')
+                    cb(null, e.message);
+                    throw e;
                 } else {
                     recommendationObj.id = recommendationId;
                     recommendationObj.src = src;
@@ -112,11 +117,12 @@ module.exports = function(Recommendation) {
                     recommendationObj.egghead_id = eggheadId;
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
-                    console.log("A new recommendation was made by '" + egghead + "' for the book '" + bookTitle + "'.")
+                    console.log("A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.")
                     // egghead recommends new book
                     if (isNewBook) {
                         // add book step 1: referencing categories id by category's name
-                        var getCategoriesId = app.models.Category.find().then(function(categories){
+                        var getCategoriesId = app.models.Category.find()
+                        .then(function(categories){
                             categoryId = 'c-' + String(categories.length + 1);
                             lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
                             lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
@@ -142,7 +148,8 @@ module.exports = function(Recommendation) {
                             })
                         })
                         // add book step 2: referencing eggheads id by egghead's name
-                        var getEggheadId = app.models.EggHead.find().then(function(eggheads){
+                        var getEggheadId = app.models.EggHead.find()
+                        .then(function(eggheads){
                             eggheadId = 'eh-' + String(categories.length + 1);
                             // insert bookshelf egghead id to book
                             lowerCaseEggheadsWithIdInBookshelf.forEach(function(bookshelfEgghead){
@@ -154,7 +161,8 @@ module.exports = function(Recommendation) {
                         // add book step 3: construct alias
                         var alias = _.words(bookTitle).join('').toLowerCase();
                         // add book step 4: add id / title / authors / amazonPage / alias
-                        Promise.all([getCategoriesId, getEggheadId]).then(function(){
+                        Promise.all([getCategoriesId, getEggheadId])
+                        .then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
                             bookObj.cover_image = bookCoverImage;
@@ -163,7 +171,8 @@ module.exports = function(Recommendation) {
                             bookObj.alias = alias;
                             // insert book to bookshelf
                             app.models.Book.create(bookObj);
-                            console.log(bookObj);
+                            console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
+                            cb(null, "A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.");
                         })
                     } else {
                         //egghead recommends old book
@@ -172,12 +181,14 @@ module.exports = function(Recommendation) {
                             eggheadList.push(eggheadId);
                             book.updateAttributes({eggheads_id: eggheadList}, function(err, book){
                                 console.log("Updated the book '" + bookTitle + "' egghead's List.");
+                                cb(null, "Updated the book '" + bookTitle + "' egghead's List.");
                             })
                         })
                     }
                 }
             })
-        }).catch(function(e){
+        })
+        .catch(function(e){
             console.log(e);
         })
     }

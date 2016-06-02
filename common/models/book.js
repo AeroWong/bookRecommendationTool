@@ -4,23 +4,22 @@ var app = require('../../server/server.js');
 
 module.exports = function (Book) {
     Book.getBookInfo = function (bookAlias, cb) {
-        // bookAlias for testing --- will be deleted after implementation
-        var bookAlias = 'fuckthewholeuniverse',
-        //
-            bookInfoObj = { title: null,
+        var bookInfoObj = { title: null,
                             authors: null,
                             coverImage: null,
                             amazonPage: null,
                             src: null };
 
-        Book.findOne({where: {alias: bookAlias}}).then(function(book){
+        Book.findOne({where: {alias: bookAlias}})
+        .then(function(book){
             // get book's basic info
             bookInfoObj.title = book.title;
             bookInfoObj.authors = book.authors;
             bookInfoObj.coverImage = book.cover_image;
             bookInfoObj.amazonPage = book.amazon_page;
 
-            var getReformedRecommendations = app.models.Recommendation.find({where: {'book_id': book.id}}).then(function(recommendations){
+            var getReformedRecommendations = app.models.Recommendation.find({where: {'book_id': book.id}})
+            .then(function(recommendations){
                 var reformedRecommendations = [];
                 recommendations.forEach(function(recommendation){
                     var reformedRecommendation = { src: null,
@@ -44,6 +43,7 @@ module.exports = function (Book) {
                     eggheads.forEach(function(egghead){
                         if (recommendation.eggheadId === egghead.id) {
                             recommendation.eggheadName = egghead.name;
+                            delete recommendation.eggheadId;
                         }
                     })
                     return recommendation;
