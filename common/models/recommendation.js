@@ -5,6 +5,7 @@ module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
         var recommendation = { bookTitle: 'Fuck The Whole Universe',
+                               bookCoverImage: 'coverImage.png',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Social Science', 'Finance', 'Hip Hop'],
@@ -12,6 +13,7 @@ module.exports = function(Recommendation) {
                                src: 'd12.com' },
         //
             bookTitle = recommendation.bookTitle,
+            bookCoverImage = recommendation.bookCoverImage;
             authors = recommendation.authors,
             amazonPage = recommendation.amazonPage,
             categories = recommendation.categories,
@@ -133,7 +135,7 @@ module.exports = function(Recommendation) {
                                     var startCaseCategory = _.startCase(category);
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
-                                    categoryObj.alias = _.words(startCaseCategory).join('');
+                                    categoryObj.alias = _.words(startCaseCategory).join('').toLowerCase();
                                     app.models.Category.create(categoryObj);
                                     console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
                                 }
@@ -150,11 +152,12 @@ module.exports = function(Recommendation) {
                             })
                         })
                         // add book step 3: construct alias
-                        var alias = _.words(bookTitle).join('');
+                        var alias = _.words(bookTitle).join('').toLowerCase();
                         // add book step 4: add id / title / authors / amazonPage / alias
                         Promise.all([getCategoriesId, getEggheadId]).then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
+                            bookObj.cover_image = bookCoverImage;
                             bookObj.authors = authors;
                             bookObj.amazon_page = amazonPage;
                             bookObj.alias = alias;
