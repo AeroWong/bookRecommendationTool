@@ -4,10 +4,7 @@ var app = require('../../server/server.js');
 
 module.exports = function(Category) {
     Category.getCategoryBooks = function(categoryAlias, cb) {
-        // variable for testing purpose
-        var categoryAlias = 'hiphop',
-        //
-            categoryInfoObj = { name: null,
+        var categoryInfoObj = { name: null,
                                 bookCount: null,
                                 books: [] };
         // get the category name and the number of book count
@@ -113,10 +110,9 @@ module.exports = function(Category) {
         })
     }
     Category.remoteMethod ('getCategoryBooks', {
-        description: 'add a new category for the bookshelf',
-        accessType: 'WRITE',
+        description: 'get a list of books from a selcted category',
         http: {path: '/getCategoryBooks', verb: 'post', status: 200},
-        accepts: {arg: 'category', type: 'Category', description: 'Category name', http: {source: 'body'}},
-        returns: {arg: 'book', type: Category, root: true}
+        accepts: {arg: 'category', type: 'string', description: 'Category name', http: {source: 'query'}},
+        returns: {arg: 'category info and its books', type: Category, root: true}
     });
 };
