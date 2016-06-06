@@ -39,6 +39,10 @@
     "alias": {
       "type": "string",
       "required": true
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
     }
   },
   "validations": [],

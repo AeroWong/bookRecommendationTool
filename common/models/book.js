@@ -7,8 +7,7 @@ module.exports = function (Book) {
         var bookInfoObj = { title: null,
                             authors: null,
                             coverImage: null,
-                            amazonPage: null,
-                            src: null };
+                            amazonPage: null };
 
         Book.findOne({where: {alias: bookAlias}})
         .then(function(book){

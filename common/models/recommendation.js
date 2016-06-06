@@ -1,10 +1,11 @@
 var _ = require('lodash');
+var moment = require('moment');
 var app = require('../../server/server.js');
 
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'Smack That',
+        var recommendation = { bookTitle: 'Fuck that shit',
                                bookCoverImage: 'coverImage.png',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
@@ -42,16 +43,18 @@ module.exports = function(Recommendation) {
             recommendationObj = { id: null,
                                   src: null,
                                   book_id: null,
-                                  egghead_id: null },
+                                  egghead_id: null,
+                                  created: null },
             bookObj = { id: null,
                         title: null,
                         authors: null,
                         amazon_page: null,
                         categories_id: [],
                         eggheads_id: [],
-                        alias: null };
+                        alias: null,
+                        created: null };
 
-        // check if bookshelf has the egghead
+        // check if the bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find()
         .then(function(eggheads){
             lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
@@ -116,6 +119,7 @@ module.exports = function(Recommendation) {
                     recommendationObj.src = src;
                     recommendationObj.book_id = bookId;
                     recommendationObj.egghead_id = eggheadId;
+                    recommendationObj.created = moment.utc().format('YYYY-MM-DD');
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.")
@@ -171,6 +175,7 @@ module.exports = function(Recommendation) {
                             bookObj.authors = authors;
                             bookObj.amazon_page = amazonPage;
                             bookObj.alias = alias;
+                            bookObj.created = moment.utc().format('YYYY-MM-DD');;
                             // insert book to bookshelf
                             app.models.Book.create(bookObj);
                             return bookObj;
@@ -209,12 +214,43 @@ module.exports = function(Recommendation) {
             console.log(e);
         })
     }
+    Recommendation.getCurrentMonthRecommendations = function (cb) {
+
+        var lastDayOfPreviousMonth = moment.utc().date(0).format('YYYY-MM-DD');
+
+        return Recommendation.find().then(function(recommendations){
+            return recommendations.map(function(recommendation){
+                if (recommendation.created &&
+                    recommendation.created !== undefined &&
+                    moment(recommendation.created).isAfter(lastDayOfPreviousMonth))
+                {
+                    return recommendation;
+                }
+            })
+        })
+        .then(function(whatever){console.log(whatever)})
+
+        // Recommendation.findById('r-30').then(function(recommendation){
+        //     var today = new Date(),
+        //         currentMonth = today.getMonth();
+
+        //     if (moment(recommendation.created).isAfter(currentMonth)) {
+        //         console.log(recommendation);
+        //     }
+        // })
+    }
     Recommendation.remoteMethod('addRecommendation', {
         description: 'Add a new book recommendation',
         http: {path: '/addRecommendation', verb: 'post', status: 200},
         accessType: 'WRITE',
         accepts: {arg: 'Recommendation info', type: 'Recommendation', description: 'Recommendation detail', http: {source: 'body'}},
         returns: {arg: 'Recommendation', type: Recommendation, root: true}
+    });
+    Recommendation.remoteMethod('getCurrentMonthRecommendations', {
+        description: 'Add recommendations for a month',
+        http: {path: '/getCurrentMonthRecommendations', verb: 'get', status: 200},
+        accepts: {arg: 'month number', type: 'string', description: "render the given month's recommendations", http: {source: 'query'}},
+        returns: {arg: 'Recommendations', type: 'object', root: true}
     });
     function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, egghead, src, cb) {
         var error = new Error();

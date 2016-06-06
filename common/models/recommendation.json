@@ -17,6 +17,10 @@
     "egghead_id": {
       "type": "string",
       "required": true
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
     }
   },
   "validations": [],
