@@ -91,6 +91,24 @@ module.exports = function (EggHead) {
             console.log(e);
         })
     }
+    EggHead.getEggHeadsInfo = function(options, cb) {
+        return EggHead.find().then(function(eggheads){
+            return eggheads.map(function(egghead){
+                var reformedEgghead = {};
+                reformedEgghead.profilePic = egghead.profile_pic;
+                reformedEgghead.name = egghead.name;
+                reformedEgghead.alias = egghead.alias;
+                return reformedEgghead;
+            })
+        })
+        .then(function(eggheads){
+            console.log("rendering all eggheads' basic info...");
+            cb(null, eggheads);
+        })
+        .catch(function(e){
+            console.log(e);
+        })
+    }
     EggHead.remoteMethod('addEgghead', {
         description: 'Add a new egghead',
         http: {path: '/addEgghead', verb: 'post', status: 200},
@@ -101,6 +119,12 @@ module.exports = function (EggHead) {
     EggHead.remoteMethod('getEggheadInfo', {
         description: "render egghead's profile and recommendations",
         http: {path: '/getEggheadInfo', verb: 'get', status: 200},
+        accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
+        returns: {arg: 'data', type: 'object', root: true}
+    })
+    EggHead.remoteMethod('getEggHeadsInfo', {
+        description: "render all egghead's basic info",
+        http: {path: '/getEggHeadsInfo', verb: 'get', status: 200},
         accepts: {arg: 'egghead alias', type: 'string', description: "render the given egghead's URL", http: {source: 'query'}},
         returns: {arg: 'data', type: 'object', root: true}
     })

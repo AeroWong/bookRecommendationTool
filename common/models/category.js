@@ -113,14 +113,14 @@ module.exports = function(Category) {
     }
     Category.getCatgoriesInfo = function(options, cb) {
         return Category.find().then(function(categories){
-            console.log('Yes you see me.')
             return categories.map(function(category){
                 var reformedCategory = {};
+                reformedCategory.name = category.name;
                 if (category.books_id) {
-                    reformedCategory.name = category.name;
                     reformedCategory.bookCount = category.books_id.length;
-                } else {
-                    reformedCategory.name = category.name;
+                }
+                if (category.alias) {
+                    reformedCategory.alias = category.alias;
                 }
                 return reformedCategory;
             })
