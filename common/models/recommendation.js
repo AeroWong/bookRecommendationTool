@@ -317,7 +317,7 @@ module.exports = function(Recommendation) {
     Recommendation.remoteMethod('getCurrentMonthRecommendations', {
         description: 'Add recommendations for a month',
         http: {path: '/getCurrentMonthRecommendations', verb: 'get', status: 200},
-        accepts: {arg: 'month number', type: 'string', description: "render the given month's recommendations", http: {source: 'query'}},
+        accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
         returns: {arg: 'Recommendations', type: 'object', root: true}
     });
     function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, egghead, src, cb) {
