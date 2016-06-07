@@ -19,6 +19,7 @@ module.exports = function(Category) {
             return Promise.map(booksId, function(bookId){
                 var reformedBook = { id: null,
                                      title: null,
+                                     alias: null,
                                      authors: [],
                                      amazonPage: null };
 
@@ -56,6 +57,7 @@ module.exports = function(Category) {
                     if (reformedBook.id === book.id) {
                         reformedBook.title = book.title;
                         reformedBook.authors = book.authors;
+                        reformedBook.alias = book.alias;
                         reformedBook.recommendations = [];
                     }
                 })
@@ -109,10 +111,37 @@ module.exports = function(Category) {
             cb(null, categoryInfoObj);
         })
     }
+    Category.getCatgoriesInfo = function(options, cb) {
+        return Category.find().then(function(categories){
+            console.log('Yes you see me.')
+            return categories.map(function(category){
+                var reformedCategory = {};
+                if (category.books_id) {
+                    reformedCategory.name = category.name;
+                    reformedCategory.bookCount = category.books_id.length;
+                } else {
+                    reformedCategory.name = category.name;
+                }
+                return reformedCategory;
+            })
+        }).then(function(categories){
+            console.log("rendering all categories' info...");
+            cb(null, categories);
+        })
+        .catch(function(e){
+            console.log(e);
+        })
+    }
     Category.remoteMethod ('getCategoryBooks', {
         description: 'get a list of books from a selcted category',
-        http: {path: '/getCategoryBooks', verb: 'post', status: 200},
-        accepts: {arg: 'category', type: 'string', description: 'Category name', http: {source: 'query'}},
+        http: {path: '/getCategoryBooks', verb: 'get', status: 200},
+        accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
+        returns: {arg: 'category info and its books', type: Category, root: true}
+    });
+    Category.remoteMethod ('getCatgoriesInfo', {
+        description: 'get a list of all categories',
+        http: {path: '/getCatgoriesInfo', verb: 'get', status: 200},
+        accepts: {arg: 'category', type: 'string', description: 'Category ', http: {source: 'query'}},
         returns: {arg: 'category info and its books', type: Category, root: true}
     });
 };

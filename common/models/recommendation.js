@@ -306,6 +306,9 @@ module.exports = function(Recommendation) {
             console.log("rendering current month recommendation's info...")
             cb(null, currentMonthRecommendationInfo);
         })
+        .catch(function(e){
+            console.log(e);
+        })
     }
     Recommendation.remoteMethod('addRecommendation', {
         description: 'Add a new book recommendation',
