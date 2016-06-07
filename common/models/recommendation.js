@@ -214,9 +214,15 @@ module.exports = function(Recommendation) {
             console.log(e);
         })
     }
-    Recommendation.getCurrentMonthRecommendations = function (cb) {
+    Recommendation.getCurrentMonthRecommendations = function (options, cb) {
 
-        var lastDayOfPreviousMonth = moment.utc().date(0).format('YYYY-MM-DD');
+        var lastDayOfPreviousMonth = moment.utc().date(0).format('YYYY-MM-DD'),
+            today = new Date(), currentMonth = today.getMonth(),
+            currentMonth = moment().month(currentMonth).format('MMM'),
+            monthRecommendationsCount = null,
+            currentMonthRecommendationInfo = { recommendationCount: null,
+                                               currentMonth: currentMonth,
+                                               recommendations: null };
 
         return Recommendation.find().then(function(recommendations){
             return recommendations.map(function(recommendation){
@@ -228,16 +234,78 @@ module.exports = function(Recommendation) {
                 }
             })
         })
-        .then(function(whatever){console.log(whatever)})
+        .then(function(recommendations){
+            return _.compact(recommendations);
+        })
+        .then(function(recommendations){
+            var booksInfo = app.models.Book.find()
+            .then(function(books){
+                return recommendations.map(function(recommendation){
+                    var reformedRecommendation = {};
+                    books.forEach(function(book){
+                        if (book.id === recommendation.book_id) {
+                            reformedRecommendation.title = book.title;
+                            reformedRecommendation.alias = book.alias;
+                            reformedRecommendation.recommendationId = recommendation.id;
+                        }
+                    })
+                    return reformedRecommendation;
+                })
+            })
+            var eggheadsInfo = app.models.EggHead.find()
+            .then(function(eggheads){
+                return recommendations.map(function(recommendation){
+                    var reformedRecommendation = {};
+                    eggheads.forEach(function(egghead){
+                        if (egghead.id === recommendation.egghead_id) {
+                            reformedRecommendation.name = egghead.name;
+                            reformedRecommendation.alias = egghead.alias;
+                            reformedRecommendation.recommendationId = recommendation.id;
+                        }
+                    })
+                    return reformedRecommendation;
+                })
+            })
+            return Promise.all([booksInfo, eggheadsInfo]).then(function(promises){
+                var booksInfo = promises[0],
+                    eggheadsInfo = promises[1];
 
-        // Recommendation.findById('r-30').then(function(recommendation){
-        //     var today = new Date(),
-        //         currentMonth = today.getMonth();
-
-        //     if (moment(recommendation.created).isAfter(currentMonth)) {
-        //         console.log(recommendation);
-        //     }
-        // })
+                return booksInfo.map(function(bookInfo){
+                    var reformedRecommendation = {};
+                    eggheadsInfo.forEach(function(eggheadInfo){
+                        if (bookInfo.recommendationId === eggheadInfo.recommendationId) {
+                            reformedRecommendation.bookTitle = bookInfo.title;
+                            reformedRecommendation.bookAlias = bookInfo.alias;
+                            reformedRecommendation.eggheadName = eggheadInfo.name;
+                            reformedRecommendation.eggheadAlias = eggheadInfo.alias;
+                        }
+                    })
+                    return reformedRecommendation;
+                })
+            })
+        })
+        .then(function(recommendations){
+            var uniqRecommendations = _.uniqBy(recommendations, 'bookAlias');
+            return uniqRecommendations.map(function(uniqRecommendation){
+                var reformedRecommendation = { eggheads: [] };
+                recommendations.forEach(function(recommendation){
+                    if (uniqRecommendation.bookAlias === recommendation.bookAlias) {
+                        var egghead = { name: recommendation.eggheadName,
+                                        alias: recommendation.eggheadAlias };
+                        reformedRecommendation.bookTitle = recommendation.bookTitle;
+                        reformedRecommendation.bookAlias = recommendation.alias;
+                        reformedRecommendation.eggheads.push(egghead);
+                    }
+                })
+                return reformedRecommendation;
+            })
+        })
+        .then(function(recommendations){
+            currentMonthRecommendationInfo.recommendationCount = recommendations.length;
+            currentMonthRecommendationInfo.recommendations = recommendations;
+            console.log("rendering current month recommendation's info...")
+            cb(null, currentMonthRecommendationInfo);
+        })
     }
     Recommendation.remoteMethod('addRecommendation', {
         description: 'Add a new book recommendation',
