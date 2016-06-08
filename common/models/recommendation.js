@@ -126,7 +126,8 @@ module.exports = function(Recommendation) {
                     recommendationObj.created = moment.utc().format('YYYY-MM-DD');
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
-                    console.log("A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.")
+                    console.log("A new recommendation was just made by '" + 
+                                egghead + "' for the book '" + bookTitle + "'.")
                     // egghead recommends new book
                     if (isNewBook) {
                         // add book step 1: referencing categories id by category's name
