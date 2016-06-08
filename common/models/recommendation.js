@@ -324,7 +324,7 @@ module.exports = function(Recommendation) {
         returns: {arg: 'Recommendation', type: Recommendation, root: true}
     });
     Recommendation.remoteMethod('getCurrentMonthRecommendations', {
-        description: 'Add recommendations for a month',
+        description: 'Get a list of current month recommendations',
         http: {path: '/getCurrentMonthRecommendations', verb: 'get', status: 200},
         accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
         returns: {arg: 'Recommendations', type: 'object', root: true}
