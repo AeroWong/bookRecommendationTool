@@ -29,7 +29,7 @@ module.exports = function (EggHead) {
                 eggheadObj.name = name;
                 eggheadObj.profile_pic = profilePic;
                 eggheadObj.site = site;
-                eggheadObj.alias = _.words(name).join('').toLowerCase();
+                eggheadObj.alias = 'eggheads/' + _.words(name).join('').toLowerCase();
                 EggHead.create(eggheadObj);
                 console.log("A new egghead '" + name +"' was created.")
             }

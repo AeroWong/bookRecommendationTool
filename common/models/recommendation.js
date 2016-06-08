@@ -151,7 +151,8 @@ module.exports = function(Recommendation) {
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
                                     categoryObj.books_id.push(bookId);
-                                    categoryObj.alias = _.words(startCaseCategory).join('').toLowerCase();
+                                    categoryObj.alias = 'categories/' + 
+                                                        _.words(startCaseCategory).join('').toLowerCase();
                                     app.models.Category.create(categoryObj);
                                     console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
                                 }
@@ -178,7 +179,7 @@ module.exports = function(Recommendation) {
                             bookObj.cover_image = bookCoverImage;
                             bookObj.authors = authors;
                             bookObj.amazon_page = amazonPage;
-                            bookObj.alias = alias;
+                            bookObj.alias = 'books/' + alias;
                             bookObj.created = moment.utc().format('YYYY-MM-DD');;
                             // insert book to bookshelf
                             app.models.Book.create(bookObj);
