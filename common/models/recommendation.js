@@ -11,7 +11,8 @@ module.exports = function(Recommendation) {
                                amazonPage: 'amazon.hiphop.com',
                                categories: ['Hip Hop'],
                                egghead: 'Coolio',
-                               src: 'd12.com' },
+                               src: 'd12.com',
+                               srcTitle: 'D12 Official Site' },
         //
             bookTitle = recommendation.bookTitle,
             bookCoverImage = recommendation.bookCoverImage;
@@ -20,6 +21,7 @@ module.exports = function(Recommendation) {
             categories = recommendation.categories,
             egghead = recommendation.egghead,
             src = recommendation.src,
+            srcTitle = recommendation.srcTitle,
             lowerCaseEgghead = egghead.toLowerCase(),
             lowerCaseEggheadsWithIdInBookshelf = null,
             lowerCaseEggheadsInBookshelf = null,
@@ -42,6 +44,7 @@ module.exports = function(Recommendation) {
                             alias: null },
             recommendationObj = { id: null,
                                   src: null,
+                                  srcTitle: null,
                                   book_id: null,
                                   egghead_id: null,
                                   created: null },
@@ -117,6 +120,7 @@ module.exports = function(Recommendation) {
                 } else {
                     recommendationObj.id = recommendationId;
                     recommendationObj.src = src;
+                    recommendationObj.srcTitle = srcTitle;
                     recommendationObj.book_id = bookId;
                     recommendationObj.egghead_id = eggheadId;
                     recommendationObj.created = moment.utc().format('YYYY-MM-DD');
