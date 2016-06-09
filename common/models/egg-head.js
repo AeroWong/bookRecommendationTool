@@ -43,6 +43,7 @@ module.exports = function (EggHead) {
             // get egghead's basic info
             eggheadInfoObj.name = egghead.name;
             eggheadInfoObj.profilePic = egghead.profile_pic;
+            eggheadInfoObj.gender = egghead.gender;
             eggheadInfoObj.site = egghead.site;
             eggheadInfoObj.alias = egghead.alias;
 
