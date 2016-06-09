@@ -31,22 +31,9 @@ module.exports = function(Recommendation) {
             recommendationId = null,
             categoryId = null,
             hasRecommendation = null,
-            categoryObj = { id: null,
-                            name: null,
-                            books_id: [],
-                            alias: null },
-            recommendationObj = { id: null,
-                                  src: null,
-                                  book_id: null,
-                                  created: null },
-            bookObj = { id: null,
-                        title: null,
-                        authors: null,
-                        amazon_page: null,
-                        categories_id: [],
-                        eggheads_id: [],
-                        alias: null,
-                        created: null };
+            categoryObj = {},
+            recommendationObj = {},
+            bookObj = {};
 
         // check if the bookshelf has the egghead
         var hasEgghead = app.models.EggHead.find()
@@ -115,7 +102,6 @@ module.exports = function(Recommendation) {
                     recommendationObj.book_id = bookId;
                     recommendationObj.egghead_id = eggheadId;
                     recommendationObj.created = moment.utc().format('YYYY-MM-DD');
-                    console.log('--- ', recommendationObj);
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was just made by '" + 
@@ -128,6 +114,7 @@ module.exports = function(Recommendation) {
                             categoryId = 'c-' + String(categories.length + 1);
                             lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
                             lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
+                            bookObj.categories_id = [];
                             // insert bookshelf category id to book
                             lowerCaseCategories.forEach(function(inputCategory){
                                 lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
@@ -143,6 +130,7 @@ module.exports = function(Recommendation) {
                                     var startCaseCategory = _.startCase(category);
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
+                                    categoryObj.books_id = [];
                                     categoryObj.books_id.push(bookId);
                                     categoryObj.alias = 'categories/' +
                                                         _.words(startCaseCategory).join('').toLowerCase();
@@ -158,6 +146,7 @@ module.exports = function(Recommendation) {
                             // insert bookshelf egghead id to book
                             lowerCaseEggheadsWithIdInBookshelf.forEach(function(bookshelfEgghead){
                                 if (bookshelfEgghead.name === lowerCaseEgghead) {
+                                    bookObj.eggheads_id = [];
                                     bookObj.eggheads_id.push(bookshelfEgghead.id);
                                 }
                             })
