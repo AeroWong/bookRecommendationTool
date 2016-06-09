@@ -13,6 +13,7 @@ module.exports = function (Book) {
         .then(function(book){
             // get book's basic info
             bookInfoObj.title = book.title;
+            bookInfoObj.alias = book.alias;
             bookInfoObj.authors = book.authors;
             bookInfoObj.coverImage = book.cover_image;
             bookInfoObj.amazonPage = book.amazon_page;
@@ -21,11 +22,10 @@ module.exports = function (Book) {
             .then(function(recommendations){
                 var reformedRecommendations = [];
                 recommendations.forEach(function(recommendation){
-                    var reformedRecommendation = { src: null,
-                                                   eggheadId: null,
-                                                   eggheadName: null };
+                    var reformedRecommendation = {};
 
                     reformedRecommendation.src = recommendation.src;
+                    reformedRecommendation.srcTitle = recommendation.src_title;
                     reformedRecommendation.eggheadId = recommendation.egghead_id;
                     reformedRecommendations.push(reformedRecommendation);
                 })
@@ -42,6 +42,7 @@ module.exports = function (Book) {
                     eggheads.forEach(function(egghead){
                         if (recommendation.eggheadId === egghead.id) {
                             recommendation.eggheadName = egghead.name;
+                            recommendation.eggheadAlias = egghead.alias;
                             delete recommendation.eggheadId;
                         }
                     })
