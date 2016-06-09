@@ -14,6 +14,10 @@
       "type": "string",
       "required": true
     },
+    "gender": {
+      "type": "string",
+      "required": true
+    },
     "site": {
       "type": "string",
       "required": true

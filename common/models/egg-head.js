@@ -4,17 +4,10 @@ var app = require('../../server/server.js');
 
 module.exports = function (EggHead) {
     EggHead.addEgghead = function (egghead, cb) {
-        var name = egghead.name,
-            profilePic = egghead.profile_pic,
-            site = egghead.site,
-            lowerCaseName = name.toLowerCase(),
+        var lowerCaseName = egghead.name.toLowerCase(),
             lowerCaseNamesInBookshelf = null,
             eggheadId = null,
-            eggheadObj = { id: null,
-                           name: null,
-                           profile_pic: null,
-                           site: null,
-                           alias: null };
+            eggheadObj = {};
 
         EggHead.find()
         .then(function(eggheads){
@@ -26,12 +19,13 @@ module.exports = function (EggHead) {
                 throw e;
             } else {
                 eggheadObj.id = eggheadId;
-                eggheadObj.name = name;
-                eggheadObj.profile_pic = profilePic;
-                eggheadObj.site = site;
-                eggheadObj.alias = 'eggheads/' + _.words(name).join('').toLowerCase();
+                eggheadObj.name = egghead.name;
+                eggheadObj.gender = egghead.gender;
+                eggheadObj.profile_pic = egghead.profile_pic;
+                eggheadObj.site = egghead.site;
+                eggheadObj.alias = 'eggheads/' + _.words(egghead.name).join('').toLowerCase();
                 EggHead.create(eggheadObj);
-                console.log("A new egghead '" + name +"' was created.")
+                console.log("A new egghead '" + egghead.name +"' was created.")
             }
         })
         .then(function(){
@@ -42,24 +36,22 @@ module.exports = function (EggHead) {
         })
     }
     EggHead.getEggheadInfo = function(eggheadAlias, cb) {
-        var eggheadInfoObj = { name: null,
-                               profilePic: null,
-                               site: null };
+        var eggheadInfoObj = {};
 
-        EggHead.findOne({where: {alias: eggheadAlias}})
+        return EggHead.findOne({where: {alias: eggheadAlias}})
         .then(function(egghead){
             // get egghead's basic info
             eggheadInfoObj.name = egghead.name;
             eggheadInfoObj.profilePic = egghead.profile_pic;
             eggheadInfoObj.site = egghead.site;
+            eggheadInfoObj.alias = egghead.alias;
 
             var getReformedRecommendations = app.models.Recommendation.find({where: {egghead_id: egghead.id}})
             .then(function(recommendations){
                 return Promise.map(recommendations, function(recommendation){
-                    var reformedRecommendation = { bookTitle: null,
-                                                   bookAlias: null,
-                                                   bookId: recommendation.book_id,
-                                                   src: recommendation.src };
+                    var reformedRecommendation = { id: recommendation.book_id,
+                                                   src: recommendation.src,
+                                                   srcTitle: recommendation.srcTitle };
                     return reformedRecommendation;
                 })
             })
@@ -73,9 +65,9 @@ module.exports = function (EggHead) {
 
                 return reformedRecommendations.map(function(recommendation){
                     books.forEach(function(book){
-                        if (recommendation.bookId === book.id) {
-                            recommendation.bookTitle = book.title;
-                            recommendation.bookAlias = book.alias;
+                        if (recommendation.id === book.id) {
+                            recommendation.title = book.title;
+                            recommendation.alias = book.alias;
                         }
                     })
                     return recommendation;
@@ -83,8 +75,10 @@ module.exports = function (EggHead) {
             })
         })
         .then(function(recommendations){
-            eggheadInfoObj.recommendations = recommendations;
-            console.log("Rendering the following egghead's info:\n", eggheadInfoObj);
+            console.log("Rendering egghead " + eggheadInfoObj.name + "'s info...");
+            eggheadInfoObj.recommendations = {};
+            eggheadInfoObj.recommendations.count = recommendations.length;
+            eggheadInfoObj.recommendations.books = recommendations;
             cb(null, eggheadInfoObj);
         })
         .catch(function(e){
