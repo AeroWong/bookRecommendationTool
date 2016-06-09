@@ -51,7 +51,9 @@ module.exports = function (Book) {
             })
         })
         .then(function(recommendations){
-            bookInfoObj.recommendations = recommendations;
+            bookInfoObj.recommendations = {};
+            bookInfoObj.recommendations.count = recommendations.length;
+            bookInfoObj.recommendations.eggheads = recommendations;
             console.log('Fetching the following book...\n', bookInfoObj);
             cb(null, bookInfoObj);
         }).catch(function(e){

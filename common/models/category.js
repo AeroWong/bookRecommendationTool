@@ -105,7 +105,7 @@ module.exports = function(Category) {
         })
         .then(function(books){
             categoryInfoObj.recommendations.books = books;
-            console.log("rendering category '" + categoryInfoObj.categoryName + " book recommendations...");
+            console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
             cb(null, categoryInfoObj);
         })
     }
@@ -115,7 +115,7 @@ module.exports = function(Category) {
                 var reformedCategory = {};
                 reformedCategory.name = category.name;
                 if (category.books_id) {
-                    reformedCategory.bookCount = category.books_id.length;
+                    reformedCategory.recommendationCount = category.books_id.length;
                 }
                 if (category.alias) {
                     reformedCategory.alias = category.alias;
@@ -123,7 +123,7 @@ module.exports = function(Category) {
                 return reformedCategory;
             })
         }).then(function(categories){
-            console.log("rendering all categories' info...");
+            console.log("rendering categories' info...");
             cb(null, categories);
         })
         .catch(function(e){

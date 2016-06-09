@@ -206,10 +206,7 @@ module.exports = function(Recommendation) {
         var lastDayOfPreviousMonth = moment.utc().date(0).format('YYYY-MM-DD'),
             today = new Date(), currentMonth = today.getMonth(),
             currentMonth = moment().month(currentMonth).format('MMM'),
-            monthRecommendationsCount = null,
-            currentMonthRecommendationInfo = { recommendationCount: null,
-                                               currentMonth: currentMonth,
-                                               recommendations: null };
+            currentMonthRecommendationInfo = { currentMonth: currentMonth };
 
         return Recommendation.find().then(function(recommendations){
             return recommendations.map(function(recommendation){
@@ -233,6 +230,8 @@ module.exports = function(Recommendation) {
                         if (book.id === recommendation.book_id) {
                             reformedRecommendation.title = book.title;
                             reformedRecommendation.alias = book.alias;
+                            reformedRecommendation.src = recommendation.src;
+                            reformedRecommendation.srcTitle = recommendation.src_title;
                             reformedRecommendation.recommendationId = recommendation.id;
                         }
                     })
@@ -247,6 +246,8 @@ module.exports = function(Recommendation) {
                         if (egghead.id === recommendation.egghead_id) {
                             reformedRecommendation.name = egghead.name;
                             reformedRecommendation.alias = egghead.alias;
+                            reformedRecommendation.src = recommendation.src;
+                            reformedRecommendation.srcTitle = recommendation.src_title;
                             reformedRecommendation.recommendationId = recommendation.id;
                         }
                     })
@@ -265,6 +266,8 @@ module.exports = function(Recommendation) {
                             reformedRecommendation.bookAlias = bookInfo.alias;
                             reformedRecommendation.eggheadName = eggheadInfo.name;
                             reformedRecommendation.eggheadAlias = eggheadInfo.alias;
+                            reformedRecommendation.src = eggheadInfo.src;
+                            reformedRecommendation.srcTitle = eggheadInfo.srcTitle;
                         }
                     })
                     return reformedRecommendation;
@@ -278,9 +281,11 @@ module.exports = function(Recommendation) {
                 recommendations.forEach(function(recommendation){
                     if (uniqRecommendation.bookAlias === recommendation.bookAlias) {
                         var egghead = { name: recommendation.eggheadName,
-                                        alias: recommendation.eggheadAlias };
+                                        alias: recommendation.eggheadAlias,
+                                        src: recommendation.src,
+                                        srcTitle: recommendation.srcTitle };
                         reformedRecommendation.bookTitle = recommendation.bookTitle;
-                        reformedRecommendation.bookAlias = recommendation.alias;
+                        reformedRecommendation.bookAlias = recommendation.bookAlias;
                         reformedRecommendation.eggheads.push(egghead);
                     }
                 })
@@ -288,7 +293,7 @@ module.exports = function(Recommendation) {
             })
         })
         .then(function(recommendations){
-            currentMonthRecommendationInfo.recommendationCount = recommendations.length;
+            currentMonthRecommendationInfo.count = recommendations.length;
             currentMonthRecommendationInfo.recommendations = recommendations;
             console.log("rendering current month recommendation's info...")
             cb(null, currentMonthRecommendationInfo);
