@@ -51,7 +51,7 @@ module.exports = function (EggHead) {
                 return Promise.map(recommendations, function(recommendation){
                     var reformedRecommendation = { id: recommendation.book_id,
                                                    src: recommendation.src,
-                                                   srcTitle: recommendation.srcTitle };
+                                                   srcTitle: recommendation.src_title };
                     return reformedRecommendation;
                 })
             })
