@@ -15,14 +15,8 @@ module.exports = function(Recommendation) {
                                srcTitle: 'D12 Official Site' },
         //
             bookTitle = recommendation.bookTitle,
-            bookCoverImage = recommendation.bookCoverImage;
-            authors = recommendation.authors,
-            amazonPage = recommendation.amazonPage,
             categories = recommendation.categories,
-            egghead = recommendation.egghead,
-            src = recommendation.src,
-            srcTitle = recommendation.srcTitle,
-            lowerCaseEgghead = egghead.toLowerCase(),
+            lowerCaseEgghead = recommendation.egghead.toLowerCase(),
             lowerCaseEggheadsWithIdInBookshelf = null,
             lowerCaseEggheadsInBookshelf = null,
             lowerCaseBookTitle = bookTitle.toLowerCase(),
@@ -36,7 +30,6 @@ module.exports = function(Recommendation) {
             isNewBook = null,
             recommendationId = null,
             categoryId = null,
-            eggheadId = null,
             hasRecommendation = null,
             categoryObj = { id: null,
                             name: null,
@@ -44,9 +37,7 @@ module.exports = function(Recommendation) {
                             alias: null },
             recommendationObj = { id: null,
                                   src: null,
-                                  srcTitle: null,
                                   book_id: null,
-                                  egghead_id: null,
                                   created: null },
             bookObj = { id: null,
                         title: null,
@@ -119,15 +110,16 @@ module.exports = function(Recommendation) {
                     throw e;
                 } else {
                     recommendationObj.id = recommendationId;
-                    recommendationObj.src = src;
-                    recommendationObj.srcTitle = srcTitle;
+                    recommendationObj.src = recommendation.src;
+                    recommendationObj.src_title = recommendation.srcTitle;
                     recommendationObj.book_id = bookId;
                     recommendationObj.egghead_id = eggheadId;
                     recommendationObj.created = moment.utc().format('YYYY-MM-DD');
+                    console.log('--- ', recommendationObj);
                     // add recommendation: new book + old egghead
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was just made by '" + 
-                                egghead + "' for the book '" + bookTitle + "'.")
+                                recommendation.egghead + "' for the book '" + bookTitle + "'.")
                     // egghead recommends new book
                     if (isNewBook) {
                         // add book step 1: referencing categories id by category's name
@@ -152,7 +144,7 @@ module.exports = function(Recommendation) {
                                     categoryObj.id = categoryId;
                                     categoryObj.name = startCaseCategory;
                                     categoryObj.books_id.push(bookId);
-                                    categoryObj.alias = 'categories/' + 
+                                    categoryObj.alias = 'categories/' +
                                                         _.words(startCaseCategory).join('').toLowerCase();
                                     app.models.Category.create(categoryObj);
                                     console.log("A new category '" + startCaseCategory + "' was created in bookshelf")
@@ -177,9 +169,9 @@ module.exports = function(Recommendation) {
                         .then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
-                            bookObj.cover_image = bookCoverImage;
-                            bookObj.authors = authors;
-                            bookObj.amazon_page = amazonPage;
+                            bookObj.cover_image = recommendation.bookCoverImage;
+                            bookObj.authors = recommendation.authors;
+                            bookObj.amazon_page = recommendation.amazonPage;
                             bookObj.alias = 'books/' + alias;
                             bookObj.created = moment.utc().format('YYYY-MM-DD');;
                             // insert book to bookshelf
@@ -200,7 +192,7 @@ module.exports = function(Recommendation) {
                                 })
                             })
                             console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
-                            cb(null, "A new recommendation was just made by '" + egghead + "' for the book '" + bookTitle + "'.");
+                            cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
                         })
                     } else {
                         //egghead recommends old book
