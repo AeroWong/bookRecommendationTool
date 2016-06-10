@@ -5,7 +5,7 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'Rap God',
+        var recommendation = { bookTitle: 'Aero Testing 7',
                                bookCoverImage: 'coverImage.png',
                                authors: ['Enimen','Snoop Dogg'],
                                amazonPage: 'amazon.hiphop.com',
@@ -177,11 +177,11 @@ module.exports = function(Recommendation) {
                                         originalBookList.push(bookId);
                                         category.updateAttributes({books_id: originalBookList})
                                         console.log('Updated category ' + category.name + "'s book list.")
+                                        console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
+                                        cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
                                     }
                                 })
                             })
-                            console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
-                            cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
                         })
                     } else {
                         //egghead recommends old book
