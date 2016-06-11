@@ -38,6 +38,16 @@
       "paths": [
         "${restApiRoot}"
       ]
+    },
+    "../common/widgets/breadcrumb": {
+      "name": "render breadcrumb",
+      "paths": [
+        "/renderBreadcrumbL1/:level1",
+        "/renderBreadcrumbL2/:level1/:level2"
+      ],
+      "methods": [
+        "GET"
+      ]
     }
   },
   "files": {},
