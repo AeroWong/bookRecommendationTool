@@ -7,9 +7,11 @@ module.exports = function() {
         var params = req.params,
             baseUrl = req.baseUrl,
             level1 = params.level1,
-            level2 = params.level2;
+            level2 = params.level2,
+            message = "L2 breadcrumb needs 'categories' or 'eggheads' to be L1 param and an existing category to be L2 param.";
 
         if (level1 && level2) {
+            console.log('rendering a level 2 breadcrumb...');
             switch (level1) {
                 case 'categories':
                     return app.models.Category.find()
@@ -21,7 +23,7 @@ module.exports = function() {
                             }
                         })
                         if (breadcrumbCategoryName === null) {
-                            res.json("L2 breadcrumb needs 'categories' or 'eggheads' to be L1 param and an existing category to be L2 param.");
+                            res.send(message);
                         }
                         res.json(['Home', 'Categories', breadcrumbCategoryName]);
                     })
@@ -36,13 +38,28 @@ module.exports = function() {
                             }
                         })
                         if (breadcrumbEggheadName === null) {
-                            res.json("L2 breadcrumb needs 'categories' or 'eggheads' to be L1 param and an existing egghead to be L2 param.");
+                            res.send(message);
                         }
                         res.json(['Home', 'Eggheads', breadcrumbEggheadName]);
                     })
                     break;
+                case 'books':
+                    return app.models.Book.find()
+                    .then(function(books){
+                        var breadcrumbBookName = null;
+                        books.forEach(function(book){
+                            if ('/renderBreadcrumbL2/' + book.alias === baseUrl) {
+                                breadcrumbBookName = book.title;
+                            }
+                        })
+                        if (breadcrumbBookName === null) {
+                            res.send(message);
+                        }
+                        res.json(['Home', 'Books', breadcrumbBookName]);
+                    })
+                    break;
                 default:
-                    res.send("L2 breadcrumb needs 'categories' or 'eggheads' to be L1 param and an existing category to be L2 param.");
+                    res.send(message);
             }
         }
 
