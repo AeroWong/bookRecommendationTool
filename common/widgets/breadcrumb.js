@@ -12,50 +12,48 @@ module.exports = function() {
 
         if (level1 && level2) {
             console.log('rendering a level 2 breadcrumb...');
+            var breadcrumbLevel2 = null;
             switch (level1) {
                 case 'categories':
                     return app.models.Category.find()
                     .then(function(categories){
-                        var breadcrumbCategoryName = null;
                         categories.forEach(function(category){
                             if ('/renderBreadcrumbL2/' + category.alias === baseUrl) {
-                                breadcrumbCategoryName = category.name;
+                                breadcrumbLevel2 = category.name;
                             }
                         })
-                        if (breadcrumbCategoryName === null) {
+                        if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        res.json(['Home', 'Categories', breadcrumbCategoryName]);
+                        res.json(['Home', 'Categories', breadcrumbLevel2]);
                     })
                     break;
                 case 'eggheads':
                     return app.models.EggHead.find()
                     .then(function(eggheads){
-                        var breadcrumbEggheadName = null;
                         eggheads.forEach(function(egghead){
                             if ('/renderBreadcrumbL2/' + egghead.alias === baseUrl) {
-                                breadcrumbEggheadName = egghead.name;
+                                breadcrumbLevel2 = egghead.name;
                             }
                         })
-                        if (breadcrumbEggheadName === null) {
+                        if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        res.json(['Home', 'Eggheads', breadcrumbEggheadName]);
+                        res.json(['Home', 'Eggheads', breadcrumbLevel2]);
                     })
                     break;
                 case 'books':
                     return app.models.Book.find()
                     .then(function(books){
-                        var breadcrumbBookName = null;
                         books.forEach(function(book){
                             if ('/renderBreadcrumbL2/' + book.alias === baseUrl) {
-                                breadcrumbBookName = book.title;
+                                breadcrumbLevel2 = book.title;
                             }
                         })
-                        if (breadcrumbBookName === null) {
+                        if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        res.json(['Home', 'Books', breadcrumbBookName]);
+                        res.json(['Home', 'Books', breadcrumbLevel2]);
                     })
                     break;
                 default:
