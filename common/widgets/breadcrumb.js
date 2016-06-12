@@ -3,7 +3,7 @@ var Promise = require('bluebird');
 var app = require('../../server/server.js');
 
 module.exports = function() {
-    return function renderBreadcrumb(req, res, next){
+    return function renderBreadcrumb(level1, level2, options){
         var params = req.params,
             baseUrl = req.baseUrl,
             level1 = params.level1,

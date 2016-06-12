@@ -124,7 +124,8 @@ module.exports = function(Category) {
             })
         }).then(function(categories){
             console.log("rendering categories' info...");
-            cb(null, categories);
+            // cb(null, categories);
+            return categories;
         })
         .catch(function(e){
             console.log(e);

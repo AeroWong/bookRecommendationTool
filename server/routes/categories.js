@@ -1,12 +1,15 @@
 var express = require('express'),
+    app = require('../server'),
+    getBreadCrumb = require('../../common/widgets/breadcrumb'),
     router = express.Router({mergeParams: true});
 
-var remoteMethod = require('../../common/models/category');
-
 router.get('/', function(req, res, next){
-    console.log('app: ', app.models);
-    console.log('remote method: ', remoteMethod);
-    res.render('components/categories');
+    return app.models.Category.getCatgoriesInfo()
+    .then(function(categories){
+        console.log('req: ', req);
+        // console.log('rendering categories HTML template...');
+        // res.render('components/categories', {categories: categories});
+    })
 })
 
 module.exports = router;
