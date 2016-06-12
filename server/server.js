@@ -1,29 +1,27 @@
-var loopback = require('loopback');
-var boot = require('loopback-boot');
-var exphbs = require('express-handlebars');
-var express = require('express');
-var path = require('path');
-
-var app = module.exports = loopback();
+var loopback = require('loopback'),
+    boot = require('loopback-boot'),
+    exphbs = require('express-handlebars'),
+    express = require('express'),
+    path = require('path'),
+    app = module.exports = loopback(),
+    // routers
+    categoriesRouter = require('./routes/categories');
 
 // require modules
 app.handlebars = require('handlebars');
 
-app.engine('hbs', exphbs({extname:'hbs', 
+// routing
+app.use('/categories', categoriesRouter);
+
+app.engine('hbs', exphbs({extname:'hbs',
                           defaultLayout:'main',
-                          layoutsDir: process.cwd() + '/client/views/layouts'}));
+                          layoutsDir: process.cwd() + '/client/views/layouts',
+                          partialsDir: process.cwd() + '/client/views/components'}));
 
 app.set('view engine', 'hbs');
 app.set('views', process.cwd() + '/client/views');
 app.use('/images', express.static(process.cwd() + '/client/assets/images'));
-
-app.get('/categories', function(req, res){
-  var fruits = [{"name": "Apple"},
-                {"name": "Orange"},
-                {"name": "Lemon"}];
-
-  res.render('categories', {fruits: fruits});
-})
+app.use('/css', express.static(process.cwd() + '/client/assets/css'));
 
 app.start = function() {
   // start the web server
