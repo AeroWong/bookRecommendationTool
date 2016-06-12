@@ -1,7 +1,24 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var exphbs = require('express-handlebars');
+var express = require('express');
+var path = require('path');
 
 var app = module.exports = loopback();
+
+// require modules
+app.handlebars = require('handlebars');
+
+app.engine('hbs', exphbs({extname:'hbs', 
+                          defaultLayout:'main',
+                          layoutsDir: process.cwd() + '/client/views/layouts'}));
+
+app.set('view engine', 'hbs');
+app.set('views', process.cwd() + '/client/views');
+
+app.get('/testing', function(req, res){
+  res.render('index');
+})
 
 app.start = function() {
   // start the web server
