@@ -15,9 +15,14 @@ app.engine('hbs', exphbs({extname:'hbs',
 
 app.set('view engine', 'hbs');
 app.set('views', process.cwd() + '/client/views');
+app.use('/images', express.static(process.cwd() + '/client/assets/images'));
 
-app.get('/testing', function(req, res){
-  res.render('index');
+app.get('/categories', function(req, res){
+  var fruits = [{"name": "Apple"},
+                {"name": "Orange"},
+                {"name": "Lemon"}];
+
+  res.render('categories', {fruits: fruits});
 })
 
 app.start = function() {
