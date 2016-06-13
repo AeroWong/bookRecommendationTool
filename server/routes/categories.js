@@ -1,6 +1,6 @@
 var express = require('express'),
     app = require('../server'),
-    getBreadCrumb = require('../../common/widgets/breadcrumb'),
+    breadcrumb = require('../../common/widgets/breadcrumb')(),
     router = express.Router({mergeParams: true});
 
 router.get('/', function(req, res, next){
@@ -12,13 +12,28 @@ router.get('/', function(req, res, next){
     })
 })
 
+router.get('/:category', function(req, res, next){
+    var result = {},
+        breadcrumbL1 = 'categories',
+        breadcrumbL2 = req.params.category;
+
+    var getCategoriesInfo = app.models.Category.getCategoryRecommendations('categories/' + req.params.category)
+    .then(function(categoriesInfo){
+        return categoriesInfo;
+    })
+    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2).then(function(breadcrumb){
+        return breadcrumb;
+    });
+    return Promise.all([getCategoriesInfo, getBreadcrumb])
+    .then(function(promises){
+        var pageContent = promises[0];
+
+        pageContent.breadcrumbs = promises[1];
+
+        console.log("rendering 'category' HTML template...");
+        res.render('components/category', {pageContent});
+    })
+})
+        // var fruits = [{name: 'apple'}, {name: 'orange'}, {name: 'pineapple'}]
+
 module.exports = router;
-
-
-// app.get('/categories', function(req, res){
-//   var fruits = [{"name": "Apple"},
-//                 {"name": "Orange"},
-//                 {"name": "Lemon"}];
-
-//   res.render('categories', {fruits: fruits});
-// })

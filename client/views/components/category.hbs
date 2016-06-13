@@ -1,0 +1,9 @@
+<h1>Category</h1>
+
+{{#with pageContent}}
+<ul class="breadcrumbs">
+    {{#each breadcrumbs as | breadcrumb |}}
+        <li><a href="#">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+{{/with}}

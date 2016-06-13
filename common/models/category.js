@@ -106,7 +106,8 @@ module.exports = function(Category) {
         .then(function(books){
             categoryInfoObj.recommendations.books = books;
             console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
-            cb(null, categoryInfoObj);
+            return categoryInfoObj;
+            // cb(null, categoryInfoObj);
         })
     }
     Category.getCatgoriesInfo = function(options, cb) {
