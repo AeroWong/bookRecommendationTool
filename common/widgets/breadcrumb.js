@@ -8,7 +8,8 @@ module.exports = function() {
 
         if (level1 && level2) {
             console.log('rendering a level 2 breadcrumb...');
-            var breadcrumbLevel2 = null;
+            var breadcrumbLevel2 = null,
+                alias = null;
             switch (level1) {
                 case 'categories':
                     return app.models.Category.find()
@@ -16,12 +17,15 @@ module.exports = function() {
                         categories.forEach(function(category){
                             if (category.alias === level1 + '/' + level2) {
                                 breadcrumbLevel2 = category.name;
+                                alias = category.alias;
                             }
                         })
                         if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        return [{name: 'Home'},{name: 'Categories'},{name: breadcrumbLevel2}]
+                        return [{name: 'Home', url: '/'},
+                                {name: 'Categories', url: '/categories'},
+                                {name: breadcrumbLevel2, url: '../' + alias}];
                     }).then(function(breadcrumb){
                         return breadcrumb;
                     })
@@ -32,12 +36,15 @@ module.exports = function() {
                         eggheads.forEach(function(egghead){
                             if (egghead.alias === level1 + '/' + level2) {
                                 breadcrumbLevel2 = egghead.name;
+                                alias = egghead.alias;
                             }
                         })
                         if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        return ['Home', 'Eggheads', breadcrumbLevel2];
+                        return [{name: 'Home', url: '/'},
+                                {name: 'Eggheads', url: '/eggheads'},
+                                {name: breadcrumbLevel2, url: '../' + alias}];
                     })
                     break;
                 case 'books':
@@ -46,12 +53,15 @@ module.exports = function() {
                         books.forEach(function(book){
                             if (book.alias === level1 + '/' + level2) {
                                 breadcrumbLevel2 = book.title;
+                                breadcrumbLevel2 = book.alias;
                             }
                         })
                         if (breadcrumbLevel2 === null) {
                             res.send(message);
                         }
-                        return ['Home', 'Books', breadcrumbLevel2];
+                        return [{name: 'Home', url: '/'},
+                                {name: 'Books', url: '/books'},
+                                {name: breadcrumbLevel2, url: '../' + alias}];
                     })
                     break;
                 default:
@@ -63,10 +73,12 @@ module.exports = function() {
             console.log("rendering a level1 breadcrumb...");
             switch (level1) {
                 case 'categories':
-                    return ['Home', 'Categories'];
+                    return [{name: 'Home', url: '/'},
+                            {name: 'Categories', url: '/categories'}];
                     break;
                 case 'eggheads':
-                    return ['Home', 'Eggheads'];
+                    return [{name: 'Home', url: '/'},
+                            {name: 'Categories', url: '/categories'}];
                     break;
                 default:
                     res.send("L1 breadcrumb needs either 'categories' or 'eggheads' as params." );

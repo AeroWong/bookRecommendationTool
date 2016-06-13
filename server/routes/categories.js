@@ -34,6 +34,5 @@ router.get('/:category', function(req, res, next){
         res.render('components/category', {pageContent});
     })
 })
-        // var fruits = [{name: 'apple'}, {name: 'orange'}, {name: 'pineapple'}]
 
 module.exports = router;

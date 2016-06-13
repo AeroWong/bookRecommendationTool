@@ -44,7 +44,8 @@ module.exports = function(Category) {
                 reformedRecommendations = null,
                 blankRecommendations = null,
                 uniqReformedRecommendations = null,
-                uniqRecommendations = null;
+                uniqRecommendations = null,
+                bookNo = 1;
 
             fullBooks = reformedBooks.map(function(reformedBook){
                 books.forEach(function(book){
@@ -98,6 +99,8 @@ module.exports = function(Category) {
                 fullRecommendations.forEach(function(recommendation){
                     if (book.id === recommendation.bookId) {
                         book.eggheads = recommendation.eggheads;
+                        book.no = bookNo;
+                        bookNo++;
                     }
                 })
                 return book;
@@ -106,6 +109,7 @@ module.exports = function(Category) {
         .then(function(books){
             categoryInfoObj.recommendations.books = books;
             console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
+            console.log(categoryInfoObj.recommendations.books[0].eggheads);
             return categoryInfoObj;
             // cb(null, categoryInfoObj);
         })
