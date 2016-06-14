@@ -1,18 +1,19 @@
 var _ = require('lodash');
+var Promise = require('bluebird');
 var moment = require('moment');
 var app = require('../../server/server.js');
 
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'Fuck The Whole Universe',
-                               bookCoverImage: 'http://d.gr-assets.com/books/1328841510l/2903193.jpg',
-                               authors: ['Eminem', 'Snoop Dogg'],
-                               amazonPage: 'https://www.amazon.com/Big-Payback-History-Business-Hip-Hop/dp/0451234782/ref=sr_1_2?ie=UTF8&qid=1465861026&sr=8-2&keywords=hiphop+books',
-                               categories: ['Hip Hop'],
-                               egghead: 'Tupac',
+        var recommendation = { bookTitle: 'The Holy Bible',
+                               bookCoverImage: 'https://images-na.ssl-images-amazon.com/images/I/615RBEF16dL.jpg',
+                               authors: ['Marks Charles Hardie'],
+                               amazonPage: 'https://www.amazon.com/Holy-Bible-Hip-Hop-Version/dp/1593308000/ref=sr_1_2?ie=UTF8&qid=1465884969&sr=8-2&keywords=hip+hop+bible',
+                               categories: ['Hip Hop', "Rap", "Music"],
+                               egghead: 'Coolio',
                                src: 'https://en.wikipedia.org/wiki/D12',
-                               srcTitle: 'D12 Official Site' },
+                               srcTitle: 'Hip Hop Universe' },
         //
             bookTitle = recommendation.bookTitle,
             categories = recommendation.categories,
@@ -29,7 +30,6 @@ module.exports = function(Recommendation) {
             bookId = null,
             isNewBook = null,
             recommendationId = null,
-            categoryId = null,
             hasRecommendation = null,
             categoryObj = {},
             recommendationObj = {},
@@ -111,7 +111,7 @@ module.exports = function(Recommendation) {
                         // add book step 1: referencing categories id by category's name
                         var getCategoriesId = app.models.Category.find()
                         .then(function(categories){
-                            categoryId = 'c-' + String(categories.length + 1);
+                            var categoryLen = categories.length;
                             lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
                             lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
                             bookObj.categories_id = [];
@@ -125,7 +125,10 @@ module.exports = function(Recommendation) {
                             })
                             // create new category in bookshelf if bookshelf doesn't have the input category
                             lowerCaseCategories.forEach(function(category){
+                                var categoryId = null;
                                 if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1) {
+                                    categoryLen++;
+                                    categoryId = 'c-' + String(categoryLen);
                                     bookObj.categories_id.push(categoryId);
                                     var startCaseCategory = _.startCase(category);
                                     categoryObj.id = categoryId;
@@ -139,6 +142,9 @@ module.exports = function(Recommendation) {
                                 }
                             })
                         })
+                        .catch(function(e){
+                            console.log(e);
+                        })
                         // add book step 2: referencing eggheads id by egghead's name
                         var getEggheadId = app.models.EggHead.find()
                         .then(function(eggheads){
@@ -150,6 +156,9 @@ module.exports = function(Recommendation) {
                                     bookObj.eggheads_id.push(bookshelfEgghead.id);
                                 }
                             })
+                        })
+                        .catch(function(e){
+                            console.log(e);
                         })
                         // add book step 3: construct alias
                         var alias = _.words(bookTitle).join('').toLowerCase();
@@ -166,27 +175,54 @@ module.exports = function(Recommendation) {
                                 return {name: author};
                             });
                             // insert book to bookshelf
-                            console.log('bookObj: ', bookObj);
                             app.models.Book.create(bookObj);
                             console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
-                            return bookObj;
+                            return bookObj.categories_id;
                         })
-                        .then(function(completeBookObj){
-                            // add book to category's book list
-                            cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
+                        .then(function(bookCategoriesId){
+                            return Promise.map(bookCategoriesId, function(bookCategoryId){
+                                return app.models.Category.findOne({where: {id: bookCategoryId}})
+                                    .then(function(category){
+                                        if (category.books_id.indexOf(bookId) === -1) {
+                                            return category.id;
+                                        }
+                                    })
+                            })
+                        })
+                        .then(function(filteredCategoriesId){
+                            var cleanFilteredCategoriesId = _.compact(filteredCategoriesId);
+                            cleanFilteredCategoriesId.forEach(function(categoryId){
+                                app.models.Category.findById(categoryId, function(err, category){
+                                    var booksIdList = category.books_id;
+                                    booksIdList.push(bookId);
+                                    category.updateAttributes({books_id: booksIdList})
+                                })
+                            })
+                        })
+                        .then(function(){
+                            cb(null, "A new recommendation for the book '" + bookTitle + "' is made.");
+                        })
+                        .catch(function(e){
+                            console.log(e);
                         })
                     } else {
-                        //egghead recommends old book
-                        return app.models.Book.findById(bookId, function(err, book){
+                        // a different egghead recommends old book
+                        app.models.Book.findById(bookId, function(err, book){
                             var eggheadList = book.eggheads_id;
                             eggheadList.push(eggheadId);
                             book.updateAttributes({eggheads_id: eggheadList}, function(err, book){
                                 console.log("Updated the book '" + bookTitle + "' egghead's List.");
                                 cb(null, "Updated the book '" + bookTitle + "' egghead's List.");
-                            })
+                            });
+                        })
+                        .catch(function(e){
+                            console.log(e);
                         })
                     }
                 }
+            })
+            .catch(function(e){
+                console.log(e);
             })
         })
         .catch(function(e){
@@ -230,6 +266,9 @@ module.exports = function(Recommendation) {
                     return reformedRecommendation;
                 })
             })
+            .catch(function(e){
+                console.log(e);
+            })
             var eggheadsInfo = app.models.EggHead.find()
             .then(function(eggheads){
                 return recommendations.map(function(recommendation){
@@ -245,6 +284,9 @@ module.exports = function(Recommendation) {
                     })
                     return reformedRecommendation;
                 })
+            })
+            .catch(function(e){
+                console.log(e);
             })
             return Promise.all([booksInfo, eggheadsInfo]).then(function(promises){
                 var booksInfo = promises[0],

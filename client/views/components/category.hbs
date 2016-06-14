@@ -12,10 +12,10 @@
         <thead>
             <tr>
                 <th>Wisdomizer</th>
+                <th width="150">Source</th>
                 <th width="100">Book Cover</th>
                 <th>Book Title</th>
                 <th width="150">Author</th>
-                <th width="150">Source</th>
             </tr>
         </thead>
         <tbody>
@@ -23,13 +23,18 @@
             <tr>
                 <td>
                     {{#each book.eggheads as | egghead |}}
-                    <span>{{egghead.name}}</span>
+                    <a href="../{{egghead.alias}}"><span>{{egghead.name}}</span></a>
                     {{/each}}
                 </td>
                 <td>
-                    <img src="{{book.coverImage}}" alt="">
+                    {{#each book.eggheads as | egghead |}}
+                    <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
+                    {{/each}}
                 </td>
-                <td>{{book.title}}</td>
+                <td>
+                    <a href="../{{book.alias}}"><img src="{{book.coverImage}}" alt=""></a>
+                </td>
+                <td><a href="../{{book.alias}}"><span>{{book.title}}</span></a></td>
                 <td>
                     {{#each book.authors as | author |}}
                     <span>{{author.name}}</span>
@@ -41,4 +46,3 @@
     </table>
 </section>
 {{/with}}
-
