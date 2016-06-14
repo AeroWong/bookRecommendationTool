@@ -52,6 +52,7 @@ module.exports = function(Category) {
                     if (reformedBook.id === book.id) {
                         reformedBook.title = book.title;
                         reformedBook.authors = book.authors;
+                        reformedBook.coverImage = book.cover_image;
                         reformedBook.alias = book.alias;
                         reformedBook.eggheads = [];
                     }
@@ -109,7 +110,6 @@ module.exports = function(Category) {
         .then(function(books){
             categoryInfoObj.recommendations.books = books;
             console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
-            console.log(categoryInfoObj.recommendations.books[0].eggheads);
             return categoryInfoObj;
             // cb(null, categoryInfoObj);
         })

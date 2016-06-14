@@ -1,27 +1,44 @@
 {{#with pageContent}}
 <ul class="breadcrumbs">
     {{#each breadcrumbs as | breadcrumb |}}
-        <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
     {{/each}}
 </ul>
 <h1>You've got {{recommendations.count}} recommendations</h1>
 {{/with}}
-
 {{#with pageContent.recommendations}}
 <section class="content">
-    {{#each books as | book |}}
-    <p>{{book.no}}.\ 
-        <span><a href="../{{book.alias}}">{{book.title}}</a></span>
-        by 
-        {{#each book.authors as | author |}}
-            <span>{{author}}</span>
-        {{/each}}
-        {{#each book.eggheads as | egghead |}}
-        <br>
-        was recommended by <a href="../{{egghead.alias}}"><span>{{egghead.name}}</span></a> 
-        on <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
-        {{/each}}
-    </p>
-    {{/each}}
+    <table>
+        <thead>
+            <tr>
+                <th>Wisdomizer</th>
+                <th width="100">Book Cover</th>
+                <th>Book Title</th>
+                <th width="150">Author</th>
+                <th width="150">Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each books as | book |}}
+            <tr>
+                <td>
+                    {{#each book.eggheads as | egghead |}}
+                    <span>{{egghead.name}}</span>
+                    {{/each}}
+                </td>
+                <td>
+                    <img src="{{book.coverImage}}" alt="">
+                </td>
+                <td>{{book.title}}</td>
+                <td>
+                    {{#each book.authors as | author |}}
+                    <span>{{author.name}}</span>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </section>
 {{/with}}
+

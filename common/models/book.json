@@ -16,7 +16,7 @@
     },
     "authors": {
       "type": [
-        "string"
+        "object"
       ],
       "required": true
     },

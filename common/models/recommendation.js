@@ -5,13 +5,13 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'Aero Testing 7',
-                               bookCoverImage: 'coverImage.png',
-                               authors: ['Enimen','Snoop Dogg'],
-                               amazonPage: 'amazon.hiphop.com',
+        var recommendation = { bookTitle: 'Fuck The Whole Universe',
+                               bookCoverImage: 'http://d.gr-assets.com/books/1328841510l/2903193.jpg',
+                               authors: ['Eminem', 'Snoop Dogg'],
+                               amazonPage: 'https://www.amazon.com/Big-Payback-History-Business-Hip-Hop/dp/0451234782/ref=sr_1_2?ie=UTF8&qid=1465861026&sr=8-2&keywords=hiphop+books',
                                categories: ['Hip Hop'],
-                               egghead: 'Coolio',
-                               src: 'd12.com',
+                               egghead: 'Tupac',
+                               src: 'https://en.wikipedia.org/wiki/D12',
                                srcTitle: 'D12 Official Site' },
         //
             bookTitle = recommendation.bookTitle,
@@ -159,33 +159,25 @@ module.exports = function(Recommendation) {
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
                             bookObj.cover_image = recommendation.bookCoverImage;
-                            bookObj.authors = recommendation.authors;
                             bookObj.amazon_page = recommendation.amazonPage;
                             bookObj.alias = 'books/' + alias;
                             bookObj.created = moment.utc().format('YYYY-MM-DD');;
+                            bookObj.authors = recommendation.authors.map(function(author){
+                                return {name: author};
+                            });
                             // insert book to bookshelf
+                            console.log('bookObj: ', bookObj);
                             app.models.Book.create(bookObj);
+                            console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
                             return bookObj;
                         })
                         .then(function(completeBookObj){
                             // add book to category's book list
-                            completeBookObj.categories_id.forEach(function(categoryId){
-                                app.models.Category.findOne({where: {id: categoryId}})
-                                .then(function(category){
-                                    var originalBookList = category.books_id;
-                                    if (originalBookList.indexOf(bookId) === -1){
-                                        originalBookList.push(bookId);
-                                        category.updateAttributes({books_id: originalBookList})
-                                        console.log('Updated category ' + category.name + "'s book list.")
-                                        console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
-                                        cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
-                                    }
-                                })
-                            })
+                            cb(null, "A new recommendation was just made by '" + recommendation.egghead + "' for the book '" + bookTitle + "'.");
                         })
                     } else {
                         //egghead recommends old book
-                        app.models.Book.findById(bookId, function(err, book){
+                        return app.models.Book.findById(bookId, function(err, book){
                             var eggheadList = book.eggheads_id;
                             eggheadList.push(eggheadId);
                             book.updateAttributes({eggheads_id: eggheadList}, function(err, book){

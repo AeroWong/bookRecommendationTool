@@ -30,6 +30,8 @@ router.get('/:category', function(req, res, next){
 
         pageContent.breadcrumbs = promises[1];
 
+        console.log('pageContent: ', pageContent.recommendations.books[0].authors[0]);
+
         console.log("rendering 'category' HTML template...");
         res.render('components/category', {pageContent});
     })
