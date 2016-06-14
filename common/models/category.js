@@ -11,6 +11,7 @@ module.exports = function(Category) {
             categoryInfoObj.categoryName = category.name;
             categoryInfoObj.recommendations = {};
             categoryInfoObj.recommendations.count = category.books_id.length;
+            categoryInfoObj.totalEgghead = 0;
             return category.books_id;
         })
         .then(function(booksId){
@@ -109,6 +110,12 @@ module.exports = function(Category) {
         })
         .then(function(books){
             categoryInfoObj.recommendations.books = books;
+
+            categoryInfoObj.recommendations.books.forEach(function(book){
+                categoryInfoObj.totalEgghead += book.eggheads.length;
+            })
+
+            // console.log('categoryInfoObj: ', categoryInfoObj.recommendations.books[1].eggheads);
             console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
             return categoryInfoObj;
             // cb(null, categoryInfoObj);
