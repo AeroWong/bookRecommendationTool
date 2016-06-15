@@ -54,7 +54,7 @@ module.exports = function() {
                         books.forEach(function(book){
                             if (book.alias === level1 + '/' + level2) {
                                 breadcrumbLevel2 = book.title;
-                                breadcrumbLevel2 = book.alias;
+                                alias = book.alias;
                             }
                         })
                         if (breadcrumbLevel2 === null) {

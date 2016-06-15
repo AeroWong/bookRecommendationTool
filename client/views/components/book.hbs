@@ -1,0 +1,22 @@
+{{#with pageContent}}
+<ul class="breadcrumbs">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+<div class="row">
+    <div class="small-3 columns">
+        <article class="article-card">
+            <img src="{{profilePic}}">
+            <div class="card-content">
+                <p class="post-author">{{name}}</p>
+            </div>
+        </article>
+    </div>
+    <div class="small-9 columns">
+        <h2>You've got {{recommendations.count}} recommendations from {{name}}</h2>
+        <h3>Wanna know {{name}} more?</h3>
+        <h3>Check out his <a href="{{site}}">site</a></h3>
+    </div>
+</div>
+{{/with}}

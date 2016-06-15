@@ -7,6 +7,7 @@ var loopback = require('loopback'),
     // routers
     categoriesRouter = require('./routes/categories');
     eggheadsRouter = require('./routes/eggheads');
+    booksRouter = require('./routes/books');
 
 // require modules
 app.handlebars = require('handlebars');
@@ -14,6 +15,7 @@ app.handlebars = require('handlebars');
 // routing
 app.use('/categories', categoriesRouter);
 app.use('/eggheads', eggheadsRouter);
+app.use('/books', booksRouter);
 
 app.engine('hbs', exphbs({extname:'hbs',
                           defaultLayout:'main',

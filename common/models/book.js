@@ -9,7 +9,7 @@ module.exports = function (Book) {
                             coverImage: null,
                             amazonPage: null };
 
-        Book.findOne({where: {alias: bookAlias}})
+        return Book.findOne({where: {alias: bookAlias}})
         .then(function(book){
             // get book's basic info
             bookInfoObj.title = book.title;
@@ -54,8 +54,9 @@ module.exports = function (Book) {
             bookInfoObj.recommendations = {};
             bookInfoObj.recommendations.count = recommendations.length;
             bookInfoObj.recommendations.eggheads = recommendations;
-            console.log('Fetching the following book...\n', bookInfoObj);
-            cb(null, bookInfoObj);
+            console.log("rending the '" + bookInfoObj.title + "' book's info...");
+            return bookInfoObj;
+            // cb(null, bookInfoObj);
         }).catch(function(e){
             console.log(e);
         })
