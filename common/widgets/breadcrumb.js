@@ -27,6 +27,7 @@ module.exports = function() {
                                 {name: 'Categories', url: '/categories'},
                                 {name: breadcrumbLevel2, url: '../' + alias}];
                     }).then(function(breadcrumb){
+                        console.log('hhhhhhhh')
                         return breadcrumb;
                     })
                     break;
@@ -78,7 +79,7 @@ module.exports = function() {
                     break;
                 case 'eggheads':
                     return [{name: 'Home', url: '/'},
-                            {name: 'Categories', url: '/categories'}];
+                            {name: 'Eggheads', url: '/categories'}];
                     break;
                 default:
                     res.send("L1 breadcrumb needs either 'categories' or 'eggheads' as params." );

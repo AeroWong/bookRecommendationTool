@@ -1,7 +1,16 @@
-<h1>index page</h1>
-
-{{#each categories as | category | }}
-    <div class="fruit">{{category.name}}</div>
-{{/each}}
-
-<img src="images/OpenBook.jpg" alt="">
+{{#with pageContent}}
+<ul class="breadcrumbs">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+{{/with}}
+<div class="row">
+  <div class="large-6 columns">
+    <div data-alert class="alert-box primary">
+      <strong>Whoops!</strong> - You clearly did that wrong.
+    </div>
+  </div>
+  <div class="large-6 columns">
+  </div>
+</div>
