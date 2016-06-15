@@ -27,7 +27,6 @@ module.exports = function() {
                                 {name: 'Categories', url: '/categories'},
                                 {name: breadcrumbLevel2, url: '../' + alias}];
                     }).then(function(breadcrumb){
-                        console.log('hhhhhhhh')
                         return breadcrumb;
                     })
                     break;

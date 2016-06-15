@@ -7,16 +7,38 @@
 <div class="row">
     <div class="small-3 columns">
         <article class="article-card">
-            <img src="{{profilePic}}">
-            <div class="card-content">
-                <p class="post-author">{{name}}</p>
-            </div>
+            <img src="{{coverImage}}">
         </article>
     </div>
     <div class="small-9 columns">
-        <h2>You've got {{recommendations.count}} recommendations from {{name}}</h2>
-        <h3>Wanna know {{name}} more?</h3>
-        <h3>Check out his <a href="{{site}}">site</a></h3>
+        <h2>{{title}} by 
+            {{#each authors as |author|}}
+            <span>{{author.name}}</span>
+            {{/each}}
+        </h2>
+        <h3>was recommended by {{recommendations.count}} wisdomizers</h3>
+        <h3>Wanna know more about the book?</h3>
+        <h3>Check out its Amazon Page <a href="{{amazonPage}}">HERE</a></h3>
     </div>
 </div>
+<section class="content">
+    <table>
+        <thead>
+            <tr>
+                <th>Wisdom's Origin</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{#each recommendations.eggheads as |egghead|}}
+            <tr>
+                <td>
+                    <p>{{egghead.eggheadName}} recommended it on 
+                        <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
+                    </p>
+                </td>
+            </tr>
+                {{/each}}
+        </tbody>
+    </table>
+</section>
 {{/with}}

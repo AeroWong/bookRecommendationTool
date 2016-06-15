@@ -20,9 +20,9 @@ router.get('/:book', function(req, res, next){
 
         pageContent.breadcrumbs = promises[1];
 
-        // console.log('pageContent: ', pageContent);
+        console.log('eggehead: ', pageContent.recommendations.eggheads[0]);
 
-        console.log("rendering 'category' HTML template...");
+        console.log("rendering 'book' HTML template...");
         res.render('components/book', {pageContent});
     })
 })

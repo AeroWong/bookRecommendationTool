@@ -54,7 +54,7 @@ module.exports = function (Book) {
             bookInfoObj.recommendations = {};
             bookInfoObj.recommendations.count = recommendations.length;
             bookInfoObj.recommendations.eggheads = recommendations;
-            console.log("rending the '" + bookInfoObj.title + "' book's info...");
+            console.log("rendering the '" + bookInfoObj.title + "' book's info...");
             return bookInfoObj;
             // cb(null, bookInfoObj);
         }).catch(function(e){
