@@ -18,8 +18,6 @@ router.get('/', function(req, res, next){
 
         pageContent.breadcrumbs = promises[1];
 
-console.log('pageContent: ', pageContent);
-
         console.log("rendering 'categories' HTML template...");
         res.render('components/categories', {pageContent});
     })
