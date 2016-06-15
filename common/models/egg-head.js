@@ -67,7 +67,10 @@ module.exports = function (EggHead) {
                 return reformedRecommendations.map(function(recommendation){
                     books.forEach(function(book){
                         if (recommendation.id === book.id) {
+                            recommendation.eggheadName = eggheadInfoObj.name;
                             recommendation.title = book.title;
+                            recommendation.coverImage = book.cover_image;
+                            recommendation.authors = book.authors;
                             recommendation.alias = book.alias;
                         }
                     })
@@ -76,11 +79,13 @@ module.exports = function (EggHead) {
             })
         })
         .then(function(recommendations){
-            console.log("Rendering egghead " + eggheadInfoObj.name + "'s info...");
             eggheadInfoObj.recommendations = {};
             eggheadInfoObj.recommendations.count = recommendations.length;
             eggheadInfoObj.recommendations.books = recommendations;
-            cb(null, eggheadInfoObj);
+
+            console.log("Rendering egghead " + eggheadInfoObj.name + "'s info...");
+            // cb(null, eggheadInfoObj);
+            return eggheadInfoObj;
         })
         .catch(function(e){
             console.log(e);

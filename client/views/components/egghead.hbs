@@ -4,9 +4,23 @@
     <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
     {{/each}}
 </ul>
-<h2>You've got {{recommendations.count}} recommendations from {{totalEgghead}} wisdomizers</h2>
+<div class="row">
+    <div class="small-3 columns">
+        <article class="article-card">
+            <img src="{{profilePic}}">
+            <div class="card-content">
+                <p class="post-author">{{name}}</p>
+            </div>
+        </article>
+    </div>
+    <div class="small-9 columns">
+        <h2>You've got {{recommendations.count}} recommendations from {{name}}</h2>
+        <h3>Wanna know {{name}} more?</h3>
+        <h3>Check out his <a href="{{site}}">site</a></h3>
+    </div>
+</div>
 {{/with}}
-{{#with pageContent.recommendations}}
+{{#with pageContent}}
 <section class="content">
     <table>
         <thead>
@@ -18,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            {{#each books as | book |}}
+            {{#each recommendations.books as | book |}}
             <tr>
                 <td>
                     <a href="../{{book.alias}}"><img src="{{book.coverImage}}" alt=""></a>
@@ -30,13 +44,10 @@
                     {{/each}}
                 </td>
                 <td>
-                    {{#each book.eggheads as | egghead |}}
                     <p>
-                        <a href="../{{egghead.alias}}"><span>{{egghead.name}}</span></a>
-                        recommended it on
-                        <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
+                        {{eggheadName}} recommended it on
+                        <a href="{{book.src}}"><span>{{book.srcTitle}}</span></a>
                     </p>
-                    {{/each}}
                 </td>
             </tr>
             {{/each}}
