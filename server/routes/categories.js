@@ -4,8 +4,7 @@ var express = require('express'),
     router = express.Router({mergeParams: true});
 
 router.get('/', function(req, res, next){
-    var breadcrumbL1 = 'categories',
-        breadcrumbL2;
+    var breadcrumbL1 = 'categories';
 
     var getCatgoriesInfo = app.models.Category.getCatgoriesInfo()
     .then(function(categoriesInfo){
@@ -18,6 +17,8 @@ router.get('/', function(req, res, next){
         var pageContent = promises[0];
 
         pageContent.breadcrumbs = promises[1];
+
+console.log('pageContent: ', pageContent);
 
         console.log("rendering 'categories' HTML template...");
         res.render('components/categories', {pageContent});

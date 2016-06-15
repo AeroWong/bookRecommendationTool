@@ -4,13 +4,26 @@
     <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
     {{/each}}
 </ul>
-{{/with}}
 <div class="row">
-  <div class="large-6 columns">
-    <div data-alert class="alert-box primary">
-      <strong>Whoops!</strong> - You clearly did that wrong.
+    <div class="large-6 columns">
+        {{#each leftCol as | category |}}
+        <div data-alert class="alert-box primary">
+            <strong>{{category.name}}</strong> -
+            <a href="{{category.alias}}">
+                {{category.recommendationCount}} recommendations
+            </a>
+        </div>
+        {{/each}}
     </div>
-  </div>
-  <div class="large-6 columns">
-  </div>
+    <div class="large-6 columns">
+        {{#each rightCol as | category |}}
+        <div data-alert class="alert-box success">
+            <strong>{{category.name}}</strong> -
+            <a href="{{category.alias}}">
+                {{category.recommendationCount}} recommendations
+            </a>
+        </div>
+        {{/each}}
+    </div>
 </div>
+{{/with}}

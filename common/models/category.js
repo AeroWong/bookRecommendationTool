@@ -135,9 +135,32 @@ module.exports = function(Category) {
                 return reformedCategory;
             })
         }).then(function(categories){
+            var oddEvenIndicator = categories.length / 2,
+                endPoint = categories.length,
+                cutPoint = null, 
+                result = {};
+
+            if (oddEvenIndicator % 1 === 0.5) {
+                cutPoint = oddEvenIndicator + 0.5;
+            } else {
+                cutPoint = oddEvenIndicator;
+            }
+
+            categories.sort(function(a, b) {
+                if ( a.name < b.name ){
+                    return -1;
+                }
+                if ( a.name > b.name ){
+                    return 1;
+                }
+                return 0;
+            });
+            result.leftCol = categories.slice(0, cutPoint);
+            result.rightCol = categories.slice(cutPoint, endPoint);
+
             console.log("rendering categories' info...");
             // cb(null, categories);
-            return categories;
+            return result;
         })
         .catch(function(e){
             console.log(e);
