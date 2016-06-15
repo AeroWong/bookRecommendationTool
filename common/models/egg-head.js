@@ -98,7 +98,8 @@ module.exports = function (EggHead) {
         })
         .then(function(eggheads){
             console.log("rendering eggheads' basic info...");
-            cb(null, eggheads);
+            return eggheads;
+            // cb(null, eggheads);
         })
         .catch(function(e){
             console.log(e);

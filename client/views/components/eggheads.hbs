@@ -1,0 +1,20 @@
+{{#with pageContent}}
+<ul class="breadcrumbs">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+<ul>
+    {{#each eggheads as |egghead|}}
+    <li>
+        <article class="article-card">
+          <a href="../{{egghead.alias}}"><img src="{{egghead.profilePic}}"></a>
+          <div class="card-content">
+            <img class="post-icon" src="http://zurb.com/stickers/images/soapbox.png" alt="foundation icon">
+            <p class="post-author"><a href="../{{egghead.alias}}">{{egghead.name}}</a></p>
+          </div>
+        </article>
+    </li>
+    {{/each}}
+</ul>
+{{/with}}
