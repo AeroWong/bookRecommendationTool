@@ -5,14 +5,22 @@ var loopback = require('loopback'),
     path = require('path'),
     app = module.exports = loopback(),
     // routers
-    categoriesRouter = require('./routes/categories');
-    eggheadsRouter = require('./routes/eggheads');
+    categoriesRouter = require('./routes/categories'),
+    eggheadsRouter = require('./routes/eggheads'),
     booksRouter = require('./routes/books');
 
 // require modules
 app.handlebars = require('handlebars');
 
-// routing
+// routing - root level
+app.get('/', function(req, res){
+    return app.models.Recommendation.getCurrentMonthRecommendations()
+    .then(function(pageContent){
+        console.log('pageContent: ', pageContent);
+        res.render('components/home', {pageContent});
+    });
+})
+// routing - one level deeper
 app.use('/categories', categoriesRouter);
 app.use('/eggheads', eggheadsRouter);
 app.use('/books', booksRouter);

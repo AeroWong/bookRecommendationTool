@@ -258,6 +258,7 @@ module.exports = function(Recommendation) {
                         if (book.id === recommendation.book_id) {
                             reformedRecommendation.title = book.title;
                             reformedRecommendation.alias = book.alias;
+                            reformedRecommendation.authors = book.authors;
                             reformedRecommendation.src = recommendation.src;
                             reformedRecommendation.srcTitle = recommendation.src_title;
                             reformedRecommendation.recommendationId = recommendation.id;
@@ -329,8 +330,9 @@ module.exports = function(Recommendation) {
         .then(function(recommendations){
             currentMonthRecommendationInfo.count = recommendations.length;
             currentMonthRecommendationInfo.recommendations = recommendations;
-            console.log("rendering current month recommendation's info...")
-            cb(null, currentMonthRecommendationInfo);
+            console.log("rendering current month recommendation's info...");
+            return currentMonthRecommendationInfo;
+            // cb(null, currentMonthRecommendationInfo);
         })
         .catch(function(e){
             console.log(e);

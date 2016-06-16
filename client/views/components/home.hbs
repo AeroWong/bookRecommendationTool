@@ -1,0 +1,36 @@
+{{#with pageContent}}
+<h1>You've got {{count}} recommendations in {{currentMonth}}</h1>
+{{/with}}
+{{#with pageContent}}
+<section class="content">
+    <table>
+        <thead>
+            <tr>
+                <th width="130">Book Cover</th>
+                <th width="300">Book Title</th>
+                <th width="200">Author</th>
+                <th>Wisdom's Origin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each recommendations as | recommendation |}}
+            <tr>
+                <td>
+                    <img src="" alt="">
+                </td>
+                <td>
+                    {{recommendation.bookTitle}}
+                </td>
+                <td>
+                </td>
+                <td>
+                    {{#each recommendation.eggheads as |egghead|}}
+                    <p>{{egghead.name}} recommended it on <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a></p>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</section>
+{{/with}}
