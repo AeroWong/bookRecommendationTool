@@ -16,7 +16,7 @@ app.handlebars = require('handlebars');
 app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
-        console.log('pageContent: ', pageContent);
+        // console.log('pageContent: ', pageContent.recommendations[0]);
         res.render('components/home', {pageContent});
     });
 })

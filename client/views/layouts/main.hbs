@@ -3,21 +3,37 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Wisdom Trigger | Get Book Recommendations from Eggheads</title>
-        <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+        <title>Wisdom Trigger | Book Recommendations from Wisdomizers</title>
+{{!--         <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css"> --}}
         <link rel="stylesheet" href="/css/main.css">
     </head>
     <body>
         <!-- Start Top Bar -->
         <div class="container">
+            <div class="logo-bar">
+                <div class="inner-container">
+                    <div class="logo">Wisdom Trigger<span>&nbsp;&nbsp;&nbsp;Book Recommendations from Wisdomizers</span></div>
+                </div>
+            </div>
             <div class="top-bar">
                 <div class="top-bar-left">
-                    <ul class="menu">
-                        <li class="menu-text">Wisdom Trigger</li>
-                    </ul>
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li class="menu-text"></li>
+                        <li>
+                            <a href="#">Browse</a>
+                            <ul class="menu vertical">
+                                <li><a href="#">Wisdomizers</a></li>
+                                <li><a href="#">Book Recommendations</a></li>
+                            </ul>
+                        </li>
+                        {{!-- <li><a href="#">Two</a></li> --}}
+                        </ul>
                 </div>
                 <div class="top-bar-right">
-                    <ul class="menu" />
+                    <ul class="menu">
+                        <li><input type="search" placeholder="Search"></li>
+                        <li><button type="button" class="button">Search</button></li>
+                    </ul>
                 </div>
             </div>
             <!-- End Top Bar -->
@@ -26,7 +42,7 @@
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
         <script>
-            $(document).foundation();
+        $(document).foundation();
         </script>
     </body>
 </html>

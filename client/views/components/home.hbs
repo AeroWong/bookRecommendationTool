@@ -16,16 +16,19 @@
             {{#each recommendations as | recommendation |}}
             <tr>
                 <td>
-                    <img src="" alt="">
+                    <img src="{{recommendation.coverImage}}" alt="{{recommendation.bookTitle}}">
                 </td>
                 <td>
                     {{recommendation.bookTitle}}
                 </td>
                 <td>
+                    {{#each recommendation.authors as | author |}}
+                        <span>{{author.name}}</span>
+                    {{/each}}
                 </td>
                 <td>
-                    {{#each recommendation.eggheads as |egghead|}}
-                    <p>{{egghead.name}} recommended it on <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a></p>
+                    {{#each recommendation.eggheads as | egghead |}}
+                    <p><a href="../{{egghead.alias}}"><span>{{egghead.name}}</span></a> recommended it on <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a></p>
                     {{/each}}
                 </td>
             </tr>

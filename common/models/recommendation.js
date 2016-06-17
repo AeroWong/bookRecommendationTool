@@ -258,6 +258,7 @@ module.exports = function(Recommendation) {
                         if (book.id === recommendation.book_id) {
                             reformedRecommendation.title = book.title;
                             reformedRecommendation.alias = book.alias;
+                            reformedRecommendation.coverImage = book.cover_image;
                             reformedRecommendation.authors = book.authors;
                             reformedRecommendation.src = recommendation.src;
                             reformedRecommendation.srcTitle = recommendation.src_title;
@@ -299,6 +300,8 @@ module.exports = function(Recommendation) {
                         if (bookInfo.recommendationId === eggheadInfo.recommendationId) {
                             reformedRecommendation.bookTitle = bookInfo.title;
                             reformedRecommendation.bookAlias = bookInfo.alias;
+                            reformedRecommendation.coverImage = bookInfo.coverImage;
+                            reformedRecommendation.authors = bookInfo.authors;
                             reformedRecommendation.eggheadName = eggheadInfo.name;
                             reformedRecommendation.eggheadAlias = eggheadInfo.alias;
                             reformedRecommendation.src = eggheadInfo.src;
@@ -319,8 +322,10 @@ module.exports = function(Recommendation) {
                                         alias: recommendation.eggheadAlias,
                                         src: recommendation.src,
                                         srcTitle: recommendation.srcTitle };
+                        reformedRecommendation.authors = recommendation.authors;
                         reformedRecommendation.bookTitle = recommendation.bookTitle;
                         reformedRecommendation.bookAlias = recommendation.bookAlias;
+                        reformedRecommendation.coverImage = recommendation.coverImage;
                         reformedRecommendation.eggheads.push(egghead);
                     }
                 })
