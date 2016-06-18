@@ -21,7 +21,9 @@ module.exports = function() {
                             }
                         })
                         if (breadcrumbLevel2 === null) {
-                            res.send(message);
+                            var e = new Error(message);
+                            console.log(e.message);
+                            throw e;
                         }
                         return [{name: 'Home', url: '/'},
                                 {name: 'Categories', url: '/categories'},
@@ -30,7 +32,7 @@ module.exports = function() {
                         return breadcrumb;
                     })
                     break;
-                case 'eggheads':
+                case 'wisdomizers':
                     return app.models.EggHead.find()
                     .then(function(eggheads){
                         eggheads.forEach(function(egghead){
@@ -43,7 +45,7 @@ module.exports = function() {
                             res.send(message);
                         }
                         return [{name: 'Home', url: '/'},
-                                {name: 'Eggheads', url: '/eggheads'},
+                                {name: 'Wisdomizers', url: '/wisdomziers'},
                                 {name: breadcrumbLevel2, url: '../' + alias}];
                     })
                     break;
@@ -65,7 +67,9 @@ module.exports = function() {
                     })
                     break;
                 default:
-                    res.send(message);
+                    var e = new Error(message);
+                    console.log(e.message);
+                    throw e;
             }
         }
 
@@ -76,12 +80,14 @@ module.exports = function() {
                     return [{name: 'Home', url: '/'},
                             {name: 'Categories', url: '/categories'}];
                     break;
-                case 'eggheads':
+                case 'wisdomizers':
                     return [{name: 'Home', url: '/'},
-                            {name: 'Eggheads', url: '/categories'}];
+                            {name: 'Wisdomizers', url: '/wisdomizers'}];
                     break;
                 default:
-                    res.send("L1 breadcrumb needs either 'categories' or 'eggheads' as params." );
+                    var e = new Error("L1 breadcrumb needs either 'categories' or 'eggheads' as params." );
+                    console.log(e.message);
+                    throw e;
             }
         }
 

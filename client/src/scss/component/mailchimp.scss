@@ -1,0 +1,25 @@
+.sign-up-form {
+	text-align: center;
+    font-size: 21px;
+    &.text-1 {
+    	margin: 35px 0 35px 0;
+	}
+	&.text-2 {
+		margin: 20px 0 35px;
+		font-style: italic;
+	}
+
+}
+.button.mailchimp {
+	width: 275px;
+    margin: 0 8px;
+}
+#mc_embed_signup {
+	border: 8px solid #E6E6E6;
+}
+.from-wisdomizer {
+	font-size: 26px;
+}
+.mc-field-group {
+	margin: 0 8px;
+}

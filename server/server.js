@@ -22,7 +22,7 @@ app.get('/', function(req, res){
 })
 // routing - one level deeper
 app.use('/categories', categoriesRouter);
-app.use('/eggheads', eggheadsRouter);
+app.use('/wisdomizers', eggheadsRouter);
 app.use('/books', booksRouter);
 
 app.engine('hbs', exphbs({extname:'hbs',

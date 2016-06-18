@@ -12,6 +12,7 @@ $warning: #F89406;
   border-width: 0 0 0 0.35rem;
   font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
+  margin-bottom: 20px;
   
   &.radius {
     border-radius: 0.6rem;
@@ -49,7 +50,7 @@ $warning: #F89406;
     border-left-color: $success;
     background-color: scale-color($success, $lightness: 40%);
     strong {
-      color: $success;
+      color: #475496;
     }
   }
   &.warning {
@@ -59,4 +60,7 @@ $warning: #F89406;
       color: $warning;
     }
   }
+}
+.row.categories {
+  margin-top: 15px;
 }

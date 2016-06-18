@@ -4,7 +4,7 @@ var express = require('express'),
     router = express.Router({mergeParams: true});
 
 router.get('/', function(req, res, next){
-    var breadcrumbL1 = 'eggheads';
+    var breadcrumbL1 = 'wisdomizers';
 
     var getEggheadsInfo = app.models.EggHead.getEggHeadsInfo()
     .then(function(eggheadsInfo){
@@ -24,17 +24,17 @@ router.get('/', function(req, res, next){
     })
 })
 
-router.get('/:egghead', function(req, res, next){
-    var breadcrumbL1 = 'eggheads',
-        breadcrumbL2 = req.params.egghead;
+router.get('/:wisdomizer', function(req, res, next){
+    var breadcrumbL1 = 'wisdomizers',
+        breadcrumbL2 = req.params.wisdomizers;
 
-    var getEggheadInfo = app.models.EggHead.getEggheadInfo('eggheads/' + req.params.egghead)
+    var getEggheadInfo = app.models.EggHead.getEggheadInfo('eggheads/' + req.params.wisdomizer)
     .then(function(eggheadInfo){
         return eggheadInfo;
     })
-    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2).then(function(breadcrumb){
-        return breadcrumb;
-    });
+    
+    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2);
+
     return Promise.all([getEggheadInfo, getBreadcrumb])
     .then(function(promises){
         var pageContent = promises[0];
