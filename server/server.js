@@ -3,14 +3,30 @@ var loopback = require('loopback'),
     exphbs = require('express-handlebars'),
     express = require('express'),
     path = require('path'),
+    fs = require('fs'),
     app = module.exports = loopback(),
     // routers
     categoriesRouter = require('./routes/categories'),
     eggheadsRouter = require('./routes/eggheads'),
-    booksRouter = require('./routes/books');
+    booksRouter = require('./routes/books'),
+    // loading partials preps
+    partialsDir = process.cwd() + '/client/views/partials',
+    filenames = fs.readdirSync(partialsDir);
 
 // require modules
 app.handlebars = require('handlebars');
+
+// load partials
+filenames.forEach(function(filename){
+  console.log('filename: ', filename);
+  var matches = /^([^.]+).hbs$/.exec(filename);
+  if (!matches) {
+    return;
+  }
+  var name = matches[1];
+  var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
+  app.handlebars.registerPartial(name, template);
+})
 
 // routing - root level
 app.get('/', function(req, res){
@@ -28,7 +44,7 @@ app.use('/books', booksRouter);
 app.engine('hbs', exphbs({extname:'hbs',
                           defaultLayout:'main',
                           layoutsDir: process.cwd() + '/client/views/layouts',
-                          partialsDir: process.cwd() + '/client/views/components'}));
+                          partialsDir: process.cwd() + '/client/views/partials'}));
 
 app.set('view engine', 'hbs');
 app.set('views', process.cwd() + '/client/views');
