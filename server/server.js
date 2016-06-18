@@ -17,7 +17,7 @@ app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
         // console.log('pageContent: ', pageContent.recommendations[0]);
-        res.render('components/home', {pageContent});
+        res.render('pages/home', {pageContent});
     });
 })
 // routing - one level deeper

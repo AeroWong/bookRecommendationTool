@@ -19,7 +19,7 @@ router.get('/', function(req, res, next){
         pageContent.breadcrumbs = promises[1];
 
         console.log("rendering 'categories' HTML template...");
-        res.render('components/categories', {pageContent});
+        res.render('pages/categories', {pageContent});
     })
 
 })
@@ -42,7 +42,7 @@ router.get('/:category', function(req, res, next){
         pageContent.breadcrumbs = promises[1];
 
         console.log("rendering 'category' HTML template...");
-        res.render('components/category', {pageContent});
+        res.render('pages/category', {pageContent});
     })
 })
 

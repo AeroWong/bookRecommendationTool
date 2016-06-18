@@ -21,7 +21,7 @@ router.get('/:book', function(req, res, next){
         pageContent.breadcrumbs = promises[1];
 
         console.log("rendering 'book' HTML template...");
-        res.render('components/book', {pageContent});
+        res.render('pages/book', {pageContent});
     })
 })
 

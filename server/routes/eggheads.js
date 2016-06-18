@@ -20,7 +20,7 @@ router.get('/', function(req, res, next){
             pageContent.breadcrumbs = promises[1];
 
         console.log("rendering 'categories' HTML template...");
-        res.render('components/eggheads', {pageContent});
+        res.render('pages/eggheads', {pageContent});
     })
 })
 
@@ -42,7 +42,7 @@ router.get('/:wisdomizer', function(req, res, next){
         pageContent.breadcrumbs = promises[1];
 
         console.log("rendering 'egghead' HTML template...");
-        res.render('components/egghead', {pageContent});
+        res.render('pages/egghead', {pageContent});
     })
 })
 
