@@ -14,12 +14,16 @@ router.get('/', function(req, res, next){
 
     return Promise.all([getCatgoriesInfo, getBreadcrumb])
     .then(function(promises){
-        var pageContent = promises[0];
+        return app.models.EggHead.getEggHeadCount()
+        .then(function(wisdomizerCount){
+            var pageContent = promises[0];
 
-        pageContent.breadcrumbs = promises[1];
+            pageContent.breadcrumbs = promises[1];
+            pageContent.wisdomizerCount = wisdomizerCount;
 
-        console.log("rendering 'categories' HTML template...");
-        res.render('pages/categories', {pageContent});
+            console.log("rendering 'categories' HTML template...");
+            res.render('pages/categories', {pageContent});
+        })
     })
 
 })

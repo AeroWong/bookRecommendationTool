@@ -1,6 +1,6 @@
+{{#with pageContent}}
 <div class="row">
     <div class="large-9 columns">
-        {{#with pageContent}}
         <ul class="breadcrumbs">
             {{#each breadcrumbs as | breadcrumb |}}
             <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
@@ -19,9 +19,9 @@
             </li>
             {{/each}}
         </ul>
-        {{/with}}
     </div>
     <div class="large-3 columns">
         {{> mailchimp}}
     </div>
 </div>
+{{/with}}

@@ -110,6 +110,11 @@ module.exports = function (EggHead) {
             console.log(e);
         })
     }
+    EggHead.getEggHeadCount = function(options, cb) {
+        return EggHead.find().then(function(eggheads){
+            return eggheads.length;
+        })
+    }
     EggHead.remoteMethod('addEgghead', {
         description: 'Add a new egghead',
         http: {path: '/addEgghead', verb: 'post', status: 200},
@@ -120,6 +125,12 @@ module.exports = function (EggHead) {
     EggHead.remoteMethod('getEggheadInfo', {
         description: "render egghead's profile and recommendations",
         http: {path: '/getEggheadInfo', verb: 'get', status: 200},
+        accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
+        returns: {arg: 'data', type: 'object', root: true}
+    })
+    EggHead.remoteMethod('getEggHeadCount', {
+        description: "get the latest egghead amount",
+        http: {path: '/getEggHeadCount', verb: 'get', status: 200},
         accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
         returns: {arg: 'data', type: 'object', root: true}
     })

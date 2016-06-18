@@ -18,7 +18,6 @@ app.handlebars = require('handlebars');
 
 // load partials
 filenames.forEach(function(filename){
-  console.log('filename: ', filename);
   var matches = /^([^.]+).hbs$/.exec(filename);
   if (!matches) {
     return;
@@ -32,8 +31,11 @@ filenames.forEach(function(filename){
 app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
-        // console.log('pageContent: ', pageContent.recommendations[0]);
-        res.render('pages/home', {pageContent});
+        return app.models.EggHead.getEggHeadCount()
+        .then(function(wisdomizerCount){
+            pageContent.wisdomizerCount = wisdomizerCount;
+            res.render('pages/home', {pageContent});
+        })
     });
 })
 // routing - one level deeper
