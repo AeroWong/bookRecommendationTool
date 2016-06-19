@@ -18,10 +18,14 @@
                     {{#each recommendations as | recommendation |}}
                     <tr>
                         <td>
-                            <img src="{{recommendation.coverImage}}" alt="{{recommendation.bookTitle}}">
+                            <a href="{{recommendation.bookAlias}}">
+                                <img src="{{recommendation.coverImage}}" alt="{{recommendation.bookTitle}}">
+                            </a>
                         </td>
                         <td>
-                            {{recommendation.bookTitle}}
+                            <a href="{{recommendation.bookAlias}}">
+                                {{recommendation.bookTitle}}
+                            </a>
                         </td>
                         <td>
                             <ul class="table-listing">

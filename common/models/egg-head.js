@@ -81,7 +81,7 @@ module.exports = function (EggHead) {
         .then(function(recommendations){
             eggheadInfoObj.recommendations = {};
             eggheadInfoObj.recommendations.count = recommendations.length;
-            eggheadInfoObj.recommendations.books = recommendations;
+            eggheadInfoObj.recommendations.books = shuffle(recommendations);
 
             console.log("Rendering egghead " + eggheadInfoObj.name + "'s info...");
             // cb(null, eggheadInfoObj);
@@ -103,7 +103,7 @@ module.exports = function (EggHead) {
         })
         .then(function(eggheads){
             console.log("rendering eggheads' basic info...");
-            return eggheads;
+            return shuffle(eggheads);
             // cb(null, eggheads);
         })
         .catch(function(e){
@@ -140,6 +140,25 @@ module.exports = function (EggHead) {
         accepts: {arg: 'egghead alias', type: 'string', description: "render the given egghead's URL", http: {source: 'query'}},
         returns: {arg: 'data', type: 'object', root: true}
     })
+    function shuffle(array) {
+        var counter = array.length;
+
+        // While there are elements in the array
+        while (counter > 0) {
+            // Pick a random index
+            var index = Math.floor(Math.random() * counter);
+
+            // Decrease counter by 1
+            counter--;
+
+            // And swap the last element with it
+            var temp = array[counter];
+            array[counter] = array[index];
+            array[index] = temp;
+        }
+
+        return array;
+    }
     function turnBookshelfElementsToLowerCase (elems) {
         return elems.map(function(elem){
             if ('title' in elem){
