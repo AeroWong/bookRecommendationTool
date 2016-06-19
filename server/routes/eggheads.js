@@ -12,14 +12,20 @@ router.get('/', function(req, res, next){
     })
     var getBreadcrumb = breadcrumb(breadcrumbL1);
 
-    return Promise.all([getEggheadsInfo, getBreadcrumb])
+    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    .then(function(wisdomizerCount){
+        return wisdomizerCount;
+    })
+
+    return Promise.all([getEggheadsInfo, getBreadcrumb, getWisdomizerCount])
     .then(function(promises){
         var pageContent = {};
             pageContent.eggheads = promises[0];
             pageContent.eggheadCount = promises[0].length;
             pageContent.breadcrumbs = promises[1];
+            pageContent.wisdomizerCount = promises[2];
 
-        console.log("rendering 'categories' HTML template...");
+        console.log("rendering 'wisdomizers' HTML template...");
         res.render('pages/eggheads', {pageContent});
     })
 })
@@ -37,12 +43,17 @@ router.get('/:wisdomizer', function(req, res, next){
 
     return Promise.all([getEggheadInfo, getBreadcrumb])
     .then(function(promises){
-        var pageContent = promises[0];
+        return app.models.EggHead.getEggHeadCount()
+        .then(function(wisdomizerCount){    
+            var pageContent = promises[0];
 
-        pageContent.breadcrumbs = promises[1];
+            pageContent.breadcrumbs = promises[1];
+            pageContent.wisdomizerCount = wisdomizerCount;
 
-        console.log("rendering 'egghead' HTML template...");
-        res.render('pages/egghead', {pageContent});
+            console.log("rendering 'wisdomizer' HTML template...");
+            res.render('pages/egghead', {pageContent});
+        })
+
     })
 })
 

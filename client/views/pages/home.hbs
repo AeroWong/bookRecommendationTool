@@ -24,14 +24,20 @@
                             {{recommendation.bookTitle}}
                         </td>
                         <td>
+                            <ul class="table-listing">
                             {{#each recommendation.authors as | author |}}
-                                {{author.name}}<br>
+                                <li>{{author.name}}</li>
                             {{/each}}
+                            </ul>
                         </td>
                         <td>
+                            <ul class="table-listing">
                             {{#each recommendation.eggheads as | egghead |}}
-                            <a href="../{{egghead.alias}}">{{egghead.name}}</a> recommended it on <a href="{{egghead.src}}">{{egghead.srcTitle}}</a><br>
+                                <li>
+                                    <a href="../{{egghead.alias}}">{{egghead.name}}</a> recommended it on <a href="{{egghead.src}}">{{egghead.srcTitle}}</a>
+                                </li>
                             {{/each}}
+                            </ul>
                         </td>
                     </tr>
                     {{/each}}

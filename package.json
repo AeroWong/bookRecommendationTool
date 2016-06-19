@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
+    "start": "nodemon server/server.js --watch server.js",
     "pretest": "jshint .",
     "posttest": "nsp check"
   },
@@ -25,6 +24,7 @@
     "loopback-datasource-juggler": "^2.39.0",
     "moment": "^2.13.0",
     "mongodb": "^2.1.18",
+    "nodemon": "^1.9.2",
     "path": "^0.12.7",
     "serve-favicon": "^2.0.1"
   },

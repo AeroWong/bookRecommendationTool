@@ -36,14 +36,18 @@ router.get('/:category', function(req, res, next){
     .then(function(categoryRecommendations){
         return categoryRecommendations;
     })
-    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2).then(function(breadcrumb){
-        return breadcrumb;
-    });
-    return Promise.all([getCategoryRecommendations, getBreadcrumb])
+    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2)
+    
+    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    .then(function(wisdomizerCount){
+        return wisdomizerCount;
+    })
+    return Promise.all([getCategoryRecommendations, getBreadcrumb, getWisdomizerCount])
     .then(function(promises){
         var pageContent = promises[0];
 
         pageContent.breadcrumbs = promises[1];
+        pageContent.wisdomizerCount = promises[2];
 
         console.log("rendering 'category' HTML template...");
         res.render('pages/category', {pageContent});
