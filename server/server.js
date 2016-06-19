@@ -55,6 +55,7 @@ app.set('view engine', 'hbs');
 app.set('views', process.cwd() + '/client/views');
 app.use('/images', express.static(process.cwd() + '/client/assets/images'));
 app.use('/css', express.static(process.cwd() + '/client/assets/css'));
+app.use('/js', express.static(process.cwd() + '/client/assets/js'));
 
 app.start = function() {
   // start the web server
