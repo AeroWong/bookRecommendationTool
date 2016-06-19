@@ -19,7 +19,7 @@
                 <div class="recommendation-count">You've got {{recommendations.count}} recommendations from {{name}}.</div>
                 <div class="hook">
                     Wanna know {{name}} more? <br>
-                    Check out his <a href="{{site}}">site.</a>
+                    Check out {{pronoun}} <a href="{{site}}">site.</a>
                 </div>
             </div>
         </div>
@@ -45,11 +45,9 @@
                             <span>{{author.name}}</span>
                             {{/each}}
                         </td>
-                        <td>
-                            <p>
-                                {{eggheadName}} recommended it on
-                                <a href="{{book.src}}"><span>{{book.srcTitle}}</span></a>
-                            </p>
+                        <td>                            
+                            {{eggheadName}} recommended it on
+                            <a href="{{book.src}}"><span>{{book.srcTitle}}</span></a>
                         </td>
                     </tr>
                     {{/each}}

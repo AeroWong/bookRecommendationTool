@@ -53,6 +53,8 @@ router.get('/:wisdomizer', function(req, res, next){
         .then(function(wisdomizerCount){    
             var pageContent = promises[0];
 
+            console.log('pageContent: ', pageContent);
+
             pageContent.breadcrumbs = promises[1];
             pageContent.wisdomizerCount = promises[2];
 

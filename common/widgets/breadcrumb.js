@@ -45,7 +45,7 @@ module.exports = function() {
                             res.send(message);
                         }
                         return [{name: 'Home', url: '/'},
-                                {name: 'Wisdomizers', url: '/wisdomziers'},
+                                {name: 'Wisdomizers', url: '/wisdomizers'},
                                 {name: breadcrumbLevel2, url: '../' + alias}];
                     })
                     break;

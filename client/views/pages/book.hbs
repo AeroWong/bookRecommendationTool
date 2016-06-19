@@ -37,10 +37,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                        {{#each recommendations.eggheads as |egghead|}}
+                        {{#each recommendations.eggheads as | egghead |}}
                     <tr>
                         <td>
-                            {{egghead.eggheadName}} recommended it on 
+                            <a href="../{{egghead.eggheadAlias}}"><span>{{egghead.eggheadName}}</span></a>
+                            recommended it on 
                             <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
                         </td>
                     </tr>

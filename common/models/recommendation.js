@@ -6,14 +6,14 @@ var app = require('../../server/server.js');
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
         // recommendation object for testing --- will be deleted after implementation
-        var recommendation = { bookTitle: 'The Holy Bible',
-                               bookCoverImage: 'https://images-na.ssl-images-amazon.com/images/I/615RBEF16dL.jpg',
-                               authors: ['Marks Charles Hardie'],
-                               amazonPage: 'https://www.amazon.com/Holy-Bible-Hip-Hop-Version/dp/1593308000/ref=sr_1_2?ie=UTF8&qid=1465884969&sr=8-2&keywords=hip+hop+bible',
+        var recommendation = { bookTitle: 'Rose That Grew Concrete',
+                               bookCoverImage: 'https://images-na.ssl-images-amazon.com/images/I/51gkE-dLHaL._SX406_BO1,204,203,200_.jpg',
+                               authors: ['Tupac Shakur'],
+                               amazonPage: 'https://www.amazon.com/Rose-That-Grew-Concrete/dp/0671028456/ref=sr_1_4?ie=UTF8&qid=1466304415&sr=8-4&keywords=hip+hop+books',
                                categories: ['Hip Hop', "Rap", "Music"],
-                               egghead: 'Coolio',
-                               src: 'https://en.wikipedia.org/wiki/D12',
-                               srcTitle: 'Hip Hop Universe' },
+                               egghead: 'Lil Kim',
+                               src: 'https://www.facebook.com/LilKimTheQueenBee/',
+                               srcTitle: 'Beautiful Lil Girl' },
         //
             bookTitle = recommendation.bookTitle,
             categories = recommendation.categories,

@@ -23,7 +23,7 @@ module.exports = function (EggHead) {
                 eggheadObj.gender = egghead.gender;
                 eggheadObj.profile_pic = egghead.profile_pic;
                 eggheadObj.site = egghead.site;
-                eggheadObj.alias = 'eggheads/' + _.words(egghead.name).join('').toLowerCase();
+                eggheadObj.alias = 'wisdomizers/' + _.words(egghead.name).join('').toLowerCase();
                 EggHead.create(eggheadObj);
                 console.log("A new egghead '" + egghead.name +"' was created.")
             }
@@ -43,9 +43,16 @@ module.exports = function (EggHead) {
             // get egghead's basic info
             eggheadInfoObj.name = egghead.name;
             eggheadInfoObj.profilePic = egghead.profile_pic;
-            eggheadInfoObj.gender = egghead.gender;
             eggheadInfoObj.site = egghead.site;
             eggheadInfoObj.alias = egghead.alias;
+
+            if(egghead.gender === 'm'){
+                eggheadInfoObj.pronoun = 'his'; 
+            } else if (egghead.gender === 'f'){
+                eggheadInfoObj.pronoun = 'her';
+            } else {
+                eggheadInfoObj.pronoun = "the wisdomizer's";
+            }
 
             var getReformedRecommendations = app.models.Recommendation.find({where: {egghead_id: egghead.id}})
             .then(function(recommendations){
