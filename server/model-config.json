@@ -14,7 +14,7 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "br_dev_db"
   },
   "AccessToken": {
     "dataSource": "db",

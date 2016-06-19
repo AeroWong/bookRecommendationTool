@@ -9,6 +9,7 @@ var loopback = require('loopback'),
     categoriesRouter = require('./routes/categories'),
     eggheadsRouter = require('./routes/eggheads'),
     booksRouter = require('./routes/books'),
+    adminRouter = require('./routes/admin'),
     // loading partials preps
     partialsDir = process.cwd() + '/client/views/partials',
     filenames = fs.readdirSync(partialsDir);
@@ -43,6 +44,7 @@ app.get('/', function(req, res){
 app.use('/categories', categoriesRouter);
 app.use('/wisdomizers', eggheadsRouter);
 app.use('/books', booksRouter);
+app.use('/admin', adminRouter);
 
 app.engine('hbs', exphbs({extname:'hbs',
                           defaultLayout:'main',
