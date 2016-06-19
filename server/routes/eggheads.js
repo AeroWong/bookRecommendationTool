@@ -33,9 +33,9 @@ router.get('/', function(req, res, next){
 
 router.get('/:wisdomizer', function(req, res, next){
     var breadcrumbL1 = 'wisdomizers',
-        breadcrumbL2 = req.params.wisdomizers;
+        breadcrumbL2 = req.params.wisdomizer;
 
-    var getEggheadInfo = app.models.EggHead.getEggheadInfo('eggheads/' + req.params.wisdomizer)
+    var getEggheadInfo = app.models.EggHead.getEggheadInfo('wisdomizers/' + req.params.wisdomizer)
     .then(function(eggheadInfo){
         return eggheadInfo;
     })
