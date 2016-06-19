@@ -3,7 +3,32 @@
 	li {
 		font-size: 15px;
 	}
-	&.wisdomizers {
+	&.level-1 {
+		li:last-child {
+			pointer-events: none;
+    		cursor: default;
+    		a {
+	    		color: #0a0a0a;
+    		}
+		}
+	}
+	&.level-2 {
+		li:last-child {
+			pointer-events: none;
+    		cursor: default;
+    		a {
+	    		color: #0a0a0a;
+    		}
+		}
+	}
+	&.book {
+		li:nth-child(2n) {
+			pointer-events: none;
+    		cursor: default;
+    		a {
+	    		color: #0a0a0a;
+    		}
+		}
 		li:last-child {
 			pointer-events: none;
     		cursor: default;
