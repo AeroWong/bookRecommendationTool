@@ -13,16 +13,19 @@
                 </article>
             </div>
             <div class="large-9 columns">
-                <div class="recommendation-count">{{title}} <br>
-                    by 
+                <div class="recommendation-count">{{title}}</div>
+                <span class="by">by</span>
+                <ul class="table-listing">
                     {{#each authors as | author |}}
-                    <span class="author">{{author.name}}</span>
+                    <li>{{author.name}}</li>
                     {{/each}}
-                </div>
-                <div class="hook"> 
-                    was recommended by {{recommendations.count}} wisdomizers <br>
-                    Wanna know more about the book? <br>
-                    Check out its Amazon Page <a href="{{amazonPage}}">HERE</a>
+                </ul>        
+                <div class="hook">
+                    <div>
+                        was recommended by {{recommendations.count}} wisdomizers <br><br>
+                        Wanna know more about the book? <br>
+                        Check out its Amazon Page <a href="{{amazonPage}}">HERE</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,9 +40,8 @@
                         {{#each recommendations.eggheads as |egghead|}}
                     <tr>
                         <td>
-                            <p>{{egghead.eggheadName}} recommended it on 
-                                <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
-                            </p>
+                            {{egghead.eggheadName}} recommended it on 
+                            <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
                         </td>
                     </tr>
                         {{/each}}
@@ -48,33 +50,7 @@
         </section>
     </div>
     <div class="large-3 columns">
-        <!-- Begin MailChimp Signup Form -->
-        <div id="mc_embed_signup">
-            <form action="//wisdomtrigger.us13.list-manage.com/subscribe/post?u=0d178833d66a5e0b82d3eabcb&amp;id=2da092c59f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                <div id="mc_embed_signup_scroll">
-                    <h2 class="sign-up-form text-1">
-                        <span>Get Book Recommendations</span> 
-                        <span class="from-wisdomizer">From 100 Wisdomizers</span>
-                        <span>Monthly.</span>
-                    </h2>
-                    <div class="mc-field-group">
-                    </label>
-                        <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Your Email">
-                    </div>
-                    <div class="mc-field-group">
-                        <input type="text" value="" name="FNAME" class="" id="mce-FNAME" placeholder="Your Name">
-                    </div>
-                    <div id="mce-responses" class="clear">
-                        <div class="response" id="mce-error-response" style="display:none"></div>
-                        <div class="response" id="mce-success-response" style="display:none"></div>
-                    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_0d178833d66a5e0b82d3eabcb_2da092c59f" tabindex="-1" value=""></div>
-                    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button mailchimp"></div>
-                    <h2 class="sign-up-form text-2">No spam, ever. <br> Emails are never shared.</h2>
-                </div>
-            </form>
-        </div>
-        <!--End mc_embed_signup-->
+        {{> mailchimp}}
     </div>
 </div>
 {{/with}}

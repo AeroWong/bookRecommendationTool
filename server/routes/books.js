@@ -11,14 +11,20 @@ router.get('/:book', function(req, res, next){
     .then(function(bookInfo){
         return bookInfo;
     })
-    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2).then(function(breadcrumb){
-        return breadcrumb;
-    });
-    return Promise.all([getBookInfo, getBreadcrumb])
+    
+    var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2)
+
+    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    .then(function(wisdomizerCount){
+        return wisdomizerCount;
+    })
+
+    return Promise.all([getBookInfo, getBreadcrumb, getWisdomizerCount])
     .then(function(promises){
         var pageContent = promises[0];
 
         pageContent.breadcrumbs = promises[1];
+        pageContent.wisdomizerCount = promises[2];
 
         console.log("rendering 'book' HTML template...");
         res.render('pages/book', {pageContent});
