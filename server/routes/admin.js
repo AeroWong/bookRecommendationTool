@@ -7,7 +7,7 @@ router.get('/', function(req, res, next){
 })
 
 app.post('/login', function(req, res) {
-	console.log('---- ', obj);
+	console.log('---- ', req);
 	app.models.User.login({
 	  	email: req.body.email,
 	  	password: req.body.password
