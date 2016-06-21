@@ -6,7 +6,6 @@
 		},
 		login: function(){
 			$('#log-in-form .button').click(function(){
-
 				var obj = { email: $('#log-in-form #email').val(),
 							password: $('#log-in-form #password').val()};
 
