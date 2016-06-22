@@ -8,9 +8,11 @@ router.get('/', function(req, res, next){
     res.render('pages/admin', {layout: 'admin'});
 })
 
-router.get('/dashboard', function(req, res, next){
-	console.log('req: ', req);
-	res.render('pages/dashboard', {layout: 'admin'});	
+router.get('/dashboard/:userId', function(req, res, next){
+	if(req.params.userId){
+		console.log('user with userId - ' + req.params.userId + ' - logged in the admin dashboard.')
+		res.render('pages/dashboard', {layout: 'admin'});	
+	}
 })
 
 app.post('/login', urlencodedParser, function(req, res) {
@@ -27,8 +29,7 @@ app.post('/login', urlencodedParser, function(req, res) {
 		    });
 	    	return;
 	  	} else if (token) {
-	  		res.redirect('/admin/dashboard');
-	  		// res.render('pages/dashboard', {});
+	  		res.send(token);
 	  	}
 
 

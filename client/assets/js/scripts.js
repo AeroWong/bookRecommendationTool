@@ -6,6 +6,7 @@
 		},
 		login: function(){
 			$('#log-in-form .button').click(function(){
+
 				var obj = { email: $('#log-in-form #email').val(),
 							password: $('#log-in-form #password').val()};
 
@@ -15,6 +16,10 @@
 					dataType: 'json',
 					data: obj
 				}).success(function(res){
+					if(res.userId){
+						console.log('userId: ', res.userId);
+						location.assign('admin/dashboard/' + res.userId);
+					}
 					console.log('success', res);
 				}).error(function(res){
 					console.log('error', res);
