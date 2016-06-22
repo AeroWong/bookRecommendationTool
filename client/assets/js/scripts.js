@@ -31,9 +31,9 @@
 	var dashboard = {
 		init: function() {
 			dashboard.addWisdomizer();
+			dashboard.addBookRecommendation();
 		},
 		addWisdomizer: function() {
-
 			$('#add-wisdomizer-form .button').click(function(){
 				var obj = {	name: $('#add-wisdomizer-form #wisdomizer-name').val(),
 							profile_pic: $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
@@ -52,6 +52,40 @@
 						console.log('error', res);
 					})
 				}
+			})
+		},
+		addBookRecommendation: function() {
+			$('#add-book-recommendation-form .button').click(function(){
+				var obj = { bookTitle: $('#add-book-recommendation-form #book-title').val(),
+							bookCoverImage: $('#add-book-recommendation-form #book-cover-image').val(),
+							authors: [],
+							categories: [],
+							amazonPage: $('#add-book-recommendation-form #book-amazon-page').val(),
+							egghead: $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
+							src: $('#add-book-recommendation-form #book-src').val(),
+							srcTitle: $('#add-book-recommendation-form #book-src-title').val() };
+
+				addAuthor($('.book-author').length);
+				addCategory($('.book-category').length);
+
+				function addAuthor(authorNo){
+					for (var i = 1; i < authorNo + 1; i++){
+						if ( $('#book-author-' + String(i)).val().length > 0) {
+							obj.authors.push($('#book-author-' + String(i)).val());
+						}
+					}
+				}
+				function addCategory(categoryNo){
+					for (var i = 1; i < categoryNo + 1; i++){
+						if ( $('#book-category-' + String(i)).val().length > 0) {
+							obj.categories.push($('#book-category-' + String(i)).val());
+						}
+					}
+				}
+
+				console.log(obj);
+
+
 			})
 		}
 	}
