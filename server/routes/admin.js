@@ -10,8 +10,14 @@ router.get('/', function(req, res, next){
 
 router.get('/dashboard/:userId', function(req, res, next){
 	if(req.params.userId){
-		console.log('user with userId - ' + req.params.userId + ' - logged in the admin dashboard.')
-		res.render('pages/dashboard', {layout: 'admin'});	
+		return app.models.User.findById(req.params.userId, function(err, user){
+			if (user) {
+				console.log('User with userId - ' + req.params.userId + ' - logged in the admin dashboard.')
+				res.render('pages/dashboard', {layout: 'admin'});	
+			} else {
+		    	res.render('pages/404_not_found', {layout: 'admin'}); 
+			}
+		});
 	}
 })
 
@@ -21,23 +27,13 @@ app.post('/login', urlencodedParser, function(req, res) {
 	  	password: req.body.password
 	}, 'user', function(err, token) {
 	  	if (err) {
-	    	res.render('response', { //render view named 'response.ejs'
-		      	title: 'Login failed',
-		      	content: err,
-		      	redirectTo: '/',
-		      	redirectToLinkText: 'Try again'
-		    });
+	    	res.render('pages/404_not_found', {layout: 'admin'}); 
 	    	return;
 	  	} else if (token) {
 	  		res.send(token);
+	  	} else {
+	    	res.render('pages/404_not_found', {layout: 'admin'}); 
 	  	}
-
-
-
-	  	// res.render('pages/home', { //login user and render 'home' view
-	   //  	email: req.body.email,
-	   // 		accessToken: token.id
-	  	// });
 	});
 });
 

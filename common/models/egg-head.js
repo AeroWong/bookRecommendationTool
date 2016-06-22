@@ -9,7 +9,7 @@ module.exports = function (EggHead) {
             eggheadId = null,
             eggheadObj = {};
 
-        EggHead.find()
+        return EggHead.find()
         .then(function(eggheads){
             eggheadId = 'eh-' + String(eggheads.length + 1);
             lowerCaseNamesInBookshelf = turnBookshelfElementsToLowerCase(eggheads);

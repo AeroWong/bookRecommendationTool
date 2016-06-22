@@ -27,6 +27,34 @@
 			})
 
 		}
+	};
+	var dashboard = {
+		init: function() {
+			dashboard.addWisdomizer();
+		},
+		addWisdomizer: function() {
+
+			$('#add-wisdomizer-form .button').click(function(){
+				var obj = {	name: $('#add-wisdomizer-form #wisdomizer-name').val(),
+							profile_pic: $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
+							gender: $('#add-wisdomizer-form #wisdomizer-gender').val(),
+							site: $('#add-wisdomizer-form #wisdomizer-site').val() };
+				console.log(obj);
+				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
+					$.ajax({
+						type: "POST",
+						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/EggHeads/addEgghead',
+						dataType: 'json',
+						data: obj
+					}).success(function(res){
+						console.log('added a new wisdomizer.');
+					}).error(function(res){
+						console.log('error', res);
+					})
+				}
+			})
+		}
 	}
 	admin.init();
+	dashboard.init();
 }());
