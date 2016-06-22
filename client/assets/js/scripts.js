@@ -39,7 +39,7 @@
 							profile_pic: $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
 							gender: $('#add-wisdomizer-form #wisdomizer-gender').val(),
 							site: $('#add-wisdomizer-form #wisdomizer-site').val() };
-				console.log(obj);
+
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
 					$.ajax({
 						type: "POST",
