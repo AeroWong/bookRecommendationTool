@@ -35,10 +35,28 @@
 		},
 		addWisdomizer: function() {
 			$('#add-wisdomizer-form .button').click(function(){
-				var obj = {	name: $('#add-wisdomizer-form #wisdomizer-name').val(),
-							profile_pic: $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
-							gender: $('#add-wisdomizer-form #wisdomizer-gender').val(),
-							site: $('#add-wisdomizer-form #wisdomizer-site').val() };
+				var $name = $('#add-wisdomizer-form #wisdomizer-name').val(),
+					$profile_pic = $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
+					$gender = $('#add-wisdomizer-form #wisdomizer-gender').val(),
+					$site = $('#add-wisdomizer-form #wisdomizer-site').val();
+
+				var obj = {	name: $name,
+							profile_pic: $profile_pic,
+							gender: $gender,
+							site: $site };
+
+				if ($name.length === 0){
+					$('#alert-message-1').addClass('active');
+				}
+				if ($profile_pic.length === 0){
+					$('#alert-message-2').addClass('active');
+				}
+				if ($gender.length === 0){
+					$('#alert-message-3').addClass('active');
+				}
+				if ($site.length === 0){
+					$('#alert-message-4').addClass('active');
+				}
 
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
 					$.ajax({
@@ -48,7 +66,13 @@
 						data: obj
 					})
 					.success(function(res){
-						console.log('added a new wisdomizer.');
+						var $successMsg = $('#success-message-1')
+
+						$successMsg.addClass('active');
+						
+						$successMsg.fadeOut(5000, function(){
+							console.log('Added a widomizer. You can add another one.');
+						}) 
 					})
 					.error(function(res){
 						console.log('error', res);

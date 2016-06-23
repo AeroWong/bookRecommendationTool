@@ -5,4 +5,21 @@
 	.instruction {
 		margin: 10px 15px;
 	}
+	.alert-message,
+	.success-message {
+		margin: 10px 0;
+		display: none;
+	}
+	.alert-message {
+		color: #F00;
+		&.active {
+			display: block;
+		}
+	}
+	.success-message {
+		color: #475496;
+		&.active {
+			display: block;
+		}
+	}
 }
