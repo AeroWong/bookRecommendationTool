@@ -46,9 +46,11 @@
 						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/EggHeads/addEgghead',
 						dataType: 'json',
 						data: obj
-					}).success(function(res){
+					})
+					.success(function(res){
 						console.log('added a new wisdomizer.');
-					}).error(function(res){
+					})
+					.error(function(res){
 						console.log('error', res);
 					})
 				}
@@ -83,9 +85,22 @@
 					}
 				}
 
-				console.log(obj);
-
-
+				if(obj.bookTitle && obj.bookCoverImage && obj.authors && obj.categories && 
+				   obj.amazonPage && obj.egghead && obj.src && obj.srcTitle){
+					
+					$.ajax({
+						type: 'POST',
+						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/Recommendations/addRecommendation',
+						dataType: 'json',
+						data: obj
+					})
+					.success(function(res){
+						console.log('added a new book recommendation.')
+					})
+					.error(function(res){
+						console.log('error', res);
+					})
+				}
 			})
 		}
 	}
