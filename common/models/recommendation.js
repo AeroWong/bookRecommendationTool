@@ -33,7 +33,7 @@ module.exports = function(Recommendation) {
             if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
                 // stop the system
                 var e = new Error("The egghead doesn't exist. Please create one.");
-                console.log(e.message);
+                cb(null, e.message);
                 throw e;
             } else {
                 // reference egghead id by egghead's name

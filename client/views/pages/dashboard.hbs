@@ -22,15 +22,16 @@
 	</div>
 	<div class="large-6 columns">
 		<h3 class="instruction">Add Book Recommendation</h3>
+		<h3 class="success-message" id="success-message-2">SUCCESSFULLY Added Book Recommendation</h3>
 		<form id="add-book-recommendation-form">
 			<div class="large-12 columns add-book-recommendation-form">
-			    <label>What is the book title?
+			    <label>What is the book title?<span class="alert-message" id="alert-message-5">Please insert the book title.</span>
 			        <input type="text" id="book-title" placeholder="e.g.: On Writing Well" />
 			    </label>
-			    <label>What is the cover image?
+			    <label>What is the cover image?<span class="alert-message" id="alert-message-6">Please insert the cover image.</span>
 			        <input type="text" id="book-cover-image" placeholder="e.g.: https://images-na.ssl-images-amazon.com/images/I/51KiJBZg5%2BL._SX355_BO1,204,203,200_.jpg" />
 			    </label>
-			    <label>Who are the authors? There will be at least ONE.
+			    <label>Who are the authors? There will be at least ONE.<span class="alert-message" id="alert-message-7">Please insert at least 1 author.</span>
 			        <input type="text" class="book-author" id="book-author-1" placeholder="e.g.: Tim Ferris" />
 			    </label>
 			    <label>
@@ -39,7 +40,7 @@
 			    <label>
 			        <input type="text" class="book-author" id="book-author-3" placeholder="e.g.: Tony Robbins" />
 			    </label>
-			    <label>What are the categories? There will be at least ONE.
+			    <label>What are the categories? There will be at least ONE.<span class="alert-message" id="alert-message-8">Please insert at least 1 category.</span>
 			        <input type="text" class="book-category" id="book-category-1" placeholder="e.g.: Writing" />
 			    </label>
 			    <label>
@@ -48,16 +49,16 @@
 			    <label>
 			        <input type="text" class="book-category" id="book-category-3" placeholder="e.g.: Marketing" />
 			    </label>
-			    <label>What is the corresponding Amazon book page?
+			    <label>What is the corresponding Amazon book page?<span class="alert-message" id="alert-message-9">Please insert the corresponding Amazon book page.</span>
 			        <input type="text" id="book-amazon-page" placeholder="e.g.: http://amzn.to/28Oc2bv" />
 			    </label>
-			    <label>Which Wisdomizer recommended this book?
+			    <label>Which Wisdomizer recommended this book?<span class="alert-message" id="alert-message-10">Please insert the Wisdomizer's name.</span><span class="alert-message" id="alert-message-13"> No this Wisdomizer. Please add his/her as a Wisdomizer first.</span>
 			        <input type="text" id="book-corresponding-wisdomizer" placeholder="e.g.: Richard Branson" />
 			    </label>
-			    <label>Where did the Wisdomizer recommend this book? <br>Put in the URL source. <br>It could be anywhere from a blog post, or Youtube video, etc.
+			    <label>Where did the Wisdomizer recommend this book? <br>Put in the URL source. <br>It could be anywhere from a blog post, or Youtube video, etc.<span class="alert-message" id="alert-message-11">Please insert the recommendation source.</span>
 			        <input type="text" id="book-src" placeholder="e.g.: https://www.youtube.com/watch?v=O3Sh5AbjD4c" />
 			    </label>
-			    <label>What is the source title?
+			    <label>What is the source title?<span class="alert-message" id="alert-message-12">Please insert the title for the recommendation source.</span>
 			        <input type="text" id="book-src-title" placeholder="e.g.: Gabrielle Reece on Self-Worth - Inside Quest" />
 			    </label>
 			    <a href="#" class="button">ADD</a>

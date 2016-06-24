@@ -8,7 +8,7 @@
 			$('#log-in-form .button').click(function(){
 
 				var obj = { email: $('#log-in-form #email').val(),
-							password: $('#log-in-form #password').val()};
+							password: $('#log-in-form #password').val() };
 
 				$.ajax({
 					type: "POST",
@@ -34,28 +34,35 @@
 			dashboard.addBookRecommendation();
 		},
 		addWisdomizer: function() {
+
 			$('#add-wisdomizer-form .button').click(function(){
+
 				var $name = $('#add-wisdomizer-form #wisdomizer-name').val(),
 					$profile_pic = $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
 					$gender = $('#add-wisdomizer-form #wisdomizer-gender').val(),
-					$site = $('#add-wisdomizer-form #wisdomizer-site').val();
+					$site = $('#add-wisdomizer-form #wisdomizer-site').val(),
+					reminder = 'Please fill in the neccessary field.';
 
 				var obj = {	name: $name,
 							profile_pic: $profile_pic,
 							gender: $gender,
 							site: $site };
 
-				if ($name.length === 0){
-					$('#alert-message-1').addClass('active');
+				if (obj.name.length === 0){
+					$('#alert-message-1').css('display', 'block');
+					console.log(reminder);
 				}
-				if ($profile_pic.length === 0){
-					$('#alert-message-2').addClass('active');
+				if (obj.profile_pic.length === 0){
+					$('#alert-message-2').css('display', 'block');
+					console.log(reminder);
 				}
-				if ($gender.length === 0){
-					$('#alert-message-3').addClass('active');
+				if (obj.gender.length === 0){
+					$('#alert-message-3').css('display', 'block');
+					console.log(reminder);
 				}
-				if ($site.length === 0){
-					$('#alert-message-4').addClass('active');
+				if (obj.site.length === 0){
+					$('#alert-message-4').css('display', 'block');
+					console.log(reminder);
 				}
 
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
@@ -66,30 +73,48 @@
 						data: obj
 					})
 					.success(function(res){
-						var $successMsg = $('#success-message-1')
-
-						$successMsg.addClass('active');
-						
-						$successMsg.fadeOut(5000, function(){
-							console.log('Added a widomizer. You can add another one.');
-						}) 
+						if (res.data === "Duplicated egghead."){
+							console.log("Duplicated Wisdomizer. Please add another one.")
+						} else {
+							$('#success-message-1').css('display', 'block');
+							$('.alert-message').css('display', 'none');
+							$('#success-message-1').fadeOut(5000, function(){
+								console.log('Added a widomizer.');
+								$('#success-message-1').css('display', 'none');
+								$('#add-wisdomizer-form #wisdomizer-name').val('');
+								$('#add-wisdomizer-form #wisdomizer-profile-pic').val('');
+								$('#add-wisdomizer-form #wisdomizer-gender').val('');
+								$('#add-wisdomizer-form #wisdomizer-site').val('');
+							});
+						}
 					})
 					.error(function(res){
-						console.log('error', res);
+						console.log('back-end error', res);
 					})
 				}
 			})
 		},
 		addBookRecommendation: function() {
+
 			$('#add-book-recommendation-form .button').click(function(){
-				var obj = { bookTitle: $('#add-book-recommendation-form #book-title').val(),
-							bookCoverImage: $('#add-book-recommendation-form #book-cover-image').val(),
+
+				var $bookTitle = $('#add-book-recommendation-form #book-title').val(),
+					$bookCoverImage = $('#add-book-recommendation-form #book-cover-image').val(),
+					$amazonPage = $('#add-book-recommendation-form #book-amazon-page').val(),
+					$egghead = $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
+					$src = $('#add-book-recommendation-form #book-src').val(),
+					$srcTitle = $('#add-book-recommendation-form #book-src-title').val(),
+					$successMsg = $('#success-message-2'),
+					reminder = 'Please fill in the neccessary field.';
+
+				var obj = { bookTitle: $bookTitle,
+							bookCoverImage: $bookCoverImage,
 							authors: [],
 							categories: [],
-							amazonPage: $('#add-book-recommendation-form #book-amazon-page').val(),
-							egghead: $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
-							src: $('#add-book-recommendation-form #book-src').val(),
-							srcTitle: $('#add-book-recommendation-form #book-src-title').val() };
+							amazonPage: $amazonPage,
+							egghead: $egghead,
+							src: $src,
+							srcTitle: $srcTitle };
 
 				addAuthor($('.book-author').length);
 				addCategory($('.book-category').length);
@@ -109,6 +134,39 @@
 					}
 				}
 
+				if (obj.bookTitle.length === 0){
+					$('#alert-message-5').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.bookCoverImage.length === 0){
+					$('#alert-message-6').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.authors.length === 0){
+					$('#alert-message-7').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.categories.length === 0){
+					$('#alert-message-8').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.amazonPage.length === 0){
+					$('#alert-message-9').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.egghead.length === 0){
+					$('#alert-message-10').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.src.length === 0){
+					$('#alert-message-11').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.srcTitle.length === 0){
+					$('#alert-message-12').css('display', 'block');
+					console.log(reminder);
+				}
+
 				if(obj.bookTitle && obj.bookCoverImage && obj.authors && obj.categories && 
 				   obj.amazonPage && obj.egghead && obj.src && obj.srcTitle){
 					
@@ -119,7 +177,25 @@
 						data: obj
 					})
 					.success(function(res){
-						console.log('added a new book recommendation.')
+						if(res.data === "The egghead doesn't exist. Please create one."){
+							$('#alert-message-13').css('display', 'block');
+							console.log("The Wisdomizer doesn't exist. Please add one.");
+						} else if (res.data === 'Duplicated book recommendation.') {
+							console.log('Duplicated book recommendation. Please make a new one.');
+						} else {
+							$('#success-message-2').css('display', 'block');
+							$('#alert-message-13').css('display', 'none');
+							$successMsg.fadeOut(5000, function(){
+								$('#add-book-recommendation-form #book-title').val('');
+								$('#add-book-recommendation-form #book-cover-image').val('');
+								$('.book-author').val('');
+								$('.book-category').val('');
+								$('#add-book-recommendation-form #book-amazon-page').val('');
+								$('#add-book-recommendation-form #book-corresponding-wisdomizer').val('');
+								$('#add-book-recommendation-form #book-src').val('');
+								$('#add-book-recommendation-form #book-src-title').val('');
+							}) 
+						}
 					})
 					.error(function(res){
 						console.log('error', res);
