@@ -10,6 +10,10 @@
       "type": "string",
       "required": true
     },
+    "isbn": {
+      "type": "string",
+      "required": true
+    },
     "cover_image": {
       "type": "string",
       "required": true

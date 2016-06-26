@@ -5,7 +5,9 @@ var app = require('../../server/server.js');
 
 module.exports = function(Recommendation) {
     Recommendation.addRecommendation = function (recommendation, cb) {
+
         var bookTitle = recommendation.bookTitle,
+            bookIsbn = recommendation.bookIsbn,
             categories = recommendation.categories,
             lowerCaseEgghead = recommendation.egghead.toLowerCase(),
             lowerCaseEggheadsWithIdInBookshelf = null,
@@ -157,6 +159,7 @@ module.exports = function(Recommendation) {
                         .then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
+                            bookObj.isbn = bookIsbn;
                             bookObj.cover_image = recommendation.bookCoverImage;
                             bookObj.amazon_page = recommendation.amazonPage;
                             bookObj.alias = 'books/' + alias;
@@ -165,6 +168,7 @@ module.exports = function(Recommendation) {
                                 return {name: author};
                             });
                             // insert book to bookshelf
+                            console.log('bookObj: ', bookObj);
                             app.models.Book.create(bookObj);
                             console.log("A new book '" + bookTitle + "' was inserted in bookshelf.");
                             return bookObj.categories_id;

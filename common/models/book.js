@@ -4,15 +4,12 @@ var app = require('../../server/server.js');
 
 module.exports = function (Book) {
     Book.getBookInfo = function (bookAlias, cb) {
-        var bookInfoObj = { title: null,
-                            authors: null,
-                            coverImage: null,
-                            amazonPage: null };
-
+        var bookInfoObj = {};
         return Book.findOne({where: {alias: bookAlias}})
         .then(function(book){
             // get book's basic info
             bookInfoObj.title = book.title;
+            bookInfoObj.isbn = book.isbn;
             bookInfoObj.alias = book.alias;
             bookInfoObj.authors = book.authors;
             bookInfoObj.coverImage = book.cover_image;

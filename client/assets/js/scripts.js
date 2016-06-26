@@ -99,6 +99,7 @@
 			$('#add-book-recommendation-form .button').click(function(){
 
 				var $bookTitle = $('#add-book-recommendation-form #book-title').val(),
+					$bookIsbn = $('#add-book-recommendation-form #book-isbn').val(),
 					$bookCoverImage = $('#add-book-recommendation-form #book-cover-image').val(),
 					$amazonPage = $('#add-book-recommendation-form #book-amazon-page').val(),
 					$egghead = $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
@@ -108,6 +109,7 @@
 					reminder = 'Please fill in the neccessary field.';
 
 				var obj = { bookTitle: $bookTitle,
+							bookIsbn: $bookIsbn,
 							bookCoverImage: $bookCoverImage,
 							authors: [],
 							categories: [],
@@ -136,6 +138,10 @@
 
 				if (obj.bookTitle.length === 0){
 					$('#alert-message-5').css('display', 'block');
+					console.log(reminder);
+				}
+				if (obj.bookIsbn.length === 0){
+					$('#alert-message-14').css('display', 'block');
 					console.log(reminder);
 				}
 				if (obj.bookCoverImage.length === 0){
@@ -187,6 +193,7 @@
 							$('#alert-message-13').css('display', 'none');
 							$successMsg.fadeOut(5000, function(){
 								$('#add-book-recommendation-form #book-title').val('');
+								$('#add-book-recommendation-form #book-isbn').val('');
 								$('#add-book-recommendation-form #book-cover-image').val('');
 								$('.book-author').val('');
 								$('.book-category').val('');
@@ -194,6 +201,7 @@
 								$('#add-book-recommendation-form #book-corresponding-wisdomizer').val('');
 								$('#add-book-recommendation-form #book-src').val('');
 								$('#add-book-recommendation-form #book-src-title').val('');
+								console.log('A new book recommendation is made.');
 							}) 
 						}
 					})
