@@ -7,8 +7,8 @@
     "host": "127.0.0.1",
     "port": 27017,
     "database": "br_dev_db",
-    "username": "",
-    "password": "",
+    "username": "root",
+    "password": "AQe3eROPRGCw",
     "name": "br_dev_db",
     "connector": "mongodb"
   }
