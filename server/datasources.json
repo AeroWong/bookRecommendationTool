@@ -7,9 +7,18 @@
     "host": "127.0.0.1",
     "port": 27017,
     "database": "br_dev_db",
-    "username": "brAdmin",
-    "password": "password",
+    "username": "devAdmin",
+    "password": "opensesame",
     "name": "br_dev_db",
+    "connector": "mongodb"
+  },
+  "br_prd_db": {
+    "host": "0.0.0.0",
+    "port": 27017,
+    "database": "br_prd_db",
+    "username": "prdAdmin",
+    "password": "opensesame",
+    "name": "br_prd_db",
     "connector": "mongodb"
   }
 }
