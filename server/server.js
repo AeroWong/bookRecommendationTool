@@ -32,7 +32,6 @@ filenames.forEach(function(filename){
 app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
-        console.log('pageContent: ', pageContent);
         return app.models.EggHead.getEggHeadCount()
         .then(function(wisdomizerCount){
             pageContent.wisdomizerCount = wisdomizerCount;
