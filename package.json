@@ -28,6 +28,7 @@
     "loopback-datasource-juggler": "^2.39.0",
     "moment": "^2.13.0",
     "mongodb": "^2.1.18",
+    "node-sass": "^3.8.0",
     "nodemon": "^1.9.2",
     "path": "^0.12.7",
     "serve-favicon": "^2.0.1"
