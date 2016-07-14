@@ -10,6 +10,8 @@
 				var obj = { email: $('#log-in-form #email').val(),
 							password: $('#log-in-form #password').val() };
 
+				//testing
+
 				$.ajax({
 					type: "POST",
 					url: 'http://' + window.location.hostname + ':80/login',
