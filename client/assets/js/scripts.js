@@ -12,7 +12,7 @@
 
 				$.ajax({
 					type: "POST",
-					url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/login',
+					url: 'http://' + window.location.hostname + ':80/login',
 					dataType: 'json',
 					data: obj
 				}).success(function(res){
