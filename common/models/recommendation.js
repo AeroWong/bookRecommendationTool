@@ -49,19 +49,24 @@ module.exports = function(Recommendation) {
         // reference book id by book title
         var getBookId = app.models.Book.find()
         .then(function(books){
-            lowerCaseBookTitlesWithIdInBookshelf = reformBookshelfElements(books);
-            lowerCaseBookTitlesInBookshelf = turnBookshelfElementsToLowerCase(books);
-            // use existing id if there is a duplicated book
-            lowerCaseBookTitlesWithIdInBookshelf.forEach(function(book){
-                if (lowerCaseBookTitle === book.title) {
-                    bookId = book.id;
-                    isNewBook = false;
-                }
-            })
-            // create a new id
-            if (lowerCaseBookTitlesInBookshelf.indexOf(lowerCaseBookTitle) === -1) {
-                bookId = 'b-' + String(books.length + 1);
+            if (books.length === 0) {
+                bookId = 'b-1';
                 isNewBook = true;
+            } else {
+                lowerCaseBookTitlesWithIdInBookshelf = reformBookshelfElements(books);
+                lowerCaseBookTitlesInBookshelf = turnBookshelfElementsToLowerCase(books);
+                // use existing id if there is a duplicated book
+                lowerCaseBookTitlesWithIdInBookshelf.forEach(function(book){
+                    if (lowerCaseBookTitle === book.title) {
+                        bookId = book.id;
+                        isNewBook = false;
+                    }
+                })
+                // create a new id
+                if (lowerCaseBookTitlesInBookshelf.indexOf(lowerCaseBookTitle) === -1) {
+                    bookId = 'b-' + String(books.length + 1);
+                    isNewBook = true;
+                }
             }
         })
         // check if there is a duplicated recommendation
@@ -100,25 +105,34 @@ module.exports = function(Recommendation) {
                                 recommendation.egghead + "' for the book '" + bookTitle + "'.")
                     // egghead recommends new book
                     if (isNewBook) {
-                        // add book step 1: referencing categories id by category's name
                         var getCategoriesId = app.models.Category.find()
                         .then(function(categories){
-                            var categoryLen = categories.length;
-                            lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
-                            lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
+                            var categoryLen;
                             bookObj.categories_id = [];
-                            // insert bookshelf category id to book
-                            lowerCaseCategories.forEach(function(inputCategory){
-                                lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
-                                    if (inputCategory === bookshelfCategory.name) {
-                                        bookObj.categories_id.push(bookshelfCategory.categories_id);
-                                    }
+                            // add book step 1: referencing categories id by category's name
+                            if (categories.length > 0) {
+                                categoryLen = categories.length;
+                                lowerCaseCategoriesInBookshelf = turnBookshelfElementsToLowerCase(categories);
+                                lowerCaseCategoriesWithIdInBookshelf = reformBookshelfElements(categories);
+                                // insert bookshelf category id to book
+                                lowerCaseCategories.forEach(function(inputCategory){
+                                    lowerCaseCategoriesWithIdInBookshelf.forEach(function(bookshelfCategory){
+                                        if (inputCategory === bookshelfCategory.name) {
+                                            bookObj.categories_id.push(bookshelfCategory.categories_id);
+                                        }
+                                    })
                                 })
-                            })
+                            } else if (categories.length === 0) {
+                                categoryLen = 0;
+                            }
+                            // for no existing categories in DB (init case)
+                            if (lowerCaseCategoriesInBookshelf === null) {
+                                lowerCaseCategoriesInBookshelf = [];
+                            }
                             // create new category in bookshelf if bookshelf doesn't have the input category
                             lowerCaseCategories.forEach(function(category){
                                 var categoryId = null;
-                                if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1) {
+                                if (lowerCaseCategoriesInBookshelf.indexOf(category) === -1 || lowerCaseCategoriesInBookshelf.indexOf(category) === null) {
                                     categoryLen++;
                                     categoryId = 'c-' + String(categoryLen);
                                     bookObj.categories_id.push(categoryId);
@@ -215,7 +229,7 @@ module.exports = function(Recommendation) {
                     }
                 }
             })
-            .catch(function(e){
+            .catch(function(e){ 
                 console.log(e);
             })
         })

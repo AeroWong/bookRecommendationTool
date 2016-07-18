@@ -11,5 +11,14 @@
     "password": "opensesame",
     "name": "br_dev_db",
     "connector": "mongodb"
+  },
+  "wt_prd_db": {
+    "host": "127.0.0.1",
+    "port": 27017,
+    "database": "wt_prd_db",
+    "username": "aero",
+    "password": "opensesame",
+    "name": "wt_prd_db",
+    "connector": "mongodb"
   }
 }

@@ -6,13 +6,14 @@
 		},
 		login: function(){
 			$('#log-in-form .button').click(function(){
-
-				var obj = { email: $('#log-in-form #email').val(),
+				// port 80 for live-site
+				var port = window.location.hostname === 'localhost' ? ':3000' : ':80', 
+					obj = { email: $('#log-in-form #email').val(),
 							password: $('#log-in-form #password').val() };
 
 				$.ajax({
 					type: "POST",
-					url: 'http://' + window.location.hostname + ':80/login',
+					url: 'http://' + window.location.hostname + port + '/login',
 					dataType: 'json',
 					data: obj
 				}).success(function(res){
