@@ -14,7 +14,7 @@
     ]
   },
   "User": {
-    "dataSource": "br_dev_db"
+    "dataSource": "wt_prd_db"
   },
   "AccessToken": {
     "dataSource": "db",
@@ -33,19 +33,19 @@
     "public": false
   },
   "EggHead": {
-    "dataSource": "br_dev_db",
+    "dataSource": "wt_prd_db",
     "public": true
   },
   "Book": {
-    "dataSource": "br_dev_db",
+    "dataSource": "wt_prd_db",
     "public": true
   },
   "Category": {
-    "dataSource": "br_dev_db",
+    "dataSource": "wt_prd_db",
     "public": true
   },
   "Recommendation": {
-    "dataSource": "br_dev_db",
+    "dataSource": "wt_prd_db",
     "public": true
   }
 }
