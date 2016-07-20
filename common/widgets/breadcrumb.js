@@ -4,7 +4,7 @@ var app = require('../../server/server.js');
 
 module.exports = function() {
     return function renderBreadcrumb(level1, level2, options){
-        var message = "L2 breadcrumb needs 'categories' or 'eggheads' to be L1 param and an existing category to be L2 param.";
+        var message = "L2 breadcrumb needs 'categories' or 'wisdomizers' to be L1 param and an existing category to be L2 param.";
 
         if (level1 && level2) {
             console.log('rendering a level 2 breadcrumb...');
@@ -33,12 +33,12 @@ module.exports = function() {
                     })
                     break;
                 case 'wisdomizers':
-                    return app.models.EggHead.find()
-                    .then(function(eggheads){
-                        eggheads.forEach(function(egghead){
-                            if (egghead.alias === level1 + '/' + level2) {
-                                breadcrumbLevel2 = egghead.name;
-                                alias = egghead.alias;
+                    return app.models.Wisdomizer.find()
+                    .then(function(wisdomizerss){
+                        wisdomizerss.forEach(function(wisdomizers){
+                            if (wisdomizers.alias === level1 + '/' + level2) {
+                                breadcrumbLevel2 = wisdomizers.name;
+                                alias = wisdomizers.alias;
                             }
                         })
                         if (breadcrumbLevel2 === null) {
@@ -85,7 +85,7 @@ module.exports = function() {
                             {name: 'Wisdomizers', url: '/wisdomizers'}];
                     break;
                 default:
-                    var e = new Error("L1 breadcrumb needs either 'categories' or 'eggheads' as params." );
+                    var e = new Error("L1 breadcrumb needs either 'categories' or 'wisdomizers' as params." );
                     console.log(e.message);
                     throw e;
             }

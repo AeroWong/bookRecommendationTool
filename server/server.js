@@ -7,7 +7,7 @@ var loopback = require('loopback'),
     app = module.exports = loopback(),
     // routers
     categoriesRouter = require('./routes/categories'),
-    eggheadsRouter = require('./routes/eggheads'),
+    wisdomizersRouter = require('./routes/wisdomizers'),
     booksRouter = require('./routes/books'),
     adminRouter = require('./routes/admin'),
     // loading partials preps
@@ -32,7 +32,7 @@ filenames.forEach(function(filename){
 app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
-        return app.models.EggHead.getEggHeadCount()
+        return app.models.Wisdomizer.getWisdomizerCount()
         .then(function(wisdomizerCount){
             pageContent.wisdomizerCount = wisdomizerCount;
             res.render('pages/home', {pageContent});
@@ -41,7 +41,7 @@ app.get('/', function(req, res){
 })
 // routing - one level deeper
 app.use('/categories', categoriesRouter);
-app.use('/wisdomizers', eggheadsRouter);
+app.use('/wisdomizers', wisdomizersRouter);
 app.use('/books', booksRouter);
 app.use('/admin', adminRouter);
 

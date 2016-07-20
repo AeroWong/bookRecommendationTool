@@ -45,12 +45,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each recommendations.eggheads as | egghead |}}
+                    {{#each recommendations.wisdomizers as | wisdomizer |}}
                     <tr>
                         <td>
-                            <a href="../{{egghead.eggheadAlias}}"><span>{{egghead.eggheadName}}</span></a>
+                            <a href="../{{wisdomizer.wisdomizerAlias}}"><span>{{wisdomizer.wisdomizerName}}</span></a>
                             recommended it on 
-                            <a href="{{egghead.src}}"><span>{{egghead.srcTitle}}</span></a>
+                            <a href="{{wisdomizer.src}}"><span>{{wisdomizer.srcTitle}}</span></a>
                         </td>
                     </tr>
                     {{/each}}

@@ -36,9 +36,9 @@
                         </td>
                         <td>
                             <ul class="table-listing">
-                            {{#each recommendation.eggheads as | egghead |}}
+                            {{#each recommendation.wisdomizers as | wisdomizer |}}
                                 <li>
-                                    <a href="../{{egghead.alias}}">{{egghead.name}}</a> recommended it on <a href="{{egghead.src}}" target="_blank">{{egghead.srcTitle}}</a>
+                                    <a href="../{{wisdomizer.alias}}">{{wisdomizer.name}}</a> recommended it on <a href="{{wisdomizer.src}}" target="_blank">{{wisdomizer.srcTitle}}</a>
                                 </li>
                             {{/each}}
                             </ul>

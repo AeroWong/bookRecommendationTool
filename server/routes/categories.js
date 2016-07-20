@@ -14,7 +14,7 @@ router.get('/', function(req, res, next){
 
     return Promise.all([getCatgoriesInfo, getBreadcrumb])
     .then(function(promises){
-        return app.models.EggHead.getEggHeadCount()
+        return app.models.Wisdomizer.getWisdomizerCount()
         .then(function(wisdomizerCount){
             var pageContent = promises[0];
 
@@ -38,7 +38,7 @@ router.get('/:category', function(req, res, next){
     })
     var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2)
     
-    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    var getWisdomizerCount = app.models.Wisdomizer.getWisdomizerCount()
     .then(function(wisdomizerCount){
         return wisdomizerCount;
     })

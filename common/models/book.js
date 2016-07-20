@@ -23,24 +23,24 @@ module.exports = function (Book) {
 
                     reformedRecommendation.src = recommendation.src;
                     reformedRecommendation.srcTitle = recommendation.src_title;
-                    reformedRecommendation.eggheadId = recommendation.egghead_id;
+                    reformedRecommendation.wisdomizerId = recommendation.wisdomizer_id;
                     reformedRecommendations.push(reformedRecommendation);
                 })
                 return reformedRecommendations;
             })
-            var getEggheads = app.models.EggHead.find().then(function(eggheads){
-                return eggheads;
+            var getWisdomizers = app.models.Wisdomizer.find().then(function(wisdomizers){
+                return wisdomizers;
             })
-            return Promise.all([getReformedRecommendations, getEggheads]).then(function(promises){
+            return Promise.all([getReformedRecommendations, getWisdomizers]).then(function(promises){
                 var reformedRecommendations = promises[0],
-                    eggheads = promises[1];
+                    wisdomizers = promises[1];
 
                 return reformedRecommendations.map(function(recommendation){
-                    eggheads.forEach(function(egghead){
-                        if (recommendation.eggheadId === egghead.id) {
-                            recommendation.eggheadName = egghead.name;
-                            recommendation.eggheadAlias = egghead.alias;
-                            delete recommendation.eggheadId;
+                    wisdomizers.forEach(function(wisdomizer){
+                        if (recommendation.wisdomizerId === wisdomizer.id) {
+                            recommendation.wisdomizerName = wisdomizer.name;
+                            recommendation.wisdomizerAlias = wisdomizer.alias;
+                            delete recommendation.wisdomizerId;
                         }
                     })
                     return recommendation;
@@ -50,7 +50,7 @@ module.exports = function (Book) {
         .then(function(recommendations){
             bookInfoObj.recommendations = {};
             bookInfoObj.recommendations.count = recommendations.length;
-            bookInfoObj.recommendations.eggheads = recommendations;
+            bookInfoObj.recommendations.wisdomizers = recommendations;
             console.log("rendering the '" + bookInfoObj.title + "' book's info...");
             return bookInfoObj;
             // cb(null, bookInfoObj);

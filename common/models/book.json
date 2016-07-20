@@ -34,7 +34,7 @@
       ],
       "required": true
     },
-    "eggheads_id": {
+    "wisdomizers_id": {
       "type": [
         "string"
       ],

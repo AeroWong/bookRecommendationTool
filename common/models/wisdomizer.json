@@ -1,5 +1,5 @@
 {
-  "name": "EggHead",
+  "name": "Wisdomizer",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {

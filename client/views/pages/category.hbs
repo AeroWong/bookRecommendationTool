@@ -4,7 +4,7 @@
     <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
     {{/each}}
 </ul>
-<div class="recommendation-count">You've got {{recommendations.count}} recommendation(s) from {{totalEgghead}} wisdomizer(s).</div>
+<div class="recommendation-count">You've got {{recommendations.count}} recommendation(s) from {{totalWisdomizer}} wisdomizer(s).</div>
 {{/with}}
 <div class="row">
     {{#with pageContent.recommendations}}
@@ -32,10 +32,10 @@
                             {{/each}}
                         </td>
                         <td>
-                            {{#each book.eggheads as | egghead |}}                            
-                            <a href="../{{egghead.alias}}">{{egghead.name}}</a>
+                            {{#each book.wisdomizers as | wisdomizer |}}                            
+                            <a href="../{{wisdomizer.alias}}">{{wisdomizer.name}}</a>
                             recommended it on
-                            <a href="{{egghead.src}}" target="_blank">{{egghead.srcTitle}}</a><br>
+                            <a href="{{wisdomizer.src}}" target="_blank">{{wisdomizer.srcTitle}}</a><br>
                             {{/each}}
                         </td>
                     </tr>

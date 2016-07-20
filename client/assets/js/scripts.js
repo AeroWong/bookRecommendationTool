@@ -69,12 +69,12 @@
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
 					$.ajax({
 						type: "POST",
-						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/EggHeads/addEgghead',
+						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/Wisdomizers/addWisdomizer',
 						dataType: 'json',
 						data: obj
 					})
 					.success(function(res){
-						if (res.data === "Duplicated egghead."){
+						if (res.data === "Duplicated wisdomzier."){
 							console.log("Duplicated Wisdomizer. Please add another one.")
 						} else {
 							$('#success-message-1').css('display', 'block');
@@ -103,7 +103,7 @@
 					$bookIsbn = $('#add-book-recommendation-form #book-isbn').val(),
 					$bookCoverImage = $('#add-book-recommendation-form #book-cover-image').val(),
 					$amazonPage = $('#add-book-recommendation-form #book-amazon-page').val(),
-					$egghead = $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
+					$wisdomizer = $('#add-book-recommendation-form #book-corresponding-wisdomizer').val(),
 					$src = $('#add-book-recommendation-form #book-src').val(),
 					$srcTitle = $('#add-book-recommendation-form #book-src-title').val(),
 					$successMsg = $('#success-message-2'),
@@ -115,7 +115,7 @@
 							authors: [],
 							categories: [],
 							amazonPage: $amazonPage,
-							egghead: $egghead,
+							wisdomizer: $wisdomizer,
 							src: $src,
 							srcTitle: $srcTitle };
 
@@ -161,7 +161,7 @@
 					$('#alert-message-9').css('display', 'block');
 					console.log(reminder);
 				}
-				if (obj.egghead.length === 0){
+				if (obj.wisdomizer.length === 0){
 					$('#alert-message-10').css('display', 'block');
 					console.log(reminder);
 				}
@@ -175,7 +175,7 @@
 				}
 
 				if(obj.bookTitle && obj.bookCoverImage && obj.authors && obj.categories && 
-				   obj.amazonPage && obj.egghead && obj.src && obj.srcTitle){
+				   obj.amazonPage && obj.wisdomizer && obj.src && obj.srcTitle){
 					
 					$.ajax({
 						type: 'POST',
@@ -184,7 +184,7 @@
 						data: obj
 					})
 					.success(function(res){
-						if(res.data === "The egghead doesn't exist. Please create one."){
+						if(res.data === "The wisdomizer doesn't exist. Please create one."){
 							$('#alert-message-13').css('display', 'block');
 							console.log("The Wisdomizer doesn't exist. Please add one.");
 						} else if (res.data === 'Duplicated book recommendation.') {

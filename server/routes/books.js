@@ -14,7 +14,7 @@ router.get('/:book', function(req, res, next){
     
     var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2)
 
-    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    var getWisdomizerCount = app.models.Wisdomizer.getWisdomizerCount()
     .then(function(wisdomizerCount){
         return wisdomizerCount;
     })

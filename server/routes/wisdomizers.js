@@ -6,28 +6,28 @@ var express = require('express'),
 router.get('/', function(req, res, next){
     var breadcrumbL1 = 'wisdomizers';
 
-    var getEggheadsInfo = app.models.EggHead.getEggHeadsInfo()
-    .then(function(eggheadsInfo){
-        return eggheadsInfo;
+    var getWisdomizersInfo = app.models.Wisdomizer.getWisdomizersInfo()
+    .then(function(wisdomizersInfo){
+        return wisdomizersInfo;
     })
 
     var getBreadcrumb = breadcrumb(breadcrumbL1);
 
-    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    var getWisdomizerCount = app.models.Wisdomizer.getWisdomizerCount()
     .then(function(wisdomizerCount){
         return wisdomizerCount;
     })
 
-    return Promise.all([getEggheadsInfo, getBreadcrumb, getWisdomizerCount])
+    return Promise.all([getWisdomizersInfo, getBreadcrumb, getWisdomizerCount])
     .then(function(promises){
         var pageContent = {};
-            pageContent.eggheads = promises[0];
-            pageContent.eggheadCount = promises[0].length;
+            pageContent.wisdomizers = promises[0];
+            pageContent.wisdomizerCount = promises[0].length;
             pageContent.breadcrumbs = promises[1];
             pageContent.wisdomizerCount = promises[2];
 
         console.log("rendering 'wisdomizers' HTML template...");
-        res.render('pages/eggheads', {pageContent});
+        res.render('pages/wisdomizers', {pageContent});
     })
 })
 
@@ -35,21 +35,21 @@ router.get('/:wisdomizer', function(req, res, next){
     var breadcrumbL1 = 'wisdomizers',
         breadcrumbL2 = req.params.wisdomizer;
 
-    var getEggheadInfo = app.models.EggHead.getEggheadInfo('wisdomizers/' + req.params.wisdomizer)
-    .then(function(eggheadInfo){
-        return eggheadInfo;
+    var getWisdomizerInfo = app.models.Wisdomizer.getWisdomizerInfo('wisdomizers/' + req.params.wisdomizer)
+    .then(function(wisdomizerInfo){
+        return wisdomizerInfo;
     })
     
     var getBreadcrumb = breadcrumb(breadcrumbL1, breadcrumbL2);
 
-    var getWisdomizerCount = app.models.EggHead.getEggHeadCount()
+    var getWisdomizerCount = app.models.Wisdomizer.getWisdomizerCount()
     .then(function(wisdomizerCount){
         return wisdomizerCount;
     })
 
-    return Promise.all([getEggheadInfo, getBreadcrumb, getWisdomizerCount])
+    return Promise.all([getWisdomizerInfo, getBreadcrumb, getWisdomizerCount])
     .then(function(promises){
-        return app.models.EggHead.getEggHeadCount()
+        return app.models.Wisdomizer.getWisdomizerCount()
         .then(function(wisdomizerCount){    
             var pageContent = promises[0];
 
@@ -57,7 +57,7 @@ router.get('/:wisdomizer', function(req, res, next){
             pageContent.wisdomizerCount = promises[2];
 
             console.log("rendering 'wisdomizer' HTML template...");
-            res.render('pages/egghead', {pageContent});
+            res.render('pages/wisdomizer', {pageContent});
         })
 
     })

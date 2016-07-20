@@ -11,7 +11,7 @@ module.exports = function(Category) {
             categoryInfoObj.categoryName = category.name;
             categoryInfoObj.recommendations = {};
             categoryInfoObj.recommendations.count = category.books_id.length;
-            categoryInfoObj.totalEgghead = 0;
+            categoryInfoObj.totalWisdomizer = 0;
             return category.books_id;
         })
         .then(function(booksId){
@@ -30,16 +30,16 @@ module.exports = function(Category) {
         .then(function(recommendations){
             return recommendations;
         })
-        var getEggheads = app.models.EggHead.find()
-        .then(function(eggheads){
-            return eggheads;
+        var getWisdomizers = app.models.Wisdomizer.find()
+        .then(function(wisdomizers){
+            return wisdomizers;
         })
-        return Promise.all([getRefromedBooks, getBooks, getRecommendations, getEggheads])
+        return Promise.all([getRefromedBooks, getBooks, getRecommendations, getWisdomizers])
         .then(function(promises){
             var reformedBooks = promises[0],
                 books = promises[1],
                 recommendations = promises[2],
-                eggheads = promises[3],
+                wisdomizers = promises[3],
                 fullBooks = null,
                 fullRecommendations = null,
                 reformedRecommendations = null,
@@ -55,7 +55,7 @@ module.exports = function(Category) {
                         reformedBook.authors = book.authors;
                         reformedBook.coverImage = book.cover_image;
                         reformedBook.alias = book.alias;
-                        reformedBook.eggheads = [];
+                        reformedBook.wisdomizers = [];
                     }
                 })
                 return reformedBook;
@@ -63,8 +63,8 @@ module.exports = function(Category) {
 
             blankRecommendations = recommendations.map(function(recommendation){
                 var reformedRecommendation = {};
-                eggheads.forEach(function(egghead){
-                    if (recommendation.egghead_id === egghead.id) {
+                wisdomizers.forEach(function(wisdomizer){
+                    if (recommendation.wisdomizer_id === wisdomizer.id) {
                         reformedRecommendation.bookId = recommendation.book_id;
                     }
                 })
@@ -74,24 +74,24 @@ module.exports = function(Category) {
             uniqReformedRecommendations = _.uniqBy(blankRecommendations, 'bookId');
 
             reformedRecommendations = recommendations.map(function(recommendation){
-                var reformedEgghead = {};
-                eggheads.forEach(function(egghead){
-                    if (recommendation.egghead_id === egghead.id) {
-                        reformedEgghead.bookId = recommendation.book_id;
-                        reformedEgghead.name = egghead.name;
-                        reformedEgghead.alias = egghead.alias;
-                        reformedEgghead.src = recommendation.src;
-                        reformedEgghead.srcTitle = recommendation.src_title;
+                var reformedWisdomizer = {};
+                wisdomizers.forEach(function(wisdomizer){
+                    if (recommendation.wisdomizer_id === wisdomizer.id) {
+                        reformedWisdomizer.bookId = recommendation.book_id;
+                        reformedWisdomizer.name = wisdomizer.name;
+                        reformedWisdomizer.alias = wisdomizer.alias;
+                        reformedWisdomizer.src = recommendation.src;
+                        reformedWisdomizer.srcTitle = recommendation.src_title;
                     }
                 })
-                return reformedEgghead;
+                return reformedWisdomizer;
             })
 
             fullRecommendations = uniqReformedRecommendations.map(function(uniqRecommendation){
-                uniqRecommendation.eggheads = [];
+                uniqRecommendation.wisdomizers = [];
                 reformedRecommendations.forEach(function(reformedRecommendation){
                     if (uniqRecommendation.bookId === reformedRecommendation.bookId) {
-                        uniqRecommendation.eggheads.push(reformedRecommendation);
+                        uniqRecommendation.wisdomizers.push(reformedRecommendation);
                     }
                 })
                 return uniqRecommendation;
@@ -100,7 +100,7 @@ module.exports = function(Category) {
             return fullBooks.map(function(book){
                 fullRecommendations.forEach(function(recommendation){
                     if (book.id === recommendation.bookId) {
-                        book.eggheads = recommendation.eggheads;
+                        book.wisdomizers = recommendation.wisdomizers;
                         book.no = bookNo;
                         bookNo++;
                     }
@@ -112,10 +112,10 @@ module.exports = function(Category) {
             categoryInfoObj.recommendations.books = books;
 
             categoryInfoObj.recommendations.books.forEach(function(book){
-                categoryInfoObj.totalEgghead += book.eggheads.length;
+                categoryInfoObj.totalWisdomizer += book.wisdomizers.length;
             })
 
-            // console.log('categoryInfoObj: ', categoryInfoObj.recommendations.books[1].eggheads);
+            // console.log('categoryInfoObj: ', categoryInfoObj.recommendations.books[1].wisdomizers);
             console.log("rendering category " + categoryInfoObj.categoryName + "'s book recommendations...");
             return categoryInfoObj;
             // cb(null, categoryInfoObj);

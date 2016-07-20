@@ -32,7 +32,7 @@
     "dataSource": "db",
     "public": false
   },
-  "EggHead": {
+  "Wisdomizer": {
     "dataSource": "wt_prd_db",
     "public": true
   },

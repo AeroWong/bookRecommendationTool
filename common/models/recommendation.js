@@ -9,16 +9,16 @@ module.exports = function(Recommendation) {
         var bookTitle = recommendation.bookTitle,
             bookIsbn = recommendation.bookIsbn,
             categories = recommendation.categories,
-            lowerCaseEgghead = recommendation.egghead.toLowerCase(),
-            lowerCaseEggheadsWithIdInBookshelf = null,
-            lowerCaseEggheadsInBookshelf = null,
+            lowerCaseWisdomizer = recommendation.wisdomizer.toLowerCase(),
+            lowerCaseWisdomizersWithIdInBookshelf = null,
+            lowerCaseWisdomizersInBookshelf = null,
             lowerCaseBookTitle = bookTitle.toLowerCase(),
             lowerCaseBookTitlesWithIdInBookshelf = null,
             lowerCaseBookTitlesInBookshelf = null,
             lowerCaseCategories = categories.map(function(category){return category.toLowerCase()}),
             lowerCaseCategoriesInBookshelf = null,
             lowerCaseCategoriesWithIdInBookshelf = null,
-            eggheadId = null,
+            wisdomizerId = null,
             bookId = null,
             isNewBook = null,
             recommendationId = null,
@@ -27,21 +27,21 @@ module.exports = function(Recommendation) {
             recommendationObj = {},
             bookObj = {};
 
-        // check if the bookshelf has the egghead
-        var hasEgghead = app.models.EggHead.find()
-        .then(function(eggheads){
-            lowerCaseEggheadsInBookshelf = turnBookshelfElementsToLowerCase(eggheads);
-            lowerCaseEggheadsWithIdInBookshelf = reformBookshelfElements(eggheads);
-            if (lowerCaseEggheadsInBookshelf.indexOf(lowerCaseEgghead) === -1) {
+        // check if the bookshelf has the wisdomizer
+        var hasWisdomizer = app.models.Wisdomizer.find()
+        .then(function(wisdomizers){
+            lowerCaseWisdomizersInBookshelf = turnBookshelfElementsToLowerCase(wisdomizers);
+            lowerCaseWisdomizersWithIdInBookshelf = reformBookshelfElements(wisdomizers);
+            if (lowerCaseWisdomizersInBookshelf.indexOf(lowerCaseWisdomizer) === -1) {
                 // stop the system
-                var e = new Error("The egghead doesn't exist. Please create one.");
+                var e = new Error("The wisdomizer doesn't exist. Please create one.");
                 cb(null, e.message);
                 throw e;
             } else {
-                // reference egghead id by egghead's name
-                lowerCaseEggheadsWithIdInBookshelf.forEach(function(egghead){
-                    if (lowerCaseEgghead === egghead.name) {
-                        eggheadId = egghead.id;
+                // reference wisdomizer id by wisdomizer's name
+                lowerCaseWisdomizersWithIdInBookshelf.forEach(function(wisdomizer){
+                    if (lowerCaseWisdomizer === wisdomizer.name) {
+                        wisdomizerId = wisdomizer.id;
                     }
                 })
             }
@@ -70,14 +70,14 @@ module.exports = function(Recommendation) {
             }
         })
         // check if there is a duplicated recommendation
-        Promise.all([hasEgghead, getBookId]).then(function(){
+        Promise.all([hasWisdomizer, getBookId]).then(function(){
             Recommendation.find()
             .then(function(recommendations){
                 // creating new id if there is no duplicated one in bookshelf
                 recommendationId = 'r-' + String(recommendations.length + 1);
                 var counter = 0;
                 recommendations.forEach(function(recommendation){
-                    if (bookId === recommendation.book_id && eggheadId === recommendation.egghead_id) {
+                    if (bookId === recommendation.book_id && wisdomizerId === recommendation.wisdomizer_id) {
                         counter++;
                     }
                 })
@@ -97,13 +97,13 @@ module.exports = function(Recommendation) {
                     recommendationObj.src = recommendation.src;
                     recommendationObj.src_title = recommendation.srcTitle;
                     recommendationObj.book_id = bookId;
-                    recommendationObj.egghead_id = eggheadId;
+                    recommendationObj.wisdomizer_id = wisdomizerId;
                     recommendationObj.created = moment.utc().format('YYYY-MM-DD');
-                    // add recommendation: new book + old egghead
+                    // add recommendation: new book + old wisdomizer
                     Recommendation.create(recommendationObj);
                     console.log("A new recommendation was just made by '" + 
-                                recommendation.egghead + "' for the book '" + bookTitle + "'.")
-                    // egghead recommends new book
+                                recommendation.wisdomizer + "' for the book '" + bookTitle + "'.")
+                    // wisdomizer recommends new book
                     if (isNewBook) {
                         var getCategoriesId = app.models.Category.find()
                         .then(function(categories){
@@ -151,15 +151,15 @@ module.exports = function(Recommendation) {
                         .catch(function(e){
                             console.log(e);
                         })
-                        // add book step 2: referencing eggheads id by egghead's name
-                        var getEggheadId = app.models.EggHead.find()
-                        .then(function(eggheads){
-                            eggheadId = 'eh-' + String(categories.length + 1);
-                            // insert bookshelf egghead id to book
-                            lowerCaseEggheadsWithIdInBookshelf.forEach(function(bookshelfEgghead){
-                                if (bookshelfEgghead.name === lowerCaseEgghead) {
-                                    bookObj.eggheads_id = [];
-                                    bookObj.eggheads_id.push(bookshelfEgghead.id);
+                        // add book step 2: referencing wisdomizers id by wisdomizer's name
+                        var getWisdomizerId = app.models.Wisdomizer.find()
+                        .then(function(wisdomizers){
+                            wisdomizerId = 'eh-' + String(categories.length + 1);
+                            // insert bookshelf wisdomizer id to book
+                            lowerCaseWisdomizersWithIdInBookshelf.forEach(function(bookshelfWisdomizer){
+                                if (bookshelfWisdomizer.name === lowerCaseWisdomizer) {
+                                    bookObj.wisdomizers_id = [];
+                                    bookObj.wisdomizers_id.push(bookshelfWisdomizer.id);
                                 }
                             })
                         })
@@ -169,7 +169,7 @@ module.exports = function(Recommendation) {
                         // add book step 3: construct alias
                         var alias = _.words(bookTitle).join('').toLowerCase();
                         // add book step 4: add id / title / authors / amazonPage / alias
-                        Promise.all([getCategoriesId, getEggheadId])
+                        Promise.all([getCategoriesId, getWisdomizerId])
                         .then(function(){
                             bookObj.id = bookId;
                             bookObj.title = bookTitle;
@@ -214,13 +214,13 @@ module.exports = function(Recommendation) {
                             console.log(e);
                         })
                     } else {
-                        // a different egghead recommends old book
+                        // a different wisdomizer recommends old book
                         app.models.Book.findById(bookId, function(err, book){
-                            var eggheadList = book.eggheads_id;
-                            eggheadList.push(eggheadId);
-                            book.updateAttributes({eggheads_id: eggheadList}, function(err, book){
-                                console.log("Updated the book '" + bookTitle + "' egghead's List.");
-                                cb(null, "Updated the book '" + bookTitle + "' egghead's List.");
+                            var wisdomizerList = book.wisdomizers_id;
+                            wisdomizerList.push(wisdomizerId);
+                            book.updateAttributes({wisdomizers_id: wisdomizerList}, function(err, book){
+                                console.log("Updated the book '" + bookTitle + "' wisdomizer's List.");
+                                cb(null, "Updated the book '" + bookTitle + "' wisdomizer's List.");
                             });
                         })
                         .catch(function(e){
@@ -279,14 +279,14 @@ module.exports = function(Recommendation) {
             .catch(function(e){
                 console.log(e);
             })
-            var eggheadsInfo = app.models.EggHead.find()
-            .then(function(eggheads){
+            var wisdomizersInfo = app.models.Wisdomizer.find()
+            .then(function(wisdomizers){
                 return recommendations.map(function(recommendation){
                     var reformedRecommendation = {};
-                    eggheads.forEach(function(egghead){
-                        if (egghead.id === recommendation.egghead_id) {
-                            reformedRecommendation.name = egghead.name;
-                            reformedRecommendation.alias = egghead.alias;
+                    wisdomizers.forEach(function(wisdomizer){
+                        if (wisdomizer.id === recommendation.wisdomizer_id) {
+                            reformedRecommendation.name = wisdomizer.name;
+                            reformedRecommendation.alias = wisdomizer.alias;
                             reformedRecommendation.src = recommendation.src;
                             reformedRecommendation.srcTitle = recommendation.src_title;
                             reformedRecommendation.recommendationId = recommendation.id;
@@ -298,22 +298,22 @@ module.exports = function(Recommendation) {
             .catch(function(e){
                 console.log(e);
             })
-            return Promise.all([booksInfo, eggheadsInfo]).then(function(promises){
+            return Promise.all([booksInfo, wisdomizersInfo]).then(function(promises){
                 var booksInfo = promises[0],
-                    eggheadsInfo = promises[1];
+                    wisdomizersInfo = promises[1];
 
                 return booksInfo.map(function(bookInfo){
                     var reformedRecommendation = {};
-                    eggheadsInfo.forEach(function(eggheadInfo){
-                        if (bookInfo.recommendationId === eggheadInfo.recommendationId) {
+                    wisdomizersInfo.forEach(function(wisdomizerInfo){
+                        if (bookInfo.recommendationId === wisdomizerInfo.recommendationId) {
                             reformedRecommendation.bookTitle = bookInfo.title;
                             reformedRecommendation.bookAlias = bookInfo.alias;
                             reformedRecommendation.coverImage = bookInfo.coverImage;
                             reformedRecommendation.authors = bookInfo.authors;
-                            reformedRecommendation.eggheadName = eggheadInfo.name;
-                            reformedRecommendation.eggheadAlias = eggheadInfo.alias;
-                            reformedRecommendation.src = eggheadInfo.src;
-                            reformedRecommendation.srcTitle = eggheadInfo.srcTitle;
+                            reformedRecommendation.wisdomizerName = wisdomizerInfo.name;
+                            reformedRecommendation.wisdomizerAlias = wisdomizerInfo.alias;
+                            reformedRecommendation.src = wisdomizerInfo.src;
+                            reformedRecommendation.srcTitle = wisdomizerInfo.srcTitle;
                         }
                     })
                     return reformedRecommendation;
@@ -323,18 +323,18 @@ module.exports = function(Recommendation) {
         .then(function(recommendations){
             var uniqRecommendations = _.uniqBy(recommendations, 'bookAlias');
             return uniqRecommendations.map(function(uniqRecommendation){
-                var reformedRecommendation = { eggheads: [] };
+                var reformedRecommendation = { wisdomizers: [] };
                 recommendations.forEach(function(recommendation){
                     if (uniqRecommendation.bookAlias === recommendation.bookAlias) {
-                        var egghead = { name: recommendation.eggheadName,
-                                        alias: recommendation.eggheadAlias,
+                        var wisdomizer = { name: recommendation.wisdomizerName,
+                                        alias: recommendation.wisdomizerAlias,
                                         src: recommendation.src,
                                         srcTitle: recommendation.srcTitle };
                         reformedRecommendation.authors = recommendation.authors;
                         reformedRecommendation.bookTitle = recommendation.bookTitle;
                         reformedRecommendation.bookAlias = recommendation.bookAlias;
                         reformedRecommendation.coverImage = recommendation.coverImage;
-                        reformedRecommendation.eggheads.push(egghead);
+                        reformedRecommendation.wisdomizers.push(wisdomizer);
                     }
                 })
                 return reformedRecommendation;
@@ -364,7 +364,7 @@ module.exports = function(Recommendation) {
         accepts: {arg: 'filter', type: 'string', description: "Filter defining fields, where, include, order, offset, and limit", http: {source: 'query'}},
         returns: {arg: 'Recommendations', type: 'object', root: true}
     });
-    function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, egghead, src, cb) {
+    function isRecommendationDetialFilled (bookTitle, authors, amazonPage, categories, wisdomizer, src, cb) {
         var error = new Error();
         if (_.isEmpty(title) || title === 'string') {
             console.log("Please insert the book title.");
@@ -394,11 +394,11 @@ module.exports = function(Recommendation) {
                      message: 'Please insert at least 1 category for the book'};
             cb(null, error);
             return false;
-        } else if (_.isEmpty(eggheads) || eggheads[0] === 'string') {
-            console.log("Please insert at least 1 egghead for the book.");
-            error = {name: "Book without egghead's recommendation",
+        } else if (_.isEmpty(wisdomizers) || wisdomizers[0] === 'string') {
+            console.log("Please insert at least 1 wisdomizer for the book.");
+            error = {name: "Book without wisdomizer's recommendation",
                      status: 400,
-                     message: 'Please insert at least 1 egghead for the book'};
+                     message: 'Please insert at least 1 wisdomizer for the book'};
             cb(null, error);
             return false;
         } else {
@@ -423,13 +423,13 @@ module.exports = function(Recommendation) {
                 return reformedCategory;
             })
         } else if (elems[0].id.charAt(0) === 'e') {
-            return elems.map(function(egghead){
-                var reformedEgghead = {};
-                reformedEgghead.name = egghead.name.toLowerCase();
-                reformedEgghead.profile_pic = egghead.profile_pic;
-                reformedEgghead.site = egghead.site;
-                reformedEgghead.id = egghead.id;
-                return reformedEgghead;
+            return elems.map(function(wisdomizer){
+                var reformedWisdomizer = {};
+                reformedWisdomizer.name = wisdomizer.name.toLowerCase();
+                reformedWisdomizer.profile_pic = wisdomizer.profile_pic;
+                reformedWisdomizer.site = wisdomizer.site;
+                reformedWisdomizer.id = wisdomizer.id;
+                return reformedWisdomizer;
             })
         } else if (elems[0].id.charAt(0) === 'b') {
             return elems.map(function(book){
@@ -439,7 +439,7 @@ module.exports = function(Recommendation) {
                 reformedBook.authors = book.authors;
                 reformedBook.amazonPage = book.amazon_page;
                 reformedBook.categories = book.categories_id;
-                reformedBook.eggheads = book.eggheads_id;
+                reformedBook.wisdomizers = book.wisdomizers_id;
                 return reformedBook;
             })
         }
