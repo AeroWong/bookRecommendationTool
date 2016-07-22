@@ -8,6 +8,7 @@ var loopback = require('loopback'),
     // routers
     categoriesRouter = require('./routes/categories'),
     wisdomizersRouter = require('./routes/wisdomizers'),
+    wisdombabiesRouter = require('./routes/wisdombabies'),
     booksRouter = require('./routes/books'),
     adminRouter = require('./routes/admin'),
     // loading partials preps
@@ -42,6 +43,7 @@ app.get('/', function(req, res){
 // routing - one level deeper
 app.use('/categories', categoriesRouter);
 app.use('/wisdomizers', wisdomizersRouter);
+app.use('/wisdombabies', wisdombabiesRouter);
 app.use('/books', booksRouter);
 app.use('/admin', adminRouter);
 

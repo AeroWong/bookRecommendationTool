@@ -36,6 +36,10 @@
     "dataSource": "wt_prd_db",
     "public": true
   },
+  "Wisdombaby": {
+    "dataSource": "wt_prd_db",
+    "public": true
+  },
   "Book": {
     "dataSource": "wt_prd_db",
     "public": true

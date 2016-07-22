@@ -1,0 +1,30 @@
+{{#with pageContent}}
+<ul class="breadcrumbs level-2">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+<div class="row">
+    <div class="large-9 columns">
+        <div class="row">
+            <div class="large-3 columns">        
+                <article class="article-card wisdomizer">
+                    <img src="{{profilePic}}">
+                    <div class="card-content">
+                        <p class="post-author">{{name}}</p>
+                    </div>
+                </article>
+            </div>
+            <div class="small-9 columns">        
+                <div class="hook">
+                    Wanna know {{name}} more? <br>
+                    Check out {{pronoun}} <a href="{{site}}" target="_blank">site.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="large-3 columns">
+        {{> mailchimp}}
+    </div>    
+</div>
+{{/with}}

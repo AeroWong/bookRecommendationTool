@@ -1,0 +1,27 @@
+{{#with pageContent}}
+<ul class="breadcrumbs level-1">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+<div class="row">
+    <div class="large-9 columns">
+        <div class="recommendation-count">There is {{wisdombabyCount}} wisdom baby running Wisdom Trigger for you.</div>
+        <ul class="wisdomizer-listing">
+            {{#each wisdomizers as |wisdomizer|}}
+            <li class="img-box">
+                <article class="article-card">
+                    <a href="../{{wisdomizer.alias}}"><img src="{{wisdomizer.profilePic}}"></a>
+                    <div class="card-content">
+                        <p class="post-author"><a href="../{{wisdomizer.alias}}">{{wisdomizer.name}}</a></p>
+                    </div>
+                </article>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+    <div class="large-3 columns">
+        {{> mailchimp}}
+    </div>  
+</div>
+{{/with}}
