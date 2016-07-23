@@ -26,10 +26,11 @@ router.get('/', function(req, res, next){
     return Promise.all([getWisdombabiesInfo, getBreadcrumb, getWisdomizerCount, getWisdombabyCount])
     .then(function(promises){
         var pageContent = {};
-            pageContent.wisdomizers = promises[0];
-            pageContent.breadcrumbs = promises[1];
-            pageContent.wisdomizerCount = promises[2];
-            pageContent.wisdombabyCount = promises[3];
+
+        pageContent.wisdomizers = promises[0];
+        pageContent.breadcrumbs = promises[1];
+        pageContent.wisdomizerCount = promises[2];
+        pageContent.wisdombabyCount = promises[3];
 
         console.log("rendering 'wisdombabies' HTML template...");
         res.render('pages/wisdombabies', {pageContent});

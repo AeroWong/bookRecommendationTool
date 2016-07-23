@@ -5,7 +5,7 @@ var express = require('express'),
 
 router.get('/', function(req, res, next){
 
-    var breadcrumbL1 = 'about',
+    var breadcrumbL1 = 'contact',
         pageContent = {};
 
     var getBreadcrumb = breadcrumb(breadcrumbL1);
@@ -22,8 +22,8 @@ router.get('/', function(req, res, next){
     	pageContent.wisdomizerCount = promises[0];
     	pageContent.breadcrumbs = promises[1];
 
-	    console.log("rendering 'about' HTML template...");
-	    res.render('pages/about', {pageContent});
+	    console.log("rendering 'contact' HTML template...");
+	    res.render('pages/contact', {pageContent});
     })
 })
 

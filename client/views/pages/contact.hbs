@@ -1,0 +1,26 @@
+{{#with pageContent}}
+<ul class="breadcrumbs level-1">
+    {{#each breadcrumbs as | breadcrumb |}}
+    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+    {{/each}}
+</ul>
+<div class="row categories">
+    <div class="large-9 columns">
+        <p class="static-content">
+            Hi Stranger - <br><br>
+			Wisdom Trigger and Wisdom Babies are here as public servants, taking requests. <br><br>
+			I'm just doing it for the sake of sharing. <br><br>
+			If you have any idea to improve this public service... <br>
+            Or you want to become another Wisdom Baby to help running the site...... <br>
+            Or you're simply a book nerd who wants to talk about random great books you're reading......... <br><br>
+            Email me at this <a href="mailto:aero@aerowong.com">mailbox</a>. <br><br>
+            I reply to all. <br><br>
+            Don't hesitate to write in. You're only a stranger once. =] <br><br>
+            - Wisdom Baby
+        </p>
+    </div>
+    <div class="large-3 columns">
+        {{> mailchimp}}
+    </div>
+</div>
+{{/with}}

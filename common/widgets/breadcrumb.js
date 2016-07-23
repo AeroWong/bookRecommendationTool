@@ -99,6 +99,10 @@ module.exports = function() {
                 case 'about':
                     return [{name: 'Home', url: '/'},
                             {name: "Wisdom's story", url: '/about'}];
+                    break;
+                case 'contact':
+                    return [{name: 'Home', url: '/'},
+                            {name: "Wisdom's contact", url: '/contact'}];
                     break;                    
                 case 'categories':
                     return [{name: 'Home', url: '/'},
