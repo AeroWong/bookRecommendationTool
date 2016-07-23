@@ -221,6 +221,7 @@
 			$('.element').socialShare({
 			    twitterVia		: 'aerowong',
 			    twitterHashTags : 'bookRecommendations, wisdomTrigger, wisdomizer',
+			    description     : 'Book Recommendations from Wisdomizers',
 			    image 			: 'http://wisdomtrigger.com/images/FAVICON-W.png'
 			});
 		}
