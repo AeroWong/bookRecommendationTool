@@ -213,18 +213,6 @@
 			})
 		}
 	}
-	var socialShare = {
-		init: function(){
-			socialShare.addButton();
-		},
-		addButton: function(){
-			$('.element').socialShare({
-			    twitterVia		: 'ritz078',
-			    twitterHashTags : 'javascript,jquery'
-			});
-		}
-	}
 	admin.init();
 	dashboard.init();
-	socialShare.init();
 }());
