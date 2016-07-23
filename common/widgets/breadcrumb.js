@@ -96,6 +96,10 @@ module.exports = function() {
         if (level1 && level2 === undefined) {
             console.log("rendering a level1 breadcrumb...");
             switch (level1) {
+                case 'about':
+                    return [{name: 'Home', url: '/'},
+                            {name: "Wisdom's story", url: '/about'}];
+                    break;                    
                 case 'categories':
                     return [{name: 'Home', url: '/'},
                             {name: 'Categories', url: '/categories'}];

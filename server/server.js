@@ -6,6 +6,7 @@ var loopback = require('loopback'),
     fs = require('fs'),
     app = module.exports = loopback(),
     // routers
+    aboutRouter = require('./routes/about'),
     categoriesRouter = require('./routes/categories'),
     wisdomizersRouter = require('./routes/wisdomizers'),
     wisdombabiesRouter = require('./routes/wisdombabies'),
@@ -41,6 +42,7 @@ app.get('/', function(req, res){
     });
 })
 // routing - one level deeper
+app.use('/about', aboutRouter);
 app.use('/categories', categoriesRouter);
 app.use('/wisdomizers', wisdomizersRouter);
 app.use('/wisdombabies', wisdombabiesRouter);
