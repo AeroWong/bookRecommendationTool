@@ -213,6 +213,19 @@
 			})
 		}
 	}
+	var socialShare = {
+		init: function(){
+			socialShare.addButton();
+		},
+		addButton: function(){
+			$('.element').socialShare({
+			    twitterVia		: 'aerowong',
+			    twitterHashTags : 'bookRecommendations, wisdomTrigger, wisdomizer',
+			    image 			: 'http://wisdomtrigger.com/images/FAVICON-W.png'
+			});
+		}
+	}
 	admin.init();
 	dashboard.init();
+	socialShare.init();
 }());
