@@ -7,7 +7,7 @@
 <div class="row">
     <div class="large-9 columns">
         <div class="recommendation-count">
-            {{wisdomizerCount}} wisdomizers are ready to trigger your wisdom. 
+            {{wisdomizerCount}} wisdomizers ready to trigger your wisdom. 
             <p class="reload-page">Re-load page to shuffle order.</p>
         </div>
         <ul class="wisdomizer-listing">
@@ -22,6 +22,10 @@
             </li>
             {{/each}}
         </ul>
+        <div class="social-btn">
+            <p class="instruction">Share Wisdom</p>
+            {{> social_share}}        
+        </div>
     </div>
     <div class="large-3 columns wisdomizers">
         {{> mailchimp}}

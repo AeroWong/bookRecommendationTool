@@ -41,4 +41,7 @@
 .recommendation-count {
 	font-size: 30px;
 	margin: 5px 10px 20px;
+	&.home {
+		margin: 10px 25px 20px;
+	}
 }

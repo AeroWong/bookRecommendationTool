@@ -61,6 +61,7 @@ app.set('views', process.cwd() + '/client/views');
 app.use('/images', express.static(process.cwd() + '/client/assets/images'));
 app.use('/css', express.static(process.cwd() + '/client/assets/css'));
 app.use('/js', express.static(process.cwd() + '/client/assets/js'));
+app.use('/bower', express.static(process.cwd() + '/bower_components'));
 
 app.start = function() {
   // start the web server

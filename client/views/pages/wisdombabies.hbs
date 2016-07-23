@@ -6,7 +6,7 @@
 </ul>
 <div class="row">
     <div class="large-9 columns">
-        <div class="recommendation-count">There is {{wisdombabyCount}} wisdom baby running the Wisdom Trigger.</div>
+        <div class="recommendation-count">{{wisdombabyCount}} wisdom baby running the Wisdom Trigger.</div>
         <ul class="wisdomizer-listing">
             {{#each wisdomizers as |wisdomizer|}}
             <li class="img-box">
@@ -19,6 +19,10 @@
             </li>
             {{/each}}
         </ul>
+        <div class="social-btn">
+            <p class="instruction">Share Wisdom</p>
+            {{> social_share}}        
+        </div>
     </div>
     <div class="large-3 columns">
         {{> mailchimp}}
