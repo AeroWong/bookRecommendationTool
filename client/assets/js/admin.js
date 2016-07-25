@@ -6,6 +6,14 @@
 		},
 		login: function(){
 			$('#log-in-form .button').click(function(){
+				logIn();
+			})
+			$(document).keypress(function(e){
+				if (e.which == 13) {
+					logIn();
+				}
+			})
+			var logIn = function(){
 				// port 80 for live-site
 				var port = window.location.hostname === 'localhost' ? ':3000' : ':80', 
 					obj = { email: $('#log-in-form #email').val(),
@@ -25,8 +33,7 @@
 				}).error(function(res){
 					console.log('error', res);
 				})
-			})
-
+			}
 		}
 	};
 	var dashboard = {
