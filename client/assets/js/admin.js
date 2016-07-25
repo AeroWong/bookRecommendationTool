@@ -49,7 +49,8 @@
 					$profile_pic = $('#add-wisdomizer-form #wisdomizer-profile-pic').val(),
 					$gender = $('#add-wisdomizer-form #wisdomizer-gender').val(),
 					$site = $('#add-wisdomizer-form #wisdomizer-site').val(),
-					reminder = 'Please fill in the neccessary field.';
+					reminder = 'Please fill in the neccessary field.',
+					port = window.location.hostname === 'localhost' ? ':3000' : ':80';
 
 				var obj = {	name: $name,
 							profile_pic: $profile_pic,
@@ -76,7 +77,7 @@
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
 					$.ajax({
 						type: "POST",
-						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/Wisdomizers/addWisdomizer',
+						url: 'http://' + window.location.hostname + port + '/login',
 						dataType: 'json',
 						data: obj
 					})
