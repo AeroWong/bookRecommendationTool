@@ -77,7 +77,7 @@
 				if (obj.name && obj.profile_pic && obj.gender && obj.site) {
 					$.ajax({
 						type: "POST",
-						url: 'http://' + window.location.hostname + port + '/login',
+						url: 'http://' + window.location.hostname + port + '/api/Wisdomizers/addWisdomizer',
 						dataType: 'json',
 						data: obj
 					})
