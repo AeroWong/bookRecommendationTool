@@ -1,6 +1,6 @@
 {
   "apps": [{
-    "name"   : "Wisdom Trigger",
+    "name"   : "WisdomTrigger",
     "script" : "./server/server.js",
     "watch" : true
   }]
