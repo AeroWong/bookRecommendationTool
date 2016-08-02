@@ -187,7 +187,7 @@
 					
 					$.ajax({
 						type: 'POST',
-						url: ((window.location.hostname.indexOf('wisdomtrigger.com') > -1)? 'https://' : 'http://') + window.location.hostname + ':3000/api/Recommendations/addRecommendation',
+						url: 'http://' + window.location.hostname + port + '/api/Recommendations/addRecommendation',
 						dataType: 'json',
 						data: obj
 					})
