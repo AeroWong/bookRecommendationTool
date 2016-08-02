@@ -107,6 +107,8 @@
 
 			$('#add-book-recommendation-form .button').click(function(){
 
+				var port = window.location.hostname === 'localhost' ? ':3000' : ':80', 
+
 				var $bookTitle = $('#add-book-recommendation-form #book-title').val(),
 					$bookIsbn = $('#add-book-recommendation-form #book-isbn').val(),
 					$bookCoverImage = $('#add-book-recommendation-form #book-cover-image').val(),
