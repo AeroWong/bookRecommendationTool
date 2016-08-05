@@ -15,7 +15,12 @@ module.exports = function(Recommendation) {
             lowerCaseBookTitle = bookTitle.toLowerCase(),
             lowerCaseBookTitlesWithIdInBookshelf = null,
             lowerCaseBookTitlesInBookshelf = null,
-            lowerCaseCategories = categories.map(function(category){return category.toLowerCase()}),
+            lowerCaseCategories = categories.map(function(category){
+                var lowerCaseCategory;
+                lowerCaseCategory = category.toLowerCase();
+                lowerCaseCategory = _.trim(lowerCaseCategory);
+                return lowerCaseCategory;
+            }),
             lowerCaseCategoriesInBookshelf = null,
             lowerCaseCategoriesWithIdInBookshelf = null,
             wisdomizerId = null,
