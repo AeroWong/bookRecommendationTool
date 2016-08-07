@@ -16,9 +16,13 @@ A month later, I set aside my Anki flash cards and started to code. I used JavaS
 Plus the server side stuffs, the following items are the components that I used.
 
 Virtual server: [Amazon EC2](https://aws.amazon.com/ec2/)
+
 Web server: [Nginx](https://nginx.org/en/)
+
 DB: [MongoDB](https://www.mongodb.com/)
+
 Backend: [Node](https://nodejs.org/en/), [LoopBack](https://loopback.io/)
+
 Frontend: [Handlebars](http://handlebarsjs.com/)
 
 So, that was that. 
