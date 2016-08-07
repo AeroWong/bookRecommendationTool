@@ -34,7 +34,7 @@
   },
   "Wisdomizer": {
     "dataSource": "wt_prd_db",
-    "public": true
+    "public": false
   },
   "Wisdombaby": {
     "dataSource": "wt_prd_db",
