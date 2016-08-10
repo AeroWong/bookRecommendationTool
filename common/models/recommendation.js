@@ -243,8 +243,8 @@ module.exports = function(Recommendation) {
         })
     }
     Recommendation.getCurrentMonthRecommendations = function (options, cb) {
-
         var lastDayOfPreviousMonth = moment.utc().date(0).format('YYYY-MM-DD'),
+            lastDayOfMonthBeforeThePreviousMonth = moment.utc().date(0).subtract(1,'months').endOf('month').format('YYYY-MM-DD'),
             today = new Date(), currentMonth = today.getMonth(),
             currentMonth = moment().month(currentMonth).format('MMM'),
             currentMonthRecommendationInfo = { currentMonth: currentMonth };
@@ -253,7 +253,8 @@ module.exports = function(Recommendation) {
             return recommendations.map(function(recommendation){
                 if (recommendation.created &&
                     recommendation.created !== undefined &&
-                    moment(recommendation.created).isAfter(lastDayOfPreviousMonth))
+                    moment(recommendation.created).isBefore(lastDayOfPreviousMonth) &&
+                    moment(recommendation.created).isAfter(lastDayOfMonthBeforeThePreviousMonth))
                 {
                     return recommendation;
                 }
