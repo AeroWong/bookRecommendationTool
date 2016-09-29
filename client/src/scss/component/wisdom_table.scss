@@ -1,0 +1,40 @@
+.large-9-homepage.columns {
+	width: 75%;
+}
+.large-3-homepage.columns {
+	width: 25%;
+}
+
+.table {
+	background: #F8F8F8 none repeat scroll 0% 0%;
+	color: #0A0A0A;
+	width: 100%;
+	overflow: auto;
+	border: 1px solid #f1f1f1;
+	.table-col {
+		display: inline-block;
+		padding: 0.5rem 0.625rem 0.625rem;
+	}
+	.table-col.identity {
+		font-weight: 700;
+	}
+	.table-col.book-cover {
+		width: 15%;
+	}
+	.table-col.book-title {
+		vertical-align: middle;
+		width: 20%;
+	}
+	.table-col.book-author {
+		width: 15%;
+	}
+	.table-col.book-origin {
+		width: 45%;
+	}
+}
+.table.item{
+	margin: 0;
+	li:nth-child(odd) {
+	    background-color: #fefefe;
+	}
+}

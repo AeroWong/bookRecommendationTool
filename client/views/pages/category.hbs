@@ -10,42 +10,49 @@
     {{#with pageContent.recommendations}}
     <div class="large-9 columns">
         <section class="content">
-            <table>
-                <thead>
-                    <tr>
-                        <th width="130">Book Cover</th>
-                        <th width="250">Book Title</th>
-                        <th width="200">Author</th>
-                        <th>Wisdom's Origin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each books as | book |}}
-                    <tr>
-                        <td>
-                            <a href="../{{book.alias}}"><img src="{{book.coverImage}}" alt=""></a>
-                        </td>
-                        <td><a href="../{{book.alias}}">{{book.title}}</a></td>
-                        <td>
-                            {{#each book.authors as | author |}}
-                                {{author.name}}<br>
-                            {{/each}}
-                        </td>
-                        <td>
-                            {{#each book.wisdomizers as | wisdomizer |}}                            
-                            <a href="../{{wisdomizer.alias}}">{{wisdomizer.name}}</a>
-                            recommended it on
-                            <a href="{{wisdomizer.src}}" target="_blank">{{wisdomizer.srcTitle}}</a><br>
-                            {{/each}}
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-            <div class="social-btn">
-                {{> social_share}}        
+            <div class="table">
+                <div class="table-col identity book-cover">Book Cover</div>
+                <div class="table-col identity book-title">Book Title</div>
+                <div class="table-col identity book-author">Author</div>
+                <div class="table-col identity book-origin">Wisdom's Origin</div>
             </div>
+            <ul class="table item">
+                {{#each books as | book |}}
+                <li>
+                    <div class="table-col book-cover">
+                        <a href="../{{book.alias}}">
+                            <img src="{{book.coverImage}}" alt="">
+                        </a>
+                    </div>
+                    <div class="table-col book-title">
+                        <a href="../{{book.alias}}">
+                            {{book.title}}
+                        </a>
+                    </div>
+                    <div class="table-col book-author">
+                        <ul class="table-listing">
+                            {{#each book.authors as | author |}}
+                                <li style="background: transparent;">{{author.name}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                    <div class="table-col book-origin">
+                        <ul class="table-listing">
+                            {{#each book.wisdomizers as | wisdomizer |}}
+                                <li style="background: transparent;">
+                                    <a href="../{{wisdomizer.alias}}">{{wisdomizer.name}}</a> recommended it on <a href="{{wisdomizer.src}}" target="_blank">{{wisdomizer.srcTitle}}</a>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </li>                
+                {{/each}}
+            </ul>
         </section>
+        <div class="social-btn">
+            <p class="instruction">Share Wisdom</p>
+            {{> social_share}}        
+        </div>
     </div>
     {{/with}}
     {{#with pageContent}}
