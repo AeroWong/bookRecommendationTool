@@ -1,17 +1,25 @@
 (function() {
-	'use strict';
-	var socialShare = {
-		init: function(){
-			socialShare.addButton();
-		},
-		addButton: function(){
-			$('.element').socialShare({
-			    twitterVia		: 'aerowong',
-			    twitterHashTags : 'bookRecommendations, wisdomTrigger, wisdomizer',
-			    description     : 'Book Recommendations from Wisdomizers',
-			    image 			: 'http://wisdomtrigger.com/images/books.jpg'
-			});
-		}
-	}
-	socialShare.init();
+	'use strict'
+	var currentPage = window.location.href;
+	
+	$('.fb').click(function(){
+		var fbShare = "http://www.facebook.com/sharer/sharer.php?u=" + currentPage;
+		window.open(fbShare);
+	})
+	$('.gp').click(function(){
+		var gpShare = "https://plus.google.com/share?url=" + currentPage;
+		window.open(gpShare);
+	})
+	$('.linkedin').click(function(){
+		var linkedinShare = "https://www.linkedin.com/cws/share?url=" + currentPage;
+		window.open(linkedinShare);
+	})
+	$('.twitter').click(function(){
+		var twitterShare = "http://www.twitter.com/share?url=" + currentPage;
+		window.open(twitterShare);
+	})
+	$('.pinterest').click(function(){
+		var pinterestShare = "http://pinterest.com/pin/create/button/?url=" + currentPage;
+		window.open(pinterestShare);
+	})
 }());
