@@ -35,6 +35,9 @@ filenames.forEach(function(filename){
 app.get('/', function(req, res){
     return app.models.Recommendation.getCurrentMonthRecommendations()
     .then(function(pageContent){
+        if(pageContent.count === 0){
+            return res.redirect('/wisdomizers');
+        }
         return app.models.Wisdomizer.getWisdomizerCount()
         .then(function(wisdomizerCount){
             pageContent.wisdomizerCount = wisdomizerCount;
